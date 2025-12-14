@@ -39,7 +39,7 @@ A centralized repository of development configurations and rules that can be ins
 
 ```bash
 # 1. Clone this repository (one time only)
-git clone https://github.com/your-username/vibe-coding-rules.git ~/.vibe-coding-rules
+git clone https://github.com/rubensdeoliveira/vibe-coding-rules.git ~/.vibe-coding-rules
 
 # 2. In any new project, run the installer
 cd /your/project
