@@ -3,11 +3,12 @@
 <div align="center">
 
 ![Claude](https://img.shields.io/badge/Claude-Sonnet%204.5-8A2BE2?style=for-the-badge&logo=anthropic&logoColor=white)
+![Gemini](https://img.shields.io/badge/Gemini-3%20Flash-4285F4?style=for-the-badge&logo=google&logoColor=white)
 ![Cursor](https://img.shields.io/badge/Cursor-IDE-blue?style=for-the-badge&logo=visual-studio-code&logoColor=white)
 ![Task Flow](https://img.shields.io/badge/Task%20Flow-AI%20Powered-green?style=for-the-badge)
 ![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=for-the-badge)
 
-**One-command setup for Claude Code, Cursor, and Rubinho Task Flow in any project**
+**One-command setup for Claude Code, Gemini, Cursor, and Rubinho Task Flow in any project**
 
 </div>
 
@@ -15,13 +16,13 @@
 
 ## Overview
 
-A centralized repository of development configurations and rules that can be instantly installed in any project. Provides complete setup for Claude Code, Cursor IDE, and Rubinho Task Flow - a simple AI-powered task management system.
+A centralized repository of development configurations and rules that can be instantly installed in any project. Provides complete setup for Claude Code, Gemini, Cursor IDE, and Rubinho Task Flow - a simple AI-powered task management system.
 
 ### Key Features
 
 - **One-Command Installation** - Complete setup with `./install-rules.sh`
 - **Simple Task Management** - Define tasks in plain text, AI generates detailed subtasks
-- **Claude as Default** - Claude Code Sonnet configured across all tools
+- **Multiple AI Models** - Claude Code Sonnet and Gemini 3 Flash configured and ready to use
 - **Discrete .gitignore** - AI configs hidden with generic comments
 - **Zero Configuration** - Ready to use immediately
 - **Rubinho Task Flow** - AI-powered task management with simple text interface
@@ -30,7 +31,7 @@ A centralized repository of development configurations and rules that can be ins
 
 - **Operating System:** macOS, Linux, or Windows (WSL)
 - **Tools:** Git, Bash, Node.js
-- **Required:** Claude Code CLI or Cursor IDE (with Pro subscription)
+- **Required:** Claude Code CLI, Gemini API access, or Cursor IDE (with Pro subscription)
 
 ## Installation
 
@@ -65,16 +66,19 @@ your-project/
 │   │   ├── commit_practices.mdc
 │   │   ├── git_control.mdc
 │   │   └── task_execution.mdc
-│   └── mcp.json                  # MCP server config
+│   └── settings.json             # Cursor model settings
 │
 ├── .claude/
 │   └── settings.json             # Claude Code settings
+│
+├── .gemini/
+│   └── settings.json             # Gemini settings
 │
 ├── .task-flow/                   # Rubinho Task Flow
 │   ├── .task-flow-tasks.txt       # Plain text task definitions (edit this!)
 │   └── scripts/                  # Management scripts (don't edit)
 │       ├── task-flow.sh          # Task Flow CLI
-│       ├── generate.sh           # Calls Claude Code to generate tasks
+│       ├── generate.sh           # Calls AI (Claude/Gemini/Cursor) to generate tasks
 │       ├── status.sh             # Status viewer
 │       ├── show.sh               # Task details viewer
 │       ├── done.sh               # Mark tasks as done
@@ -88,6 +92,7 @@ your-project/
 
 No additional configuration required! Just make sure you have:
 - Claude Code CLI installed, OR
+- Gemini API access configured, OR
 - Cursor IDE with an active Pro subscription
 
 **You're ready!**
@@ -149,6 +154,12 @@ cd /path/to/my-project
 
 ### Cursor Integration
 
+Cursor is pre-configured with:
+- Claude Sonnet 4.5 Pro as default model
+- Custom settings
+- Rubinho Task Flow integration
+- Development best practices
+
 All rules are automatically active in Cursor. The IDE will:
 - Follow coding standards from `.cursor/rules/`
 - Integrate with Rubinho Task Flow workflows
@@ -157,6 +168,13 @@ All rules are automatically active in Cursor. The IDE will:
 ### Claude Code Integration
 
 Claude Code is pre-configured with:
+- Custom settings
+- Rubinho Task Flow integration
+- Development best practices
+
+### Gemini Integration
+
+Gemini is pre-configured with:
 - Custom settings
 - Rubinho Task Flow integration
 - Development best practices
@@ -188,9 +206,11 @@ The installer adds these entries to `.gitignore`:
 
 ```gitignore
 .claude/
+.gemini/
 .cursor/
 .task-flow/
 CLAUDE.md
+GEMINI.md
 ```
 
 **Why discrete?**
@@ -209,10 +229,11 @@ To update configs in an existing project:
 ```
 
 The installer will:
-- ✅ Copy new rules
-- ✅ **Overwrite all configs** with latest versions
+- ✅ Copy new rules (always overwrites)
+- ✅ **Overwrite config files** (settings.json) with latest versions
 - ✅ Update .gitignore if needed
-- ✅ Update Task Flow scripts
+- ✅ Update Task Flow scripts (always overwrites)
+- ✅ **Preserve your data**: tasks.json and status.json are **NOT overwritten** (your tasks stay safe)
 
 **Note**: The installer automatically adds `.task-flow/` to `.gitignore`, keeping your task progress private and out of version control.
 
@@ -223,17 +244,20 @@ This repository contains:
 ```
 rubinho-task-flow/
 ├── .cursor/
-│   ├── mcp.json.example          # MCP config template
+│   ├── settings.json             # Cursor model settings
 │   └── rules/                    # All development rules
 │
 ├── .claude/
 │   └── settings.json             # Claude Code settings
 │
+├── .gemini/
+│   └── settings.json             # Gemini settings
+│
 ├── .task-flow/
 │   ├── .task-flow-tasks.txt      # Task definitions template
 │   └── scripts/                  # Management scripts
 │       ├── task-flow.sh          # Task Flow CLI (copied to projects)
-│       ├── generate.sh           # Calls Claude Code to generate tasks
+│       ├── generate.sh           # Calls AI (Claude/Gemini/Cursor) to generate tasks
 │       ├── status.sh             # Status viewer
 │       ├── show.sh               # Task details viewer
 │       ├── done.sh               # Mark tasks as done
@@ -241,7 +265,9 @@ rubinho-task-flow/
 │       └── status.json           # Task status tracking (auto)
 │
 ├── .gitignore                    # Template gitignore
+├── .model-versions.json          # Model version reference (update when new models are released)
 ├── CLAUDE.md                     # Main Claude instructions
+├── GEMINI.md                     # Main Gemini instructions
 ├── install.sh                    # Installation script
 └── README.md                     # This file
 ```
@@ -252,11 +278,63 @@ rubinho-task-flow/
 - ✅ Use Rubinho Task Flow in **projects that receive** the configs via installation
 - 🔄 Installer **always overwrites** existing configs
 - 🤫 .gitignore entries are **discrete** (no AI mentions)
-- 🎯 Works with **Claude Code CLI** or **Cursor Pro**
+- 🎯 Works with **Claude Code CLI**, **Gemini API**, or **Cursor Pro**
 - 📦 Task Flow directory (`.task-flow/`) is **automatically gitignored**
 - 📝 Define tasks in `.task-flow/.task-flow-tasks.txt` using simple format: `- [ ] Task description`
 - 🚀 Simple installation with `install.sh`, management with `.task-flow/scripts/task-flow.sh`
-- 🔒 **No API keys needed** - uses Claude Code or Cursor Pro built-in AI
+- 🔒 **API keys may be required** - depends on your AI provider (Claude Code, Gemini API, or Cursor Pro)
+- 🔔 **Model version checking** - Automatically checks for newer model versions after installation (fast, local check)
+
+## Updating Model Versions
+
+When new model versions are released, update `.model-versions.json` in this repository:
+
+```json
+{
+  "claude": {
+    "current": "claude-sonnet-4-5-20250929",
+    "latest": "NEW_VERSION_HERE",
+    "checkUrl": "https://docs.anthropic.com/claude/docs/models-overview"
+  },
+  "cursor": {
+    "current": "claude-sonnet-4-5-20250929",
+    "latest": "NEW_VERSION_HERE",
+    "checkUrl": "https://docs.cursor.com/models"
+  },
+  "gemini": {
+    "current": "gemini-3-flash",
+    "latest": "NEW_VERSION_HERE",
+    "checkUrl": "https://ai.google.dev/models/gemini"
+  }
+}
+```
+
+The installer will automatically check for newer model versions and **ask you individually** if you want to update each one (Claude, Cursor, Gemini). This check is **fast and local** - no API calls, no network requests, just a simple string comparison.
+
+**Interactive Updates:** When a newer version is available, the installer will:
+- Show current and latest versions
+- Ask: "Update [Model] to latest version? [y/N]"
+- Update only if you confirm with `y`
+- Skip if you press Enter or type `n`
+
+**Important:** Model version updates work differently:
+
+- **When installing in a target project** (passing a path):
+  - The installer **copies/replaces** files from the repository template to the target project
+  - **NO model update prompts** - just copies what's in the template
+  - Target project receives the current template versions
+
+- **When running installer in the repository itself** (rubinho-task-flow):
+  - If new model versions are detected, you can choose to update them
+  - Updates are applied **only to the repository template** files
+  - After updating the template, run installer on projects to apply the new versions
+
+**Workflow:**
+1. Run installer on a project → copies current template files to project (no update prompts)
+2. To update repository template → run installer in the repository itself, choose to update
+3. Run installer again on projects → copies updated template files to projects
+
+You have full control - model updates only happen in the repository template, not in target projects.
 
 ## Contributing
 

@@ -27,9 +27,9 @@ echo ""
 echo -e "${YELLOW}🤖 To generate tasks:${NC}"
 echo ""
 echo -e "${CYAN}1. Open another terminal${NC}"
-echo -e "${CYAN}2. Ask for claude or cursor: Read .task-flow-tasks.txt and generate detailed subtasks updating task status${NC}"
+echo -e "${CYAN}2. Ask for claude, cursor, or gemini: Read .task-flow-tasks.txt and generate detailed subtasks updating task status${NC}"
 echo ""
-echo -e "${YELLOW}Press ENTER when Claude has finished generating...${NC}"
+echo -e "${YELLOW}Press ENTER when AI has finished generating...${NC}"
 read -r
 
 if [ -f "$TASKS_OUTPUT" ] && [ -f "$STATUS_OUTPUT" ]; then
@@ -38,7 +38,7 @@ if [ -f "$TASKS_OUTPUT" ] && [ -f "$STATUS_OUTPUT" ]; then
   echo ""
 else
   echo ""
-  echo -e "${YELLOW}⚠️  Files not found. Make sure Claude Code created:${NC}"
+  echo -e "${YELLOW}⚠️  Files not found. Make sure AI created:${NC}"
   echo "   - .task-flow/scripts/tasks.json"
   echo "   - .task-flow/scripts/status.json"
   echo ""

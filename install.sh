@@ -22,6 +22,140 @@ pause() {
   read -r
 }
 
+check_model_updates() {
+  local target="$1"
+  local versions_file="$SCRIPT_DIR/.model-versions.json"
+
+  [ ! -f "$versions_file" ] && return
+
+  local claude_latest=$(grep -A3 '"claude"' "$versions_file" | grep '"latest"' | sed 's/.*"latest": "\([^"]*\)".*/\1/')
+  local cursor_latest=$(grep -A3 '"cursor"' "$versions_file" | grep '"latest"' | sed 's/.*"latest": "\([^"]*\)".*/\1/')
+  local gemini_latest=$(grep -A3 '"gemini"' "$versions_file" | grep '"latest"' | sed 's/.*"latest": "\([^"]*\)".*/\1/')
+
+  if [ -f "$SCRIPT_DIR/.claude/settings.json" ]; then
+    local installed=$(grep -o '"model": "[^"]*"' "$SCRIPT_DIR/.claude/settings.json" | cut -d'"' -f4)
+    if [ -n "$installed" ] && [ -n "$claude_latest" ] && [ "$installed" != "$claude_latest" ]; then
+      echo ""
+      echo -e "${YELLOW}⚠️  Claude: New version available${NC}"
+      echo -e "   ${CYAN}Current: ${installed}${NC}"
+      echo -e "   ${CYAN}Latest: ${claude_latest}${NC}"
+      read -r -p "$(echo -e ${BLUE}Update Claude to latest version? [y/N]: ${NC})" response
+      if [[ "$response" =~ ^[yY]$ ]]; then
+        local settings_file="$SCRIPT_DIR/.claude/settings.json"
+        mkdir -p "$(dirname "$settings_file")"
+        printf '{\n  "model": "%s"\n}\n' "$claude_latest" > "$settings_file"
+        if [ -f "$settings_file" ]; then
+          local verify=$(grep -o '"model": "[^"]*"' "$settings_file" | cut -d'"' -f4)
+          if [ "$verify" = "$claude_latest" ]; then
+            echo -e "${GREEN}✅ Claude template updated to ${claude_latest}${NC}"
+            echo -e "${CYAN}   (Repository template updated - run install.sh on projects to apply)${NC}"
+          else
+            echo -e "${RED}❌ Error: Update failed${NC}"
+          fi
+        else
+          echo -e "${RED}❌ Error: Could not write to $settings_file${NC}"
+        fi
+      else
+        echo -e "${CYAN}   Skipped Claude update${NC}"
+      fi
+    fi
+  fi
+
+  if [ -f "$SCRIPT_DIR/.cursor/settings.json" ]; then
+    local installed=$(grep -o '"model": "[^"]*"' "$SCRIPT_DIR/.cursor/settings.json" | cut -d'"' -f4)
+    if [ -n "$installed" ] && [ -n "$cursor_latest" ] && [ "$installed" != "$cursor_latest" ]; then
+      echo ""
+      echo -e "${YELLOW}⚠️  Cursor: New version available${NC}"
+      echo -e "   ${CYAN}Current: ${installed}${NC}"
+      echo -e "   ${CYAN}Latest: ${cursor_latest}${NC}"
+      read -r -p "$(echo -e ${BLUE}Update Cursor to latest version? [y/N]: ${NC})" response
+      if [[ "$response" =~ ^[yY]$ ]]; then
+        local settings_file="$SCRIPT_DIR/.cursor/settings.json"
+        mkdir -p "$(dirname "$settings_file")"
+        printf '{\n  "model": "%s"\n}\n' "$cursor_latest" > "$settings_file"
+        if [ -f "$settings_file" ]; then
+          local verify=$(grep -o '"model": "[^"]*"' "$settings_file" | cut -d'"' -f4)
+          if [ "$verify" = "$cursor_latest" ]; then
+            echo -e "${GREEN}✅ Cursor template updated to ${cursor_latest}${NC}"
+            echo -e "${CYAN}   (Repository template updated - run install.sh on projects to apply)${NC}"
+          else
+            echo -e "${RED}❌ Error: Update failed${NC}"
+          fi
+        else
+          echo -e "${RED}❌ Error: Could not write to $settings_file${NC}"
+        fi
+      else
+        echo -e "${CYAN}   Skipped Cursor update${NC}"
+      fi
+    fi
+  fi
+
+  if [ -f "$SCRIPT_DIR/.gemini/settings.json" ]; then
+    local installed=$(grep -o '"model": "[^"]*"' "$SCRIPT_DIR/.gemini/settings.json" | cut -d'"' -f4)
+    if [ -n "$installed" ] && [ -n "$gemini_latest" ] && [ "$installed" != "$gemini_latest" ]; then
+      echo ""
+      echo -e "${YELLOW}⚠️  Gemini: New version available${NC}"
+      echo -e "   ${CYAN}Current: ${installed}${NC}"
+      echo -e "   ${CYAN}Latest: ${gemini_latest}${NC}"
+      read -r -p "$(echo -e ${BLUE}Update Gemini to latest version? [y/N]: ${NC})" response
+      if [[ "$response" =~ ^[yY]$ ]]; then
+        local settings_file="$SCRIPT_DIR/.gemini/settings.json"
+        mkdir -p "$(dirname "$settings_file")"
+        printf '{\n  "model": "%s"\n}\n' "$gemini_latest" > "$settings_file"
+        if [ -f "$settings_file" ]; then
+          local verify=$(grep -o '"model": "[^"]*"' "$settings_file" | cut -d'"' -f4)
+          if [ "$verify" = "$gemini_latest" ]; then
+            echo -e "${GREEN}✅ Gemini template updated to ${gemini_latest}${NC}"
+            echo -e "${CYAN}   (Repository template updated - run install.sh on projects to apply)${NC}"
+          else
+            echo -e "${RED}❌ Error: Update failed${NC}"
+          fi
+        else
+          echo -e "${RED}❌ Error: Could not write to $settings_file${NC}"
+        fi
+      else
+        echo -e "${CYAN}   Skipped Gemini update${NC}"
+      fi
+    fi
+  fi
+}
+
+show_model_versions() {
+  local target="$1"
+
+  echo -e "${CYAN}═══════════════════════════════════════════════════════════════${NC}"
+  echo -e "${MAGENTA}📋 Model Versions Configured:${NC}"
+  echo -e "${CYAN}═══════════════════════════════════════════════════════════════${NC}"
+  echo ""
+
+  if [ -f "$target/.claude/settings.json" ]; then
+    local claude_model=$(grep -o '"model": "[^"]*"' "$target/.claude/settings.json" | cut -d'"' -f4)
+    if [ -n "$claude_model" ]; then
+      echo -e "${BLUE}Claude:${NC} ${YELLOW}$claude_model${NC}"
+    fi
+  fi
+
+  if [ -f "$target/.cursor/settings.json" ]; then
+    local cursor_model=$(grep -o '"model": "[^"]*"' "$target/.cursor/settings.json" | cut -d'"' -f4)
+    if [ -n "$cursor_model" ]; then
+      echo -e "${BLUE}Cursor:${NC} ${YELLOW}$cursor_model${NC}"
+    fi
+  fi
+
+  if [ -f "$target/.gemini/settings.json" ]; then
+    local gemini_model=$(grep -o '"model": "[^"]*"' "$target/.gemini/settings.json" | cut -d'"' -f4)
+    if [ -n "$gemini_model" ]; then
+      echo -e "${BLUE}Gemini:${NC} ${YELLOW}$gemini_model${NC}"
+    fi
+  fi
+
+  echo ""
+
+  check_model_updates "$target"
+
+  echo ""
+}
+
 install_to_project() {
   local target="$1"
 
@@ -36,14 +170,19 @@ install_to_project() {
     [[ ! "$response" =~ ^[yY]$ ]] && echo -e "${BLUE}Cancelled.${NC}" && exit 0
   fi
 
-  echo -e "${BLUE}🚀 Installing...${NC}"
+  echo -e "${BLUE}🚀 Installing/Updating...${NC}"
   echo -e "${BLUE}📁 Target: $target${NC}\n"
 
-  mkdir -p "$target"/{.cursor/rules,.claude,.task-flow}
+  mkdir -p "$target"/{.cursor/rules,.claude,.gemini,.task-flow}
 
   [ -d "$SCRIPT_DIR/.cursor/rules" ] &&
     cp -r "$SCRIPT_DIR/.cursor/rules/"* "$target/.cursor/rules/" &&
     echo -e "${GREEN}✅ Cursor rules${NC}"
+
+
+  [ -f "$SCRIPT_DIR/.cursor/settings.json" ] &&
+    cp "$SCRIPT_DIR/.cursor/settings.json" "$target/.cursor/settings.json" &&
+    echo -e "${GREEN}✅ Cursor settings${NC}"
 
   [ -f "$SCRIPT_DIR/.claude/settings.json" ] &&
     cp "$SCRIPT_DIR/.claude/settings.json" "$target/.claude/settings.json" &&
@@ -53,25 +192,41 @@ install_to_project() {
     cp "$SCRIPT_DIR/CLAUDE.md" "$target/CLAUDE.md" &&
     echo -e "${GREEN}✅ Claude instructions${NC}"
 
+  [ -f "$SCRIPT_DIR/.gemini/settings.json" ] &&
+    cp "$SCRIPT_DIR/.gemini/settings.json" "$target/.gemini/settings.json" &&
+    echo -e "${GREEN}✅ Gemini settings${NC}"
+
+  [ -f "$SCRIPT_DIR/GEMINI.md" ] &&
+    cp "$SCRIPT_DIR/GEMINI.md" "$target/GEMINI.md" &&
+    echo -e "${GREEN}✅ Gemini instructions${NC}"
+
+  [ -f "$SCRIPT_DIR/.model-versions.json" ] &&
+    cp "$SCRIPT_DIR/.model-versions.json" "$target/.model-versions.json" 2>/dev/null
+
   if [ -d "$SCRIPT_DIR/.task-flow" ]; then
     mkdir -p "$target/.task-flow/scripts"
     [ -d "$SCRIPT_DIR/.task-flow/scripts" ] && {
-      cp "$SCRIPT_DIR/.task-flow/scripts/"* "$target/.task-flow/scripts/" 2>/dev/null
+      for script in "$SCRIPT_DIR/.task-flow/scripts"/*.sh; do
+        [ -f "$script" ] && cp "$script" "$target/.task-flow/scripts/" 2>/dev/null
+      done
       chmod +x "$target/.task-flow/scripts/"*.sh 2>/dev/null
+      echo -e "${GREEN}✅ Task Flow scripts${NC}"
+      echo -e "${CYAN}   ℹ️  Note: tasks.json and status.json are NOT overwritten (your data is safe)${NC}"
     }
     [ ! -f "$target/.task-flow/.task-flow-tasks.txt" ] &&
       [ -f "$SCRIPT_DIR/.task-flow/.task-flow-tasks.txt" ] &&
       cp "$SCRIPT_DIR/.task-flow/.task-flow-tasks.txt" "$target/.task-flow/.task-flow-tasks.txt"
-    echo -e "${GREEN}✅ Task Flow scripts${NC}"
   fi
 
   [ ! -f "$target/.gitignore" ] && touch "$target/.gitignore"
 
   # Remove old entries if they exist
   sed -i.bak '/^\.claude\/$/d' "$target/.gitignore" 2>/dev/null
+  sed -i.bak '/^\.gemini\/$/d' "$target/.gitignore" 2>/dev/null
   sed -i.bak '/^\.cursor\/$/d' "$target/.gitignore" 2>/dev/null
   sed -i.bak '/^\.task-flow\/$/d' "$target/.gitignore" 2>/dev/null
   sed -i.bak '/^CLAUDE\.md$/d' "$target/.gitignore" 2>/dev/null
+  sed -i.bak '/^GEMINI\.md$/d' "$target/.gitignore" 2>/dev/null
   sed -i.bak '/^# Rubinho Task Flow/d' "$target/.gitignore" 2>/dev/null
   sed -i.bak '/^\.cursor\/rules\/$/d' "$target/.gitignore" 2>/dev/null
   sed -i.bak '/^\.task-flow\/scripts\/tasks\.json$/d' "$target/.gitignore" 2>/dev/null
@@ -84,14 +239,19 @@ install_to_project() {
   {
     echo ""
     echo ".claude/"
+    echo ".gemini/"
     echo ".cursor/"
     echo ".task-flow/"
     echo "CLAUDE.md"
+    echo "GEMINI.md"
   } >> "$target/.gitignore"
 
   echo -e "${GREEN}✅ .gitignore updated${NC}"
 
   echo -e "\n${GREEN}✨ Done!${NC}\n"
+
+  show_model_versions "$target"
+
   echo -e "${BLUE}Next steps:${NC}"
   echo -e "   ${YELLOW}cd $target${NC}"
   echo -e "   ${YELLOW}.task-flow/scripts/task-flow.sh${NC}\n"
