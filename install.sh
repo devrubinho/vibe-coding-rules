@@ -200,9 +200,7 @@ install_to_project() {
     cp "$SCRIPT_DIR/GEMINI.md" "$target/GEMINI.md" &&
     echo -e "${GREEN}✅ Gemini instructions${NC}"
 
-  [ -f "$SCRIPT_DIR/.model-versions.json" ] &&
-    cp "$SCRIPT_DIR/.model-versions.json" "$target/.model-versions.json" 2>/dev/null
-
+  
   if [ -d "$SCRIPT_DIR/.task-flow" ]; then
     mkdir -p "$target/.task-flow/scripts"
     [ -d "$SCRIPT_DIR/.task-flow/scripts" ] && {
