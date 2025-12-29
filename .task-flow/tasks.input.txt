@@ -1,0 +1,14 @@
+# Rubinho Task Flow - Task Definitions
+
+## How to use this file:
+
+1. Write your tasks below in natural language
+2. Use the format: `- Task description` (no [ ] needed)
+3. Use `task-flow: sync` to generate subtasks from your tasks
+4. Use `task-flow: status` to view task progress
+
+## Tasks:
+
+- First task
+- Second task
+

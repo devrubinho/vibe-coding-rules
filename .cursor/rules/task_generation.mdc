@@ -1,26 +1,27 @@
 ---
-description: Direct task generation from .task-flow-tasks.txt - be efficient and direct
-globs: .task-flow/.task-flow-tasks.txt, .task-flow/scripts/tasks.json, .task-flow/scripts/status.json
+description: Direct task generation from tasks.input.txt - be efficient and direct
+globs: .task-flow/tasks.input.txt, .task-flow/.internal/tasks.json, .task-flow/.internal/status.json
 alwaysApply: true
 ---
 
 - **Task Generation - Direct and Efficient:**
-  - When user asks to "Read .task-flow-tasks.txt and generate detailed subtasks updating task status":
-    - **READ ONLY**: `.task-flow/.task-flow-tasks.txt`
-    - **GENERATE**: Two JSON files with the exact structure below
-    - **SAVE**: Both files to `.task-flow/scripts/`
+  - When user asks to "Read tasks.input.txt and generate detailed subtasks updating task status":
+    - **READ ONLY**: `.task-flow/tasks.input.txt`
+    - **GENERATE**: Two JSON files and one markdown file with the exact structure below
+    - **SAVE**: All files to `.task-flow/`
     - **DON'T**: Read other files, check existing JSONs, explore codebase, or ask questions
 
 - **Required Actions:**
-  1. Read `.task-flow-tasks.txt` (ignore comments, only process `- [ ]` lines)
+  1. Read `tasks.input.txt` (ignore comments, only process lines starting with `- `)
   2. For each task line, create a task with sequential ID starting at 1
   3. Generate 3-8 subtasks per task with:
      - Clear title
      - Brief description
      - Step-by-step instructions (3-5 steps)
-  4. Create `tasks.json` with structure below
-  5. Create `status.json` with all tasks/subtasks as "pending"
-  6. Write both files immediately
+  4. Create `.task-flow/.internal/tasks.json` with structure below
+  5. Create `.task-flow/.internal/status.json` with all tasks/subtasks as "pending"
+  6. Create `.task-flow/tasks.status.md` with all tasks and subtasks marked as `- [ ]` (pending)
+  7. Write all three files immediately
 
 - **tasks.json Structure:**
   ```json
@@ -30,7 +31,7 @@ alwaysApply: true
         "id": 1,
         "title": "Task Title",
         "description": "Task description",
-        "originalRequest": "- [ ] Task description from tasks.txt",
+        "originalRequest": "- Task description from tasks.input.txt",
         "createdAt": "ISO 8601 timestamp",
         "subtasks": [
           {
@@ -60,8 +61,27 @@ alwaysApply: true
   }
   ```
 
+- **tasks.status.md Structure:**
+  ```markdown
+  # Task Status
+
+  ## Tasks
+
+  - [ ] Task Title
+
+    - [ ] Subtask Title 1
+    - [ ] Subtask Title 2
+
+  - [ ] Another Task Title
+
+    - [ ] Subtask Title 1
+    - [ ] Subtask Title 2
+  ```
+  - All tasks and subtasks start as `- [ ]` (pending)
+  - Format: Task title with `- [ ]`, then subtasks indented with `  - [ ]`
+
 - **Example:**
-  - Input (`.task-flow-tasks.txt`): `- [ ] Create authentication system`
+  - Input (`tasks.input.txt`): `- Create authentication system`
   - Output: Task with ID 1, 5 subtasks (setup database, create models, implement login, add JWT, test)
 
 - **Critical Rules:**
@@ -74,4 +94,4 @@ alwaysApply: true
   - ✅ Subtask IDs are sequential per task (1, 2, 3...)
 
 - **Principle:**
-  > **When generating tasks, be fast and direct. Read .task-flow-tasks.txt, generate JSONs with proper structure, save files. No exploration needed.**
+  > **When generating tasks, be fast and direct. Read tasks.input.txt, generate JSONs and tasks.status.md with proper structure, save files. No exploration needed.**

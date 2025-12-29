@@ -1,0 +1,196 @@
+---
+description: Work on next X subtasks from Rubinho Task Flow - simplified commands
+globs: **/*
+alwaysApply: true
+---
+
+- **Task Work - Simplified Commands:**
+  - **FASTEST FORMAT**: `task-flow: run next X` (e.g., "task-flow: run next 4" → work on next 4 subtasks)
+  - **TASK SPECIFIC**: `task-flow: run task X` (e.g., "task-flow: run task 1" → work on all subtasks of task 1)
+  - When user says "task-flow: run next X", "faça as próximas X subtasks", or "work on next X subtasks":
+    - **INTERPRET**: User wants to work on the next X pending subtasks from Rubinho Task Flow
+    - **AUTOMATIC**: Read tasks, find next X pending, implement them sequentially
+    - **UPDATE**: Mark each subtask as done after completion
+    - **NO NEED**: To specify "task flow" explicitly - it's implied
+  - When user says "task-flow: run task X", "execute todas as subtasks da task X", or "work on task X":
+    - **INTERPRET**: User wants to work on all pending subtasks of a specific task
+    - **DEPENDENCY CHECK**: Before executing, verify that all tasks before X (1, 2, ..., X-1) are completely done
+    - **CONFLICT PREVENTION**: Only execute subtasks of task X if no previous tasks have pending subtasks (allows parallel work by multiple AIs)
+    - **PARTIAL EXECUTION**: If previous tasks have pending subtasks, inform user that task X cannot be fully executed until previous tasks are complete
+    - **AUTOMATIC**: If no conflicts, read tasks, find all pending subtasks of task X, implement them sequentially
+    - **UPDATE**: Mark each subtask as done after completion
+    - **COMPLETE**: If all subtasks are done, mark the task as done
+
+- **Natural Language Phrases:**
+  - **FAST FORMAT**: `task-flow: run next X` or `task-flow run next X` (e.g., "task-flow: run next 4")
+  - **TASK FORMAT**: `task-flow: run task X` or `task-flow run task X` (e.g., "task-flow: run task 1")
+  - "faça as próximas 3 subtasks"
+  - "work on next 5 subtasks"
+  - "próximas 2 subtasks"
+  - "faça próximas subtasks"
+  - "implement next X subtasks"
+  - "trabalhe nas próximas X subtasks"
+  - "execute todas as subtasks da task 1"
+  - "work on all subtasks of task 2"
+  - Any phrase with "próximas" + number + "subtasks" or "next" + number + "subtasks"
+  - Any phrase with "task" + number + "subtasks" or "all subtasks" + "task" + number
+  
+- **Fast Command Format:**
+  - `task-flow: run next X` → Work on next X subtasks sequentially (fastest way)
+  - `task-flow run next X` → Same as above (without colon)
+  - `task-flow: run next` → Work on next 1 subtask (default)
+  - `task-flow: run task X` → Work on all pending subtasks of task X
+  - `task-flow run task X` → Same as above (without colon)
+  - Examples:
+    - "task-flow: run next 4" → Work on next 4 subtasks
+    - "task-flow run next 3" → Work on next 3 subtasks
+    - "task-flow: run next" → Work on next 1 subtask
+    - "task-flow: run task 1" → Work on all pending subtasks of task 1
+    - "task-flow run task 2" → Work on all pending subtasks of task 2
+
+- **Required Actions for `task-flow: run next X`:**
+  1. **Read task files**: `.task-flow/.internal/tasks.json` and `.task-flow/.internal/status.json`
+  2. **Find next X pending subtasks**: 
+     - Sequential order: Task 1 → Subtask 1, 2, 3... → Task 2 → Subtask 1, 2, 3...
+     - Only count subtasks with status "pending"
+     - Skip "done" and "in_progress" subtasks
+  3. **For each subtask**:
+     - Read full instructions from `tasks.json`
+     - Implement following step-by-step instructions
+     - Test/verify implementation
+     - Update `status.json` to mark as "done"
+     - Update `tasks.status.md` to reflect the new status
+  4. **After all X subtasks done**:
+     - Check if parent task is complete (all subtasks done)
+     - If complete, update task status to "done" in both `status.json` and `tasks.status.md`
+     - Show summary of what was completed
+
+- **Required Actions for `task-flow: run task X`:**
+  1. **Read task files**: `.task-flow/.internal/tasks.json` and `.task-flow/.internal/status.json`
+  2. **Check dependencies (CRITICAL for parallel work)**:
+     - Check all tasks before X (tasks 1, 2, ..., X-1)
+     - Verify if any of these previous tasks have pending subtasks
+     - If ANY previous task has pending subtasks:
+       - **STOP**: Cannot execute task X subtasks (would conflict with sequential order)
+       - **INFORM**: Tell user which tasks need to be completed first
+       - **FORMAT**: "⚠️ Cannot execute task X: Tasks [list] must be completed first. Use 'task-flow: run task Y' to complete them."
+       - **DO NOT EXECUTE**: Do not execute any subtasks of task X
+     - If all previous tasks (1 to X-1) are completely done (all subtasks done):
+       - **PROCEED**: Safe to execute all subtasks of task X
+  3. **Find all pending subtasks of task X** (only if dependency check passed): 
+     - Only subtasks of the specified task X
+     - Only count subtasks with status "pending"
+     - Skip "done" and "in_progress" subtasks
+  4. **For each subtask** (only if dependency check passed):
+     - Read full instructions from `tasks.json`
+     - Implement following step-by-step instructions
+     - Test/verify implementation
+     - Update `status.json` to mark as "done"
+     - Update `tasks.status.md` to reflect the new status
+  5. **After all subtasks of task X are done**:
+     - Update task X status to "done" in both `status.json` and `tasks.status.md`
+     - Show summary of what was completed
+
+- **Status Update Format:**
+  ```json
+  {
+    "tasks": {
+      "1": {
+        "status": "pending",
+        "subtasks": {
+          "1": "done",
+          "2": "done",
+          "3": "pending"
+        }
+      }
+    }
+  }
+  ```
+
+- **Status Update Process:**
+  - When marking a subtask as done:
+    1. Update `.task-flow/.internal/status.json` (set subtask status to "done")
+    2. Update `.task-flow/tasks.status.md` (change `- [ ]` to `- [x]` for the subtask)
+    3. If all subtasks of a task are done, mark task as done in both files
+    4. Format for `tasks.status.md`: Tasks with `- [ ]` or `- [x]`, subtasks indented with `  - [ ]` or `  - [x]`
+
+- **Examples:**
+  ```
+  User: "task-flow: run next 4"
+  AI Action:
+  1. Read .task-flow/.internal/tasks.json
+  2. Read .task-flow/.internal/status.json
+  3. Find next 4 pending subtasks sequentially (e.g., 1.2, 1.3, 1.4, 2.1)
+  4. Work on each subtask sequentially
+  5. Mark each as "done" in status.json and update tasks.status.md
+  6. Show completion summary
+  
+  User: "task-flow: run next"
+  AI Action: Same as above, but work on 1 subtask (default)
+  
+  User: "task-flow: run task 1"
+  AI Action:
+  1. Read .task-flow/.internal/tasks.json
+  2. Read .task-flow/.internal/status.json
+  3. Check dependencies: No tasks before task 1, so proceed
+  4. Find all pending subtasks of task 1 (e.g., 1.1, 1.2, 1.3)
+  5. Work on each subtask sequentially
+  6. Mark each as "done" in status.json and update tasks.status.md
+  7. Mark task 1 as "done" if all subtasks completed
+  8. Show completion summary
+  
+  User: "task-flow: run task 3"
+  AI Action (with task 2 incomplete):
+  1. Read .task-flow/.internal/tasks.json
+  2. Read .task-flow/.internal/status.json
+  3. Check dependencies: Task 2 has pending subtasks
+  4. STOP and inform: "⚠️ Cannot execute task 3: Task 2 must be completed first. Use 'task-flow: run task 2' to complete it."
+  5. Do not execute any subtasks of task 3
+  
+  User: "task-flow: run task 3"
+  AI Action (with task 2 complete):
+  1. Read .task-flow/.internal/tasks.json
+  2. Read .task-flow/.internal/status.json
+  3. Check dependencies: All tasks before 3 (1, 2) are done, so proceed
+  4. Find all pending subtasks of task 3 (e.g., 3.1, 3.2)
+  5. Work on each subtask sequentially
+  6. Mark each as "done" in status.json and update tasks.status.md
+  7. Mark task 3 as "done" if all subtasks completed
+  8. Show completion summary
+  
+  User: "faça as próximas 3 subtasks"
+  AI Action: Same workflow as "run next 3", works with natural language too
+  
+  User: "execute todas as subtasks da task 2"
+  AI Action: Same workflow as "run task 2", includes dependency check
+  ```
+
+- **Default Behavior:**
+  - If user says "próximas subtasks" without number → assume 1 subtask
+  - If user says "próximas X subtasks" → work on exactly X subtasks
+  - If user says "task X" without "next" → interpret as "run task X" (all subtasks of that task)
+  - Always work sequentially (don't skip or reorder)
+
+- **Completion Summary:**
+  After completing subtasks, show:
+  ```
+  ✅ Completed 3 subtasks:
+  - Task 1.2: [subtask title]
+  - Task 1.3: [subtask title]
+  - Task 2.1: [subtask title]
+  
+  📝 Next pending subtask: Task 2.2
+  ```
+
+- **Error Handling:**
+  - If subtask can't be completed → mark as "in_progress" and explain why
+  - If file doesn't exist → create it
+  - If instructions unclear → ask for clarification (but try to infer first)
+
+- **Integration:**
+  - Works with [task_execution.mdc](mdc:.cursor/rules/task_execution.mdc) - same workflow
+  - Follows [commit_practices.mdc](mdc:.cursor/rules/commit_practices.mdc) - suggest commit after completion
+  - Respects [git_control.mdc](mdc:.cursor/rules/git_control.mdc) - never commit automatically
+
+- **Principle:**
+  > **When user asks to work on next X subtasks, automatically find them, implement them, and update status. Make it seamless - user shouldn't need to specify task IDs or check status manually.**

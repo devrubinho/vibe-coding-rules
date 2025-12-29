@@ -4,30 +4,31 @@ globs: **/*
 alwaysApply: true
 ---
 
-- **Rubinho Task Flow - Interactive Task Management:**
+- **Rubinho Task Flow - AI-Powered Task Management:**
   - This project uses **Rubinho Task Flow** for task tracking and management
   - **IMPORTANT**: When user mentions "task flow", they always refer to **Rubinho Task Flow**
-  - Access via interactive menu: `.task-flow/scripts/task-flow.sh`
-  - Tasks are defined in plain text: `.task-flow/.task-flow-tasks.txt`
-  - Task data is stored in: `.task-flow/scripts/` (do not edit directly)
-  - Task files: `tasks.json` (definitions) and `status.json` (progress tracking)
+  - Tasks are defined in plain text: `.task-flow/tasks.input.txt`
+  - Task data is stored in: `.task-flow/.internal/` (do not edit directly - internal system files)
+  - Task files: `.internal/tasks.json` (definitions), `.internal/status.json` (progress tracking), and `tasks.status.md` (human-readable status)
 
 - **Task Definition:**
-  - Edit `.task-flow/.task-flow-tasks.txt` to define tasks
-  - Use simple format: `- [ ] Task description`
+  - Edit `.task-flow/tasks.input.txt` to define tasks
+  - Use simple format: `- Task description` (no [ ] needed)
   - AI will generate detailed subtasks from descriptions
   - Keep descriptions clear and actionable
 
-- **Interactive Menu Options:**
-  1. **Generate tasks** - AI transforms tasks.txt into detailed subtasks
-  2. **View status** - See all tasks and their completion progress
-  3. **View details** - Get detailed instructions for a specific task
-  4. **Mark as done** - Update subtask completion status
-  5. **Edit tasks.txt** - Open editor to add/modify tasks
+- **AI Commands:**
+  - `task-flow: sync` - Sync new tasks from tasks.input.txt
+  - `task-flow: think` - Analyze codebase and suggest new tasks
+  - `task-flow: run next X` - Work on next X subtasks sequentially
+  - `task-flow: run task X` - Work on all pending subtasks of task X
+  - `task-flow: status` - Show current task status
+  - `task-flow: review` - Review completed tasks
+  - `task-flow: refactor` - Refactor code from current commit
 
 - **Workflow Example:**
   ```markdown
-  1. Add tasks to `.task-flow/.task-flow-tasks.txt`:
+  1. Add tasks to `.task-flow/tasks.input.txt`:
      - [ ] Implement user authentication
      - [ ] Add database migrations
      - [ ] Create API endpoints
@@ -71,8 +72,24 @@ alwaysApply: true
 
 - **Task Generation:**
   - See [task_generation.mdc](mdc:.cursor/rules/task_generation.mdc) for direct task generation rules
-  - When generating tasks, be efficient: read tasks.txt, generate JSONs, save files
+  - When generating tasks, be efficient: read tasks.input.txt, generate JSONs, save files
   - No need to explore codebase or read other files
+
+- **Task Analysis:**
+  - See [task_analysis.mdc](mdc:.cursor/rules/task_analysis.mdc) for analyzing codebase to suggest new tasks
+  - When user asks to analyze for new tasks, intelligently scan codebase and suggest additions
+
+- **Simplified Task Work:**
+  - See [task_work.mdc](mdc:.cursor/rules/task_work.mdc) for simplified "do next X subtasks" commands
+  - When user says "faça as próximas X subtasks", automatically find and implement them
+
+- **Task Review:**
+  - See [task_review.mdc](mdc:.cursor/rules/task_review.mdc) for reviewing completed tasks
+  - When user says "task-flow: review", verify if completed tasks are actually done
+
+- **Task Refactor:**
+  - See [task_refactor.mdc](mdc:.cursor/rules/task_refactor.mdc) for refactoring code from current commit
+  - When user says "task-flow: refactor", improve code quality without changing functionality
 
 - **Task Flow Commands - Natural Language Interpretation:**
   - **CRITICAL**: When user mentions **"task flow"**, they **ALWAYS** refer to **Rubinho Task Flow**
@@ -84,25 +101,25 @@ alwaysApply: true
     - Any variation mentioning "task flow" + "subtasks"
 
 - **When User Asks to Work on Subtasks:**
-  - **STEP 1**: Read `.task-flow/scripts/tasks.json` and `.task-flow/scripts/status.json`
+  - **STEP 1**: Read `.task-flow/.internal/tasks.json` and `.task-flow/.internal/status.json`
   - **STEP 2**: Find next X pending subtasks in sequential order:
     - Order: Task 1 → Subtask 1, 2, 3... → Task 2 → Subtask 1, 2, 3...
     - Only count subtasks with status "pending"
     - Skip subtasks already "done" or "in_progress"
   - **STEP 3**: For each subtask:
-    - Read instructions from `tasks.json`
+    - Read instructions from `.internal/tasks.json`
     - Implement following step-by-step instructions
-    - After completion: Update `status.json` (subtask → "done")
-  - **STEP 4**: If all subtasks of a task are done, update task status to "done"
+    - After completion: Update `.internal/status.json` (subtask → "done") and `tasks.status.md` (mark as `- [x]`)
+  - **STEP 4**: If all subtasks of a task are done, update task status to "done" in both files
 
 - **Example:**
   - User: "trabalhe nas próximas 3 subtasks do task flow"
   - Interpretation: Work on next 3 pending subtasks from Rubinho Task Flow
   - Action:
-    1. Read `.task-flow/scripts/tasks.json` and `.task-flow/scripts/status.json`
+    1. Read `.task-flow/.internal/tasks.json` and `.task-flow/.internal/status.json`
     2. Find first 3 pending subtasks (e.g., 1.1, 1.2, 1.3 if all pending)
-    3. Work on 1.1 → mark done → work on 1.2 → mark done → work on 1.3 → mark done
-    4. Update status.json after each completion
+    3. Work on 1.1 → mark done in .internal/status.json and tasks.status.md → work on 1.2 → mark done → work on 1.3 → mark done
+    4. Update both .internal/status.json and tasks.status.md after each completion
 
 - **Principle:**
-  > **Use Rubinho Task Flow's interactive menu for all task management. Define tasks in plain text, let AI generate details, track progress through the menu, and commit work with descriptive messages.**
+  > **Use Rubinho Task Flow's AI commands for all task management. Define tasks in plain text, let AI generate details, track progress through tasks.status.md, and commit work with descriptive messages.**

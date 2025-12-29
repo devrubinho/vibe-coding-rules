@@ -1,0 +1,185 @@
+---
+description: Sync .task-flow-tasks.txt with task system and analyze codebase for new tasks
+globs: **/*
+alwaysApply: true
+---
+
+- **Task Sync - Complete Synchronization:**
+  - **FASTEST FORMAT**: `task-flow: sync` → Complete sync of tasks.input.txt with system
+  - When user says "task-flow: sync" or "task-flow sync":
+    - **READ**: `.task-flow/tasks.input.txt` to find all tasks
+    - **READ**: `.task-flow/.internal/tasks.json` and `.task-flow/.internal/status.json` to see existing tasks and their status
+    - **SYNC**: Fully synchronize tasks and status between tasks.input.txt and system files
+    - **PRESERVE**: Keep status of existing tasks (done/pending/in_progress) when possible
+
+- **Complete Sync Process:**
+  1. **Read files**:
+     - Read `.task-flow/tasks.input.txt` (all tasks from user input)
+     - Read `.task-flow/.internal/tasks.json` (existing generated tasks)
+     - Read `.task-flow/.internal/status.json` (existing task status)
+  
+  2. **Compare and identify changes**:
+     - **New tasks**: Tasks in tasks.input.txt that don't exist in tasks.json (by comparing `originalRequest`)
+     - **Removed tasks**: Tasks in tasks.json that don't exist in tasks.input.txt
+     - **Modified tasks**: Tasks that exist in both but `originalRequest` changed (text modified)
+     - **Unchanged tasks**: Tasks that exist in both with same `originalRequest`
+  
+  3. **Process new tasks**:
+     - For each new task in tasks.input.txt:
+       - Generate subtasks following [task_generation.mdc](mdc:.cursor/rules/task_generation.mdc) rules
+       - Add to tasks.json with sequential ID
+       - Add to status.json with "pending" status for task and all subtasks
+       - Add to tasks.status.md with `- [ ]` format
+  
+  4. **Process removed tasks**:
+     - For each task in tasks.json not found in tasks.input.txt:
+       - Remove from tasks.json
+       - Remove from status.json
+       - Remove from tasks.status.md
+  
+  5. **Process modified tasks**:
+     - For each task where `originalRequest` changed:
+       - Update title and description in tasks.json based on new text
+       - Regenerate subtasks (following task_generation.mdc rules)
+       - **PRESERVE STATUS**: Keep existing status from status.json (task and subtasks)
+       - Update tasks.status.md with new subtasks but preserve status marks (`- [x]` for done, `- [ ]` for pending)
+  
+  6. **Process unchanged tasks**:
+     - Keep tasks.json unchanged
+     - Keep status.json unchanged
+     - Keep tasks.status.md unchanged (preserve all status marks)
+  
+  7. **Synchronize status between files**:
+     - Read current `status.json` to get all existing statuses
+     - Read current `tasks.status.md` to get status marks
+     - **Compare and sync**: Ensure `status.json` and `tasks.status.md` are perfectly aligned
+     - If there are inconsistencies:
+       - Use `status.json` as source of truth for status values
+       - Update `tasks.status.md` to match `status.json` (convert "done" → `- [x]`, "pending" → `- [ ]`)
+       - Ensure both files reflect the same status for all tasks and subtasks
+  
+  8. **Rebuild files**:
+     - Rebuild tasks.json with all tasks in correct order (matching tasks.input.txt order)
+     - Rebuild status.json preserving all existing statuses (or updating if needed)
+     - Rebuild tasks.status.md with all tasks and correct status marks (synchronized with status.json)
+  
+  **Critical Rules:**
+  - ✅ Always preserve status of existing tasks/subtasks when possible
+  - ✅ **SYNC STATUS**: Ensure `status.json` and `tasks.status.md` are always synchronized
+  - ✅ Use `status.json` as source of truth, update `tasks.status.md` to match
+  - ✅ When regenerating subtasks for modified tasks, try to match existing subtasks by title/description
+  - ✅ If subtasks change significantly, mark new ones as "pending" but keep old ones as "done" if they were done
+  - ✅ Maintain sequential task IDs (1, 2, 3...) matching order in tasks.input.txt
+  - ✅ When removing tasks, remove all associated data (subtasks, status)
+  - ✅ After any status change, update BOTH `status.json` and `tasks.status.md` to keep them in sync
+
+- **Task Analysis - Suggest New Tasks:**
+  - **FAST FORMAT**: `task-flow: think` → Analyze codebase and suggest new tasks
+  - When user says "task-flow: think", "analyze if there are new tasks to create", "check for new tasks", or "suggest tasks":
+    - **ANALYZE**: Current codebase, recent changes, TODOs, FIXMEs, and project structure
+    - **SUGGEST**: New tasks that should be added to `.task-flow/tasks.input.txt`
+    - **FORMAT**: Use Rubinho Task Flow format: `- Task description` (no [ ] needed)
+    - **ASK**: Always ask user if they want to add the suggested tasks
+    - **ONLY ACTION**: If user confirms, add tasks to `.task-flow/tasks.input.txt` - nothing else
+    - **DON'T**: Automatically add tasks without confirmation
+
+- **Analysis Process:**
+  1. **Read existing tasks**: Check `.task-flow/tasks.input.txt` to see what's already planned
+  2. **Analyze codebase**: Look for:
+     - TODO/FIXME comments in code
+     - Missing tests or incomplete test coverage
+     - Incomplete features or half-implemented functionality
+     - Code quality issues (refactoring opportunities)
+     - Missing documentation
+     - Security improvements needed
+     - Performance optimizations
+     - Missing error handling
+  3. **Check recent changes**: Review git history or recent file modifications
+  4. **Identify gaps**: Compare what exists vs what should exist
+  5. **Suggest tasks**: Propose specific, actionable tasks
+
+- **Task Suggestion Format:**
+  ```markdown
+  ## Suggested Tasks for tasks.input.txt
+  
+  - Add unit tests for UserService
+  - Implement error handling in API endpoints
+  - Refactor authentication middleware
+  - Add API documentation with Swagger
+  - Optimize database queries in ReportService
+  ```
+
+- **When User Confirms:**
+  - If user wants to add suggested tasks:
+    - Read `.task-flow/tasks.input.txt`
+    - Append new tasks (maintaining existing format)
+    - Don't remove or modify existing tasks
+    - Keep one task per line with `- ` format (no [ ] needed)
+
+- **Natural Language Phrases:**
+  - **FAST FORMAT**: `task-flow: sync` or `task-flow sync` → Sync tasks.input.txt with system
+  - **FAST FORMAT**: `task-flow: think` or `task-flow think` → Analyze and suggest new tasks
+  - "sync tasks" → Same as task-flow: sync
+  - "sincronizar tasks" → Same as task-flow: sync
+  - "analise se tem tasks novas para criar" → Same as task-flow: think
+  - "check for new tasks" → Same as task-flow: think
+  - "suggest tasks" → Same as task-flow: think
+  - "what tasks should I add?" → Same as task-flow: think
+  - "analyze codebase for tasks" → Same as task-flow: think
+  - "find missing tasks" → Same as task-flow: think
+
+- **Example Workflows:**
+  ```
+  User: "task-flow: sync"
+  
+  AI Action (Complete Sync):
+  1. Read .task-flow/tasks.input.txt:
+     - Task 1: "Create auth system" (exists, unchanged)
+     - Task 2: "Add database" (MODIFIED - was "Setup database")
+     - Task 3: "New feature" (NEW - not in tasks.json)
+     - Task 4: REMOVED (was in tasks.json, not in tasks.input.txt)
+  
+  2. Read .task-flow/.internal/tasks.json:
+     - Task 1: exists, status: done
+     - Task 2: exists, status: in_progress (subtask 2.1 done, 2.2 pending)
+     - Task 4: exists, status: pending
+  
+  3. Process changes:
+     - Task 1: Unchanged → Keep as is, preserve status "done"
+     - Task 2: Modified → Update title/description, regenerate subtasks, PRESERVE status (2.1 done, 2.2 pending)
+     - Task 3: New → Generate subtasks, add with status "pending"
+     - Task 4: Removed → Remove from all files
+  
+  4. Sync status between files:
+     - Compare status.json and tasks.status.md
+     - Ensure both reflect same status (done → `- [x]`, pending → `- [ ]`)
+     - Update tasks.status.md to match status.json if inconsistencies found
+  
+  5. Rebuild files:
+     - tasks.json: Tasks 1, 2 (updated), 3 (new) - in order
+     - status.json: Preserve Task 1 (done), Task 2 (in_progress with preserved subtask status), Task 3 (pending)
+     - tasks.status.md: Reflect all changes with correct status marks, synchronized with status.json
+  
+  User: "task-flow: think"
+  AI Action (Analyze):
+  1. Read .task-flow/tasks/tasks.input.txt (existing tasks)
+  2. Analyze codebase for TODOs, missing features, etc.
+  3. Suggest new tasks:
+     - Add input validation to login endpoint
+     - Create migration for user preferences table
+     - Write tests for PaymentService
+  4. Ask: "Do you want to add these tasks to tasks.input.txt? [y/N]"
+  5. If user confirms (y): Add tasks to tasks.input.txt
+  6. If user declines (n): Do nothing, just show suggestions
+  
+  User: "analise se tem tasks novas para criar no task flow"
+  AI Action: Same as task-flow: think
+  ```
+
+- **Integration:**
+  - Works with [task_generation.mdc](mdc:.cursor/rules/task_generation.mdc) - after adding tasks, user can generate subtasks
+  - Follows [task_execution.mdc](mdc:.cursor/rules/task_execution.mdc) workflow
+  - Respects [git_control.mdc](mdc:.cursor/rules/git_control.mdc) - never commit automatically
+
+- **Principle:**
+  > **Analyze the codebase intelligently to suggest meaningful tasks. Don't add tasks automatically - let the user review and decide. Focus on actionable, specific tasks that improve the project.**

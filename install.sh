@@ -202,18 +202,18 @@ install_to_project() {
 
   
   if [ -d "$SCRIPT_DIR/.task-flow" ]; then
-    mkdir -p "$target/.task-flow/scripts"
-    [ -d "$SCRIPT_DIR/.task-flow/scripts" ] && {
-      for script in "$SCRIPT_DIR/.task-flow/scripts"/*.sh; do
-        [ -f "$script" ] && cp "$script" "$target/.task-flow/scripts/" 2>/dev/null
-      done
-      chmod +x "$target/.task-flow/scripts/"*.sh 2>/dev/null
-      echo -e "${GREEN}✅ Task Flow scripts${NC}"
-      echo -e "${CYAN}   ℹ️  Note: tasks.json and status.json are NOT overwritten (your data is safe)${NC}"
-    }
-    [ ! -f "$target/.task-flow/.task-flow-tasks.txt" ] &&
-      [ -f "$SCRIPT_DIR/.task-flow/.task-flow-tasks.txt" ] &&
-      cp "$SCRIPT_DIR/.task-flow/.task-flow-tasks.txt" "$target/.task-flow/.task-flow-tasks.txt"
+    mkdir -p "$target/.task-flow"
+    echo -e "${GREEN}✅ Task Flow directory${NC}"
+    echo -e "${CYAN}   ℹ️  Note: .internal/tasks.json and .internal/status.json are NOT overwritten (your data is safe)${NC}"
+    [ ! -f "$target/.task-flow/tasks.input.txt" ] &&
+      [ -f "$SCRIPT_DIR/.task-flow/tasks.input.txt" ] &&
+      cp "$SCRIPT_DIR/.task-flow/tasks.input.txt" "$target/.task-flow/tasks.input.txt"
+    [ ! -f "$target/.task-flow/tasks.status.md" ] &&
+      [ -f "$SCRIPT_DIR/.task-flow/tasks.status.md" ] &&
+      cp "$SCRIPT_DIR/.task-flow/tasks.status.md" "$target/.task-flow/tasks.status.md"
+    [ -f "$SCRIPT_DIR/.task-flow/README.md" ] &&
+      cp "$SCRIPT_DIR/.task-flow/README.md" "$target/.task-flow/README.md" &&
+      echo -e "${GREEN}✅ Task Flow README${NC}"
   fi
 
   [ ! -f "$target/.gitignore" ] && touch "$target/.gitignore"
@@ -251,7 +251,8 @@ install_to_project() {
 
   echo -e "${BLUE}Next steps:${NC}"
   echo -e "   ${YELLOW}cd $target${NC}"
-  echo -e "   ${YELLOW}.task-flow/scripts/task-flow.sh${NC}\n"
+  echo -e "   ${CYAN}Use AI commands: task-flow: sync, task-flow: run X, etc.${NC}"
+  echo -e "   ${CYAN}See .task-flow/README.md for all commands${NC}\n"
 }
 
 main() {

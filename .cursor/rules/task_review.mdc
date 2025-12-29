@@ -1,0 +1,75 @@
+---
+description: Review completed tasks to verify they are actually done or erroneously marked
+globs: **/*
+alwaysApply: true
+---
+
+- **Task Review - Verify Completed Tasks:**
+  - **FAST FORMAT**: `task-flow: review` → Review all completed tasks
+  - When user says "task-flow: review" or "review completed tasks":
+    - **READ**: `.task-flow/.internal/tasks.json` and `.task-flow/.internal/status.json`
+    - **IDENTIFY**: All tasks/subtasks marked as "done"
+    - **VERIFY**: Check if each completed task/subtask is actually implemented
+    - **REPORT**: List tasks that are erroneously marked as done
+    - **SUGGEST**: Mark incorrectly completed tasks back to "pending" or "in_progress"
+
+- **Review Process:**
+  1. Read `.task-flow/.internal/tasks.json` to get all task definitions
+  2. Read `.task-flow/.internal/status.json` to get completion status
+  3. For each task/subtask marked as "done":
+     - Check if the implementation exists in codebase
+     - Verify if implementation matches the task requirements
+     - Check if tests exist (if required by task)
+     - Verify if documentation is updated (if required)
+  4. Identify discrepancies:
+     - Task marked "done" but code doesn't exist
+     - Task marked "done" but implementation incomplete
+     - Task marked "done" but tests missing
+     - Task marked "done" but requirements not met
+  5. Report findings and ask user if they want to correct status
+
+- **Review Report Format:**
+  ```
+  📋 Task Review Results:
+  
+  ✅ Correctly Completed:
+  - Task 1.2: User authentication (verified)
+  - Task 2.1: Database migration (verified)
+  
+  ⚠️  Erroneously Marked as Done:
+  - Task 1.3: API endpoint - Code exists but tests missing
+  - Task 2.4: Error handling - Implementation incomplete
+  
+  Do you want to update status for erroneous tasks? [y/N]
+  ```
+
+- **Natural Language Phrases:**
+  - **FAST FORMAT**: `task-flow: review` or `task-flow review`
+  - "review completed tasks"
+  - "verify done tasks"
+  - "check if tasks are really done"
+  - "review task status"
+  - Any variation asking to review/verify completed tasks
+
+- **Example:**
+  ```
+  User: "task-flow: review"
+  
+  AI Action:
+  1. Read tasks.json and status.json
+  2. Find all "done" tasks/subtasks
+  3. Verify each one:
+     - Check if files exist
+     - Check if code matches requirements
+     - Check if tests exist
+  4. Report findings
+  5. Ask if user wants to correct status
+  6. If confirmed, update status.json
+  ```
+
+- **Integration:**
+  - Works with [task_execution.mdc](mdc:.cursor/rules/task_execution.mdc) workflow
+  - Respects [git_control.mdc](mdc:.cursor/rules/git_control.mdc) - never commit automatically
+
+- **Principle:**
+  > **Review completed tasks to ensure quality. Verify that "done" means actually done, not just marked. Help maintain accurate task status.**

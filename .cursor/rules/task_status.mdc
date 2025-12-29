@@ -1,0 +1,45 @@
+---
+description: Show task status from tasks.status.md - simple and direct
+globs: **/*
+alwaysApply: true
+---
+
+- **Task Status - Show Current Status:**
+  - **FAST FORMAT**: `task-flow: status` → Show current task status
+  - When user says "task-flow: status" or "task-flow status":
+    - **READ**: `.task-flow/tasks.status.md`
+    - **DISPLAY**: Show the current status of all tasks and subtasks
+    - **FORMAT**: Display in a clear, readable format showing done/pending tasks
+
+- **Status Display:**
+  - Read `.task-flow/tasks.status.md` file
+  - Show tasks marked as `- [x]` (done) and `- [ ]` (pending)
+  - Display subtasks with their status
+  - Show progress summary if available
+
+- **Natural Language Phrases:**
+  - **FAST FORMAT**: `task-flow: status` or `task-flow status`
+  - "show task status"
+  - "status das tasks"
+  - "ver status"
+  - "task status"
+  - Any variation asking to show/display task status
+
+- **Example:**
+  ```
+  User: "task-flow: status"
+  
+  AI Action:
+  1. Read .task-flow/tasks.status.md
+  2. Display current status showing:
+     - Tasks marked as done [x]
+     - Tasks marked as pending [ ]
+     - Subtasks status
+  ```
+
+- **Integration:**
+  - Works with [task_execution.mdc](mdc:.cursor/rules/task_execution.mdc) workflow
+  - Status is maintained in tasks.status.md file
+
+- **Principle:**
+  > **Show task status quickly and clearly. Read tasks.status.md and display in a readable format.**

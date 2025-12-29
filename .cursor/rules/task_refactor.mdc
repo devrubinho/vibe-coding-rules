@@ -1,0 +1,84 @@
+---
+description: Refactor code from current commit tasks without changing functionality
+globs: **/*
+alwaysApply: true
+---
+
+- **Task Refactor - Improve Code Quality:**
+  - **FAST FORMAT**: `task-flow: refactor` → Refactor code from current commit
+  - When user says "task-flow: refactor" or "refactor current tasks":
+    - **IDENTIFY**: Files changed in current commit (or staged changes)
+    - **REFACTOR**: Improve code quality without changing functionality
+    - **REMOVE**: All explanatory comments (following code_comments.mdc rules)
+    - **PRESERVE**: Only separation comments in format: `// ────────────────────────────────`
+    - **IMPROVE**: Code structure, naming, organization, but keep behavior identical
+
+- **Refactoring Rules:**
+  1. **No Functional Changes**: Code must behave exactly the same
+  2. **Remove Comments**: Remove all explanatory comments
+  3. **Keep Separation Comments**: Preserve comments that separate code blocks:
+     ```typescript
+     // ────────────────────────────────
+     // Section Name
+     // ────────────────────────────────
+     ```
+  4. **Improve Code Quality**:
+     - Better variable/function names
+     - Extract repeated code
+     - Improve code organization
+     - Better error handling
+     - Remove dead code
+     - Simplify complex logic
+  5. **Follow Project Rules**: Respect [code_comments.mdc](mdc:.cursor/rules/code_comments.mdc)
+
+- **Comment Removal:**
+  - ❌ Remove: `// This function does X`
+  - ❌ Remove: `// Check if user exists`
+  - ❌ Remove: `// TODO: fix this later`
+  - ✅ Keep: `// ────────────────────────────────`
+  - ✅ Keep: `// ────────────────────────────────\n// Section Name\n// ────────────────────────────────`
+
+- **Process:**
+  1. Identify files changed in current commit/staged changes
+  2. Read each file
+  3. Refactor:
+     - Remove explanatory comments
+     - Improve code structure
+     - Better naming
+     - Extract functions if needed
+     - Simplify logic
+  4. Verify: Code still works the same way
+  5. Show summary of changes
+
+- **Natural Language Phrases:**
+  - **FAST FORMAT**: `task-flow: refactor` or `task-flow refactor`
+  - "refactor current tasks"
+  - "refactor code from commit"
+  - "improve code quality"
+  - "clean up code"
+  - Any variation asking to refactor/improve code
+
+- **Example:**
+  ```
+  User: "task-flow: refactor"
+  
+  AI Action:
+  1. Check git diff or staged files
+  2. Identify files changed in current commit
+  3. For each file:
+     - Remove explanatory comments
+     - Improve code structure
+     - Better naming
+     - Simplify logic
+  4. Preserve separation comments
+  5. Verify functionality unchanged
+  6. Show refactoring summary
+  ```
+
+- **Integration:**
+  - Follows [code_comments.mdc](mdc:.cursor/rules/code_comments.mdc) - comment removal rules
+  - Works with [task_execution.mdc](mdc:.cursor/rules/task_execution.mdc) workflow
+  - Respects [git_control.mdc](mdc:.cursor/rules/git_control.mdc) - never commit automatically
+
+- **Principle:**
+  > **Refactor code to improve quality without changing behavior. Remove explanatory comments, keep only separation comments, improve structure and naming. Code must work exactly the same.**
