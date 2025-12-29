@@ -45,7 +45,7 @@ program
     console.log(chalk.cyan('╚════════════════════════════════════════════════════════════════╝') + '\n');
     console.log(chalk.blue('AI-powered task management for Claude, Cursor, and Gemini'));
     console.log(chalk.yellow('\nVersion:'), require('../package.json').version);
-    console.log(chalk.yellow('Repository:'), 'https://github.com/rubensdeoliveira/rbin-task-flow');
+    console.log(chalk.yellow('Repository:'), 'https://github.com/rbinoliveira/rbin-task-flow');
     console.log(chalk.yellow('\nCommands:'));
     console.log(chalk.cyan('  rbin-task-flow init') + '         - Initialize in current directory');
     console.log(chalk.cyan('  rbin-task-flow update') + '       - Update configurations');
