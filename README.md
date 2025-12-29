@@ -57,51 +57,43 @@ rbin-task-flow init
 
 ### Comandos CLI
 
-Após instalar globalmente, você pode usar estes comandos:
-
 ```bash
-# Inicializar no diretório atual
-rbin-task-flow init
-
-# Atualizar configurações
-rbin-task-flow update
-
-# Verificar atualizações de versão do modelo
-rbin-task-flow version-check
-
-# Mostrar informações de ajuda
-rbin-task-flow info
+rbin-task-flow init          # Inicializa no projeto atual
+rbin-task-flow update        # Atualiza configurações
+rbin-task-flow version-check # Verifica atualizações de modelos
+rbin-task-flow info          # Mostra informações
 ```
 
-### Comandos da IA
+### Comandos da IA - Por Que Usar?
 
-Uma vez inicializado em um projeto, use estes comandos da IA:
+Após inicializar, use estes comandos na IA (Cursor/Claude/Gemini) para gerenciar tarefas automaticamente:
 
-- `task-flow: sync` - Sincronização completa: adiciona novas, remove removidas, atualiza modificadas, preserva status
-- `task-flow: think` - Analisa código e sugere novas tarefas
-- `task-flow: run next X` - Trabalha nas próximas X subtarefas sequenciais
-- `task-flow: run task X` - Executa todas as subtarefas pendentes da tarefa X
-- `task-flow: status` - Mostra status atual das tarefas
-- `task-flow: review` - Revisa tarefas concluídas
-- `task-flow: refactor` - Refatora código do commit atual
+| Comando | Por Que Usar | Feature Principal |
+|---------|--------------|-------------------|
+| `task-flow: sync` | **Sincroniza** tarefas do arquivo texto com o sistema | Mantém tudo sincronizado automaticamente - adiciona novas, remove deletadas, preserva seu progresso |
+| `task-flow: think` | **Descobre** tarefas que você esqueceu | Analisa código e sugere tarefas que faltam (testes, refatoração, documentação) |
+| `task-flow: run next X` | **Automatiza** o trabalho nas próximas subtarefas | A IA trabalha nas próximas X subtarefas sequencialmente, você só acompanha |
+| `task-flow: run task X` | **Completa** uma tarefa inteira de uma vez | Executa todas as subtarefas de uma tarefa específica (permite trabalho paralelo) |
+| `task-flow: status` | **Visualiza** o progresso rapidamente | Vê resumo com tasks completas, em andamento e quantas subtarefas faltam |
+| `task-flow: review` | **Garante** qualidade do trabalho | Verifica se tarefas marcadas como "done" estão realmente concluídas |
+| `task-flow: refactor` | **Melhora** código sem quebrar | Refatora código do commit atual removendo comentários e melhorando qualidade |
 
-**Exemplo de uso:**
+**Fluxo típico:**
 
 ```bash
-# 1. Instalar globalmente (uma vez)
+# 1. Instalar e inicializar
 npm install -g rbin-task-flow
+cd meu-projeto && rbin-task-flow init
 
-# 2. Inicializar no seu projeto
-cd /caminho/para/meu-projeto
-rbin-task-flow init
+# 2. Editar tarefas em texto simples
+# Edite .task-flow/tasks.input.txt:
+# - Criar sistema de autenticação
+# - Adicionar testes
 
-# 3. Editar tarefas
-# Edite .task-flow/tasks.input.txt com suas tarefas
-
-# 4. Usar comandos da IA no Cursor/Claude/Gemini:
-#    - Diga: "task-flow: sync" para gerar subtarefas
-#    - Diga: "task-flow: run next 3" para trabalhar nas próximas 3 subtarefas
-#    - Diga: "task-flow: status" para ver o progresso
+# 3. Usar comandos da IA:
+# "task-flow: sync" → Gera subtarefas detalhadas automaticamente
+# "task-flow: run next 3" → IA trabalha nas próximas 3 subtarefas
+# "task-flow: status" → Vê progresso visual
 ```
 
 ## Visão Geral
@@ -424,51 +416,43 @@ rbin-task-flow init
 
 ### CLI Commands
 
-After installing globally, you can use these commands:
-
 ```bash
-# Initialize in current directory
-rbin-task-flow init
-
-# Update configurations
-rbin-task-flow update
-
-# Check for model version updates
-rbin-task-flow version-check
-
-# Show help information
-rbin-task-flow info
+rbin-task-flow init          # Initialize in current project
+rbin-task-flow update        # Update configurations
+rbin-task-flow version-check # Check for model updates
+rbin-task-flow info          # Show information
 ```
 
-### AI Commands
+### AI Commands - Why Use Them?
 
-Once initialized in a project, use these AI commands:
+After initializing, use these commands in your AI (Cursor/Claude/Gemini) to automatically manage tasks:
 
-- `task-flow: sync` - Complete synchronization: adds new, removes deleted, updates modified, preserves status
-- `task-flow: think` - Analyzes code and suggests new tasks
-- `task-flow: run next X` - Works on next X sequential subtasks
-- `task-flow: run task X` - Executes all pending subtasks of task X
-- `task-flow: status` - Shows current task status
-- `task-flow: review` - Reviews completed tasks
-- `task-flow: refactor` - Refactors code from current commit
+| Command | Why Use It | Key Feature |
+|---------|------------|-------------|
+| `task-flow: sync` | **Sync** tasks from text file with system | Keeps everything synchronized automatically - adds new, removes deleted, preserves your progress |
+| `task-flow: think` | **Discover** tasks you forgot | Analyzes code and suggests missing tasks (tests, refactoring, documentation) |
+| `task-flow: run next X` | **Automate** work on next subtasks | AI works on next X subtasks sequentially, you just follow along |
+| `task-flow: run task X` | **Complete** an entire task at once | Executes all subtasks of a specific task (allows parallel work) |
+| `task-flow: status` | **Visualize** progress quickly | See summary with completed tasks, in progress, and remaining subtasks |
+| `task-flow: review` | **Ensure** work quality | Verifies that tasks marked as "done" are actually completed |
+| `task-flow: refactor` | **Improve** code without breaking | Refactors code from current commit removing comments and improving quality |
 
-**Usage example:**
+**Typical workflow:**
 
 ```bash
-# 1. Install globally (one time)
+# 1. Install and initialize
 npm install -g rbin-task-flow
+cd my-project && rbin-task-flow init
 
-# 2. Initialize in your project
-cd /path/to/my-project
-rbin-task-flow init
+# 2. Edit tasks in plain text
+# Edit .task-flow/tasks.input.txt:
+# - Create authentication system
+# - Add tests
 
-# 3. Edit tasks
-# Edit .task-flow/tasks.input.txt with your tasks
-
-# 4. Use AI commands in Cursor/Claude/Gemini:
-#    - Say: "task-flow: sync" to generate subtasks
-#    - Say: "task-flow: run next 3" to work on next 3 subtasks
-#    - Say: "task-flow: status" to view progress
+# 3. Use AI commands:
+# "task-flow: sync" → Automatically generates detailed subtasks
+# "task-flow: run next 3" → AI works on next 3 subtasks
+# "task-flow: status" → View visual progress
 ```
 
 ## Overview
