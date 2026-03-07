@@ -279,35 +279,77 @@ export function DashboardPage() {
 }
 ```
 
+### Page-specific component naming (Front web & Mobile)
+
+When a component is specific to a page (lives under `features/[feature]/components/`), it must use the **page prefix** in the file name and in the function name.
+
+**File names (kebab-case):**
+- Page: `[page-name].page.tsx` → e.g. `admin-question.page.tsx`
+- Page-specific components: prefix = page name (no `.page`) → `admin-question-card.tsx`, `admin-question-card-item.tsx`
+- A **child component** of another component stays in the same `components/` folder (same level as parent) and **inherits the parent prefix**: `admin-question-card-item.tsx` (child of `admin-question-card.tsx`). No subfolders.
+
+**Function/component names (PascalCase):**
+- Route in `app/`: one word from route + page name → `AdminQuestion` (export default)
+- Page in features: page name + `Page` → `AdminQuestionPage`
+- Components: PascalCase of the file name → `AdminQuestionCard`, `AdminQuestionCardItem`
+
+| Location | File | Export name |
+|----------|------|-------------|
+| `app/(private)/admin/question/page.tsx` | (route file) | `AdminQuestion` (default) |
+| `features/admin/question/pages/admin-question.page.tsx` | `admin-question.page.tsx` | `AdminQuestionPage` |
+| `features/admin/question/components/admin-question-card.tsx` | `admin-question-card.tsx` | `AdminQuestionCard` |
+| `features/admin/question/components/admin-question-card-item.tsx` | `admin-question-card-item.tsx` | `AdminQuestionCardItem` |
+
+```typescript
+// src/app/(private)/admin/question/page.tsx
+import { AdminQuestionPage } from '@/features/admin/question/pages/admin-question.page'
+
+export default function AdminQuestion() {
+  return <AdminQuestionPage />
+}
+```
+
+```typescript
+// src/features/admin/question/pages/admin-question.page.tsx
+'use client'
+
+import { AdminQuestionCard } from '@/features/admin/question/components/admin-question-card'
+
+export function AdminQuestionPage() {
+  return (
+    <section>
+      <AdminQuestionCard />
+    </section>
+  )
+}
+```
+
+```typescript
+// src/features/admin/question/components/admin-question-card.tsx
+import { AdminQuestionCardItem } from '@/features/admin/question/components/admin-question-card-item'
+
+export function AdminQuestionCard() {
+  return (
+    <ul>
+      <AdminQuestionCardItem />
+    </ul>
+  )
+}
+```
+
+```typescript
+// src/features/admin/question/components/admin-question-card-item.tsx
+export function AdminQuestionCardItem() {
+  return <li>...</li>
+}
+```
+
 ### Components — Single Responsibility
 
 Each component has a single responsibility. Components:
 - Receive data via props (no direct service calls unless truly necessary)
-- Are named after the feature: `[feature]-[description].tsx`
-- Stay small and focused
-
-```typescript
-// src/features/dashboard/components/dashboard-active-card.tsx
-import { Card } from '@/shared/components/card'
-import { Skeleton } from '@/shared/components/skeleton'
-
-type DashboardActiveCardProps = {
-  data?: { count: number; trials: number }
-  isLoading: boolean
-  isError: boolean
-}
-
-export function DashboardActiveCard({ data, isLoading, isError }: DashboardActiveCardProps) {
-  if (isLoading) return <Skeleton className="h-[200px]" />
-  if (isError) return <ErrorState />
-
-  return (
-    <Card title="Active Members">
-      <p className="text-2xl font-bold">{data?.count}</p>
-    </Card>
-  )
-}
-```
+- Follow the **page prefix** naming above when they are page-specific (inside a feature)
+- Stay small and focused; child components stay in the same `components/` folder with the inherited prefix in the name
 
 ---
 
@@ -751,3 +793,4 @@ export const useAuth = () => useContext(AuthContext)
 9. **Shared is truly shared**: Only put in `shared/` what is used by 2+ features.
 10. **Naming reflects role**: File name + suffix must make the file's purpose immediately obvious.
 11. **No barrel files for re-exports**: Do not use `index.ts` (or `index.tsx`) only to re-export other modules. Import directly from the source file (e.g. `from '@/shared/components/button'` not `from '@/shared/components'`). An `index.ts` is only allowed when it contains real logic or composition, not mere re-exports.
+12. **Page-specific components use page prefix**: In features, the page file is `[page-name].page.tsx`; components specific to that page use the same prefix in file and function name (e.g. `admin-question-card.tsx` → `AdminQuestionCard`). Child components stay in the same `components/` folder and inherit the parent prefix (e.g. `admin-question-card-item.tsx` → `AdminQuestionCardItem`). App route exports `AdminQuestion`, feature page exports `AdminQuestionPage`.
