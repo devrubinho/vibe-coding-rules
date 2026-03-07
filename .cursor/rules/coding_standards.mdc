@@ -1,0 +1,712 @@
+---
+description: Coding standards and architecture patterns for all projects
+globs: **/*
+alwaysApply: true
+---
+
+# Coding Standards & Architecture
+
+These rules define how code MUST be written when implementing tasks. Always follow these patterns without deviation.
+
+---
+
+## Project Structure
+
+All projects use TypeScript and follow this structure:
+
+```
+src/
+├── app/          # Route definitions only (Next.js App Router or Expo Router)
+├── features/     # Business domain logic, organized by feature
+└── shared/       # Global reusable code
+```
+
+---
+
+## Tech Stack
+
+### Front-end (Next.js)
+- **Framework**: Next.js 15+ with App Router
+- **Language**: TypeScript (strict mode)
+- **Styling**: Tailwind CSS v4 + `clsx` + `tailwind-merge` via `cn()` helper
+- **UI Components**: shadcn/ui + `lucide-react` icons
+- **Data Fetching**: `@tanstack/react-query`
+- **Forms**: `react-hook-form` + `zod` + `@hookform/resolvers/zod`
+- **Notifications**: `sonner`
+- **ESLint**: `@rbinflow/eslint-config`
+- **E2E Testing**: Playwright and/or Cypress
+
+### Mobile (Expo / React Native)
+- **Framework**: Expo with Expo Router
+- **Language**: TypeScript (strict mode)
+- **Styling**: NativeWind + `clsx` + `tailwind-merge` via `cn()` helper
+- **Data Fetching**: `@tanstack/react-query`
+- **Forms**: `react-hook-form` + `zod` + `@hookform/resolvers/zod`
+- **Build**: EAS (Expo Application Services)
+- **ESLint**: `@rbinflow/eslint-config`
+- **E2E Testing**: Detox
+
+### Backend (NestJS)
+- **Framework**: NestJS 10+
+- **Language**: TypeScript (strict mode)
+- **ORM**: Prisma
+- **Database**: PostgreSQL
+- **Auth**: JWT + Passport
+- **Validation**: Zod (not class-validator/class-transformer)
+- **Structure**: `src/app/` (controllers), `src/features/` (use-cases, repositories), `src/shared/` (guards, pipes, gateways)
+
+---
+
+## app/ — Routes Only (Front-end & Mobile) / Controllers Only (Backend)
+
+The `app/` directory contains ONLY route definitions. Each file is a thin wrapper that imports and renders the feature page/screen.
+
+**Front-end (Next.js App Router):**
+```typescript
+// src/app/(private)/dashboard/page.tsx
+import { DashboardPage } from '@/features/dashboard/pages/dashboard.page'
+
+export default function Dashboard() {
+  return <DashboardPage />
+}
+```
+
+**Mobile (Expo Router):**
+```typescript
+// src/app/(private)/dashboard.tsx
+import { DashboardScreen } from '@/features/dashboard/screens/dashboard.screen'
+
+export default function Dashboard() {
+  return <DashboardScreen />
+}
+```
+
+**Backend (NestJS):**
+```typescript
+// src/app/account/controllers/create-session.controller.ts
+import { Body, Controller, HttpCode, Post } from '@nestjs/common'
+import { CreateSessionBodySchema, createSessionValidator } from '@/app/account/validators/create-session.validator'
+import { CreateSessionUseCase } from '@/features/account/use-cases/create-session.use-case'
+
+@Controller('/session')
+export class CreateSessionController {
+  constructor(private createSessionUseCase: CreateSessionUseCase) {}
+
+  @Post()
+  @HttpCode(200)
+  async handle(@Body(createSessionValidator) data: CreateSessionBodySchema) {
+    return this.createSessionUseCase.execute(data)
+  }
+}
+```
+
+**Rules:**
+- **Front-end/Mobile**: `page.tsx` / route files NEVER contain logic, state, or imports beyond the feature component
+- **Backend**: `app/` contains controllers and validators only — no business logic
+- Group routes with `(public)` and `(private)` folders (front/mobile)
+- `layout.tsx` files may contain auth guards and providers
+- All business logic lives in `features/`
+
+---
+
+## features/ — Feature Organization
+
+Each feature is self-contained. Structure:
+
+```
+features/[feature-name]/
+├── components/     # UI components specific to this feature
+├── hooks/          # Context providers and custom hooks
+├── pages/          # Page component (front-end) — orchestrator
+├── screens/        # Screen component (mobile) — orchestrator
+├── schemas/        # Zod validation schemas
+├── services/       # React Query wrappers (useQuery / useMutation)
+├── types/          # TypeScript types for this feature
+├── use-cases/      # Pure API call logic
+└── utils/          # Feature-specific utilities (optional)
+```
+
+### Backend Feature Structure
+
+```
+features/[feature-name]/
+├── use-cases/        # Business logic
+│   └── create-account.use-case.ts
+├── repositories/     # Data access (abstract + Prisma implementation)
+│   ├── account.repository.ts          # Abstract class
+│   └── prisma-account.repository.ts   # Prisma implementation
+├── types/            # TypeScript types
+│   └── account.type.ts
+└── utils/            # Feature-specific utilities (optional)
+```
+
+**Use Case (backend):**
+```typescript
+// src/features/account/use-cases/create-session.use-case.ts
+import { Injectable, UnauthorizedException } from '@nestjs/common'
+import { AccountRepository } from '@/features/account/repositories/account.repository'
+import { EncryptionGateway } from '@/shared/gateways/encryption.gateway'
+import { JwtGateway } from '@/shared/gateways/jwt.gateway'
+
+@Injectable()
+export class CreateSessionUseCase {
+  constructor(
+    private accountRepository: AccountRepository,
+    private encryption: EncryptionGateway,
+    private jwt: JwtGateway,
+  ) {}
+
+  async execute(data: { email: string; password: string }) {
+    const account = await this.accountRepository.findByEmail(data.email)
+    if (!account) throw new UnauthorizedException('Invalid credentials')
+
+    const isValid = await this.encryption.validateHash({
+      value: data.password,
+      hashedValue: account.password,
+    })
+    if (!isValid) throw new UnauthorizedException('Invalid credentials')
+
+    return this.jwt.generateAuthTokens({ accountId: account.id })
+  }
+}
+```
+
+**Zod validation in NestJS (not class-validator):**
+```typescript
+// src/app/account/validators/create-session.validator.ts
+import { z } from 'zod'
+import { ZodValidationPipe } from '@/shared/pipes/zod-validation.pipe'
+
+const createSessionBodySchema = z.object({
+  email: z.string().email(),
+  password: z.string().min(6),
+})
+
+export type CreateSessionBodySchema = z.infer<typeof createSessionBodySchema>
+export const createSessionValidator = new ZodValidationPipe(createSessionBodySchema)
+```
+
+```typescript
+// src/shared/pipes/zod-validation.pipe.ts
+import { BadRequestException, PipeTransform } from '@nestjs/common'
+import { ZodError, ZodSchema } from 'zod'
+
+export class ZodValidationPipe implements PipeTransform {
+  constructor(private schema: ZodSchema) {}
+
+  transform(value: unknown) {
+    try {
+      return this.schema.parse(value)
+    } catch (error) {
+      if (error instanceof ZodError) {
+        throw new BadRequestException({
+          message: 'Validation failed',
+          errors: error.errors.map((e) => ({ field: e.path.join('.'), message: e.message })),
+        })
+      }
+      throw new BadRequestException('Validation failed')
+    }
+  }
+}
+```
+
+**Gateways (abstract services in shared/):**
+```typescript
+// src/shared/gateways/encryption.gateway.ts
+export abstract class EncryptionGateway {
+  abstract createHash(value: string): Promise<string>
+  abstract validateHash(params: { value: string; hashedValue: string }): Promise<boolean>
+}
+```
+
+Gateways abstract external concerns (encryption, JWT, date, email). Implementations live alongside in `shared/gateways/` and are bound via NestJS modules.
+
+### Page / Screen — Orchestrator Pattern (Front-end/Mobile)
+
+The page/screen is an orchestrator. It:
+- Calls services (React Query hooks)
+- Manages form state with `useForm`
+- Passes data down to components as props
+- Is NEVER a long file — delegates rendering to components
+
+```typescript
+// src/features/dashboard/pages/dashboard.page.tsx
+'use client'
+
+import { DashboardRevenueCard } from '@/features/dashboard/components/dashboard-revenue-card'
+import { DashboardActiveCard } from '@/features/dashboard/components/dashboard-active-card'
+import { GetDashboardActiveService } from '@/features/dashboard/services/get-dashboard-active.service'
+
+export function DashboardPage() {
+  const { data: active, isLoading, isError } = GetDashboardActiveService()
+
+  return (
+    <section className="grid grid-cols-2 gap-5 my-10">
+      <DashboardActiveCard data={active} isLoading={isLoading} isError={isError} />
+      <DashboardRevenueCard />
+    </section>
+  )
+}
+```
+
+### Components — Single Responsibility
+
+Each component has a single responsibility. Components:
+- Receive data via props (no direct service calls unless truly necessary)
+- Are named after the feature: `[feature]-[description].tsx`
+- Stay small and focused
+
+```typescript
+// src/features/dashboard/components/dashboard-active-card.tsx
+import { Card } from '@/shared/components/card'
+import { Skeleton } from '@/shared/components/skeleton'
+
+type DashboardActiveCardProps = {
+  data?: { count: number; trials: number }
+  isLoading: boolean
+  isError: boolean
+}
+
+export function DashboardActiveCard({ data, isLoading, isError }: DashboardActiveCardProps) {
+  if (isLoading) return <Skeleton className="h-[200px]" />
+  if (isError) return <ErrorState />
+
+  return (
+    <Card title="Active Members">
+      <p className="text-2xl font-bold">{data?.count}</p>
+    </Card>
+  )
+}
+```
+
+---
+
+## shared/ — Global Reusable Code
+
+```
+shared/
+├── components/
+│   ├── button.tsx
+│   ├── card.tsx
+│   ├── data-handler.tsx
+│   ├── skeleton.tsx
+│   ├── dialog.tsx
+│   └── form/
+│       └── inputs/
+│           ├── input-text.tsx
+│           ├── input-select.tsx
+│           └── shared/
+│               ├── input-container.tsx
+│               ├── input-error.tsx
+│               └── input-label.tsx
+├── hooks/
+│   ├── dialog.hook.tsx
+│   └── drawer.hook.tsx
+├── libs/
+│   ├── axios.ts
+│   ├── react-query.ts
+│   └── tw-merge.ts
+├── providers/
+│   └── react-query-provider.tsx
+├── types/
+│   └── shared.ui.type.ts
+├── constants/
+│   └── server-routes.constants.ts
+└── utils/
+    ├── validation/
+    │   ├── required-email.validation.ts
+    │   ├── required-string.validation.ts
+    │   └── required-phone.validation.ts
+    └── error.util.ts
+```
+
+---
+
+## DataHandler — Declarative Loading/Error States
+
+Use a `DataHandler` component to handle loading, error, and empty states declaratively instead of repeating `if (isLoading)` / `if (isError)` in every component.
+
+```typescript
+// src/shared/components/data-handler.tsx
+import { ReactNode } from 'react'
+import { Skeleton } from '@/shared/components/skeleton'
+
+type DataHandlerProps = {
+  isLoading: boolean
+  isError: boolean
+  children: ReactNode
+  skeleton?: ReactNode
+}
+
+export function DataHandler({ isLoading, isError, children, skeleton }: DataHandlerProps) {
+  if (isLoading) return skeleton ?? <Skeleton />
+  if (isError) return <ErrorState />
+  return <>{children}</>
+}
+```
+
+Usage in pages:
+```typescript
+<DataHandler isLoading={isLoading} isError={isError} skeleton={<DashboardSkeleton />}>
+  <DashboardRevenueCard revenue={revenue} />
+</DataHandler>
+```
+
+---
+
+## Feature `platform` — Cross-Cutting Concerns
+
+Every project has a special `features/platform/` feature for app-wide concerns that don't belong in `shared/` (they are app-specific, not reusable across projects):
+
+```
+features/platform/
+├── components/       # App shell (menu, sidebar, header)
+├── constants/        # App routes, cookie keys, app name
+│   ├── platform-routes.constants.ts
+│   └── platform-cookies.constants.ts
+├── hooks/            # App-level hooks
+├── providers/        # AppProviders composition
+│   └── app-providers-client.tsx
+└── i18n/             # Internationalization (optional)
+```
+
+---
+
+## Providers Composition
+
+Compose all providers in a dedicated `AppProviders` component instead of nesting them in `layout.tsx`:
+
+```typescript
+// src/features/platform/providers/app-providers-client.tsx
+'use client'
+
+import { ReactNode } from 'react'
+import { Toaster } from 'sonner'
+import { AuthProvider } from '@/features/auth/hooks/authentication.hook'
+import { DialogProvider } from '@/shared/hooks/dialog.hook'
+
+export function AppProvidersClient({ children }: { children: ReactNode }) {
+  return (
+    <AuthProvider>
+      <DialogProvider>
+        {children}
+        <Toaster position="top-right" />
+      </DialogProvider>
+    </AuthProvider>
+  )
+}
+```
+
+Then in the root layout:
+```typescript
+// src/app/layout.tsx
+export default function RootLayout({ children }: { children: ReactNode }) {
+  return (
+    <html lang="en">
+      <body>
+        <ReactQueryProvider>
+          <AppProvidersClient>{children}</AppProvidersClient>
+        </ReactQueryProvider>
+      </body>
+    </html>
+  )
+}
+```
+
+---
+
+## cn() — Tailwind Class Merging
+
+Always use `cn()` for class names. Never use raw string concatenation or template literals with conditional classes.
+
+```typescript
+// src/shared/libs/tw-merge.ts
+import { type ClassValue, clsx } from 'clsx'
+import { twMerge } from 'tailwind-merge'
+
+export function cn(...inputs: ClassValue[]) {
+  return twMerge(clsx(inputs))
+}
+```
+
+Usage:
+```typescript
+import { cn } from '@/shared/libs/tw-merge'
+
+className={cn(
+  'flex flex-col rounded-lg bg-white px-5',
+  isActive && 'border-2 border-accent-500',
+  className,
+)}
+```
+
+---
+
+## React Query — Service + Use Case Pattern
+
+Split API calls into two layers:
+
+**Use Case** — pure function, no React, just the API call:
+```typescript
+// src/features/auth/use-cases/session-create.use-case.ts
+import { api } from '@/shared/libs/axios'
+import { serverRoutes } from '@/shared/constants/server-routes.constants'
+import { LoginSchema } from '@/features/auth/schemas/login.schema'
+import { SessionType } from '@/features/auth/types/session.api.type'
+
+export async function sessionCreateUseCase(data: LoginSchema): Promise<SessionType> {
+  const response = await api.post(`${serverRoutes.session}/create`, data)
+  return response.data
+}
+```
+
+**Service** — React Query wrapper used in components:
+```typescript
+// src/features/auth/services/session-create.service.tsx
+'use client'
+
+import { useMutation } from '@tanstack/react-query'
+import { sessionCreateUseCase } from '@/features/auth/use-cases/session-create.use-case'
+import { SessionType } from '@/features/auth/types/session.api.type'
+import { ServiceInput } from '@/shared/types/shared.ui.type'
+import { handleError } from '@/shared/utils/error.util'
+
+export function SessionCreateService({ onSuccess }: ServiceInput<SessionType>) {
+  return useMutation({
+    mutationFn: sessionCreateUseCase,
+    onSuccess: (data) => onSuccess?.(data),
+    onError: (error) => handleError(error),
+  })
+}
+```
+
+**Query service:**
+```typescript
+// src/features/dashboard/services/get-dashboard-active.service.tsx
+'use client'
+
+import { useQuery } from '@tanstack/react-query'
+import { getDashboardActiveUseCase } from '@/features/dashboard/use-cases/get-dashboard-active.use-case'
+import { DashboardActiveType } from '@/features/dashboard/types/dashboard-active.type'
+
+export const getDashboardActiveQueryKey = 'getDashboardActiveQueryKey'
+
+export function GetDashboardActiveService() {
+  return useQuery<DashboardActiveType>({
+    queryKey: [getDashboardActiveQueryKey],
+    queryFn: getDashboardActiveUseCase,
+  })
+}
+```
+
+**Shared service input type:**
+```typescript
+// src/shared/types/shared.ui.type.ts
+export type ServiceInput<TData = unknown> = {
+  onSuccess?: (data?: TData) => void
+  onError?: () => void
+}
+```
+
+---
+
+## Forms — React Hook Form + Zod
+
+**Schema:**
+```typescript
+// src/features/auth/schemas/login.schema.ts
+import { z } from 'zod'
+import { requiredEmail } from '@/shared/utils/validation/required-email.validation'
+import { requiredString } from '@/shared/utils/validation/required-string.validation'
+
+export const loginSchema = z.object({
+  email: requiredEmail(),
+  password: requiredString({ field: 'password' }),
+})
+
+export type LoginSchema = z.infer<typeof loginSchema>
+```
+
+**Reusable validators in shared/:**
+```typescript
+// src/shared/utils/validation/required-string.validation.ts
+import { z } from 'zod'
+
+export const requiredString = ({ field, min = 1 }: { field: string; min?: number }) =>
+  z.string({ message: `${field} is required` }).min(min, {
+    message: `${field} must be at least ${min} characters`,
+  })
+```
+
+**Form component:**
+```typescript
+// src/features/auth/components/login-form.tsx
+'use client'
+
+import { zodResolver } from '@hookform/resolvers/zod'
+import { useForm } from 'react-hook-form'
+import { LoginSchema, loginSchema } from '@/features/auth/schemas/login.schema'
+import { SessionCreateService } from '@/features/auth/services/session-create.service'
+import { InputText } from '@/shared/components/form/inputs/input-text'
+import { Button } from '@/shared/components/button'
+
+export function LoginForm() {
+  const { control, handleSubmit } = useForm<LoginSchema>({
+    resolver: zodResolver(loginSchema),
+    defaultValues: { email: '', password: '' },
+  })
+
+  const { mutate: createSession, isPending } = SessionCreateService({
+    onSuccess: () => { /* redirect */ },
+  })
+
+  return (
+    <form onSubmit={handleSubmit((data) => createSession(data))} className="flex flex-col gap-4">
+      <InputText name="email" control={control} placeholder="Email" />
+      <InputText name="password" control={control} type="password" placeholder="Password" />
+      <Button type="submit" isLoading={isPending}>Sign in</Button>
+    </form>
+  )
+}
+```
+
+**Input uses `Controller` from RHF and is generic:**
+```typescript
+// src/shared/components/form/inputs/input-text.tsx
+import { Control, Controller, FieldValues, Path, PathValue } from 'react-hook-form'
+import { cn } from '@/shared/libs/tw-merge'
+
+type InputTextProps<T extends FieldValues> = {
+  name: Path<T>
+  control: Control<T>
+  defaultValue?: PathValue<T, Path<T>>
+  placeholder?: string
+  type?: 'text' | 'password' | 'email'
+  disabled?: boolean
+  className?: string
+}
+
+export function InputText<T extends FieldValues>({
+  name, control, defaultValue = '' as PathValue<T, Path<T>>,
+  placeholder, type = 'text', disabled, className,
+}: InputTextProps<T>) {
+  return (
+    <Controller
+      name={name}
+      control={control}
+      defaultValue={defaultValue}
+      render={({ field, fieldState: { error } }) => (
+        <div className={cn('flex flex-col gap-1', className)}>
+          <input
+            {...field}
+            type={type}
+            placeholder={placeholder}
+            disabled={disabled}
+            className={cn('border rounded-lg px-4 h-12 text-sm', error && 'border-red-500')}
+          />
+          {error && <span className="text-xs text-red-500">{error.message}</span>}
+        </div>
+      )}
+    />
+  )
+}
+```
+
+---
+
+## File Naming Conventions
+
+Use kebab-case for all filenames. Suffix reflects the file's role:
+
+| Role | Suffix | Example |
+|------|--------|---------|
+| Page component | `.page.tsx` | `dashboard.page.tsx` |
+| Screen component (mobile) | `.screen.tsx` | `login.screen.tsx` |
+| UI component | `.tsx` | `dashboard-revenue-card.tsx` |
+| React Query service | `.service.tsx` | `session-create.service.tsx` |
+| API call (pure) | `.use-case.ts` | `session-create.use-case.ts` |
+| Zod schema | `.schema.ts` | `login.schema.ts` |
+| Context/hook | `.hook.tsx` | `authentication.hook.tsx` |
+| API response type | `.api.type.ts` | `session.api.type.ts` |
+| Domain type | `.type.ts` | `dashboard-active.type.ts` |
+| Utility | `.util.ts` | `error.util.ts` |
+| Validation helper | `.validation.ts` | `required-email.validation.ts` |
+| Constants | `.constants.ts` | `server-routes.constants.ts` |
+
+---
+
+## TypeScript Types
+
+- API response types: `[Name]Type` in a `.api.type.ts` file
+- Domain/internal types: `[Name]Type` in a `.type.ts` file
+- All types exported with `export type`
+- No `any` — ever
+
+```typescript
+// src/features/auth/types/session.api.type.ts
+export type SessionType = {
+  accessToken: string
+  refreshToken: string
+}
+```
+
+---
+
+## Context / Auth Hook Pattern
+
+```typescript
+// src/features/auth/hooks/authentication.hook.tsx
+'use client'
+
+import { createContext, useContext, ReactNode } from 'react'
+
+type AuthContextData = {
+  account: AccountType | null
+  isAuthenticated: boolean
+  signOut: () => Promise<void>
+}
+
+const AuthContext = createContext<AuthContextData>({} as AuthContextData)
+
+export function AuthProvider({ children }: { children: ReactNode }) {
+  // state and derived values here via useMemo
+  return (
+    <AuthContext.Provider value={{ account, isAuthenticated, signOut }}>
+      {children}
+    </AuthContext.Provider>
+  )
+}
+
+export const useAuth = () => useContext(AuthContext)
+```
+
+---
+
+## Testing
+
+### Front-end (Next.js)
+- **E2E**: Playwright and/or Cypress
+- Tests live in `e2e/` or `cypress/` at project root
+- Test files: `[feature].spec.ts` (Playwright) or `[feature].cy.ts` (Cypress)
+- Cover critical user flows: auth, main feature interactions, form submissions
+
+### Mobile (Expo / React Native)
+- **E2E**: Detox
+- Tests live in `e2e/` at project root
+- Test files: `[feature].test.ts`
+- Cover critical flows: login, main navigation, core feature interactions
+
+---
+
+## Critical Rules (Non-Negotiable)
+
+1. **`app/` is thin**: `page.tsx` only renders the feature page/screen. No logic, no state, no extra imports.
+2. **Pages are orchestrators**: Feature pages compose components — they are short. If the page is getting long, extract a component.
+3. **Components have one job**: If a component grows, split it. Name reflects its single purpose.
+4. **Always use `cn()`** for class merging — never template literals with conditional classes.
+5. **Forms always use `Controller`** from react-hook-form — never uncontrolled inputs.
+6. **API logic in use-cases**: Components and services never call `axios`/`api` directly — always through a use-case function.
+7. **Zod for all validation**: No manual validation — always define a schema and use `zodResolver`.
+8. **Type everything**: No `any`. All props, params, and return values must be typed.
+9. **Shared is truly shared**: Only put in `shared/` what is used by 2+ features.
+10. **Naming reflects role**: File name + suffix must make the file's purpose immediately obvious.

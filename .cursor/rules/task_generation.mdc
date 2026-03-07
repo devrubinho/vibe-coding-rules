@@ -144,5 +144,12 @@ alwaysApply: true
   - ✅ All statuses start as "pending"
   - ✅ Subtask IDs are sequential per task (1, 2, 3...)
 
+- **Coding Standards:**
+  - When generating subtask instructions, always follow the patterns defined in [coding_standards.mdc](mdc:.cursor/rules/coding_standards.mdc)
+  - Subtask instructions must reference the correct file structure: `src/app/`, `src/features/`, `src/shared/`
+  - Subtask instructions must specify the correct file naming suffix (`.page.tsx`, `.service.tsx`, `.use-case.ts`, etc.)
+  - Subtask instructions must enforce the service + use-case split for API calls
+  - Subtask instructions must enforce `cn()` for class merging, `Controller` for form inputs, and `zodResolver` for validation
+
 - **Principle:**
-  > **When generating tasks, be fast and direct. Read tasks.input.txt, generate JSONs and tasks.status.md with proper structure, save files. No exploration needed.**
+  > **When generating tasks, be fast and direct. Read tasks.input.txt, generate JSONs and tasks.status.md with proper structure, save files. Always follow coding_standards.mdc patterns in subtask instructions.**

@@ -21,6 +21,7 @@ This project uses RBIN Task Flow for task management:
 - **AI Commands**: Use AI-powered commands for task management:
   - `task-flow: sync` - Synchronize tasks from tasks.input.txt
   - `task-flow: think` - Analyze code and suggest new tasks
+  - `task-flow: audit` - Audit codebase against coding standards and suggest incremental improvements
   - `task-flow: status` - View current task status
   - `task-flow: run next X` - Work on next X subtasks
   - `task-flow: run X` - Execute all pending subtasks of task X (simplified - no "task" needed)
@@ -40,3 +41,7 @@ This project uses RBIN Task Flow for task management:
   - `.task-flow/.internal/` - Internal system files (ignore)
 
 Follow all rules defined in `.cursor/rules/` for consistent development practices.
+
+## Codex
+
+When using OpenAI Codex in this repo, it reads **AGENTS.md** at the project root. That file summarizes the same norms (git, commits, comments, RBIN Task Flow) so Codex follows the same conventions as Cursor/Claude. Full details remain in `.cursor/rules/` and this file.

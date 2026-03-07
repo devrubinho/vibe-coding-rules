@@ -1,0 +1,158 @@
+---
+description: Audit codebase against coding standards and suggest incremental improvements
+globs: **/*
+alwaysApply: true
+---
+
+# task-flow: audit
+
+When the user runs `task-flow: audit`, perform a non-destructive analysis of the current project against the coding standards defined in [coding_standards.mdc](mdc:.cursor/rules/coding_standards.mdc).
+
+---
+
+## What This Command Does
+
+1. **Scans the project** to understand its current structure, tech stack, and patterns
+2. **Compares against coding_standards.mdc** to identify gaps and misalignments
+3. **Reports a compatibility score** per category
+4. **Asks the user** which improvements they want to adopt — never assumes or imposes
+5. **Respects project context** — an existing company project can't be fully restructured overnight
+
+---
+
+## How to Execute
+
+### Step 1 — Explore the project
+
+Scan the codebase to understand:
+- Folder structure (is there `src/app`, `features`, `shared`? something else?)
+- Tech stack in use (`package.json`)
+- How routes/pages are organized
+- How components are structured (size, responsibilities)
+- How API calls are made (fetch, axios, react-query, or raw calls in components?)
+- How forms are handled (controlled, uncontrolled, react-hook-form?)
+- How styles are applied (Tailwind, CSS modules, styled-components, inline?)
+- File naming conventions in use
+- Presence of tests and what kind
+
+### Step 2 — Score each category
+
+For each category below, rate adherence: **Full / Partial / Missing**
+
+| Category | Score | Notes |
+|----------|-------|-------|
+| Folder structure (`app/features/shared`) | | |
+| `app/` is thin (no logic in routes) | | |
+| Feature-based organization | | |
+| Page/Screen as orchestrator (short, composes components) | | |
+| Component single responsibility | | |
+| React Query (service + use-case split) | | |
+| Forms (react-hook-form + zod) | | |
+| `cn()` for class merging | | |
+| File naming conventions | | |
+| TypeScript strictness (no `any`) | | |
+| `DataHandler` pattern (or equivalent) | | |
+| Providers composition | | |
+| E2E tests (Playwright/Cypress/Detox) | | |
+
+### Step 3 — Present findings clearly
+
+Show the score table with honest notes. Examples:
+- "Routes contain business logic — pages are 200+ lines"
+- "API calls are made directly in components with `fetch`"
+- "No consistent naming convention found"
+- "Tailwind classes concatenated with template literals instead of `cn()`"
+- "Structure is MVC-like, not feature-based — migration would be significant"
+
+### Step 4 — Ask what to adopt
+
+After presenting the report, ask:
+
+> "Which of these would you like to improve in this project? I'll generate tasks for each selected item.
+>
+> Keep in mind: some changes (like restructuring to `app/features/shared`) may not be practical for an existing project. I'll suggest incremental, non-breaking improvements where possible."
+
+List the improvable items as options. Let the user choose one, several, or all.
+
+### Step 5 — Generate tasks for selected improvements
+
+For each selected improvement:
+- Create a task in `.task-flow/tasks.input.txt` (or show the task descriptions so the user can paste them)
+- Tasks must be incremental and safe — never propose wholesale rewrites unless the user explicitly asks
+- Examples of incremental tasks:
+  - "Componentize the `UserDashboard` page — extract `UserStatsCard` and `UserActivityList` components"
+  - "Replace raw `fetch` calls in `auth.ts` with a `useCreateSession` service using react-query"
+  - "Add `cn()` helper and replace string concatenation in `Button` and `Card` components"
+  - "Extract `LoginForm` business logic from `login/page.tsx` into `features/auth/pages/login.page.tsx`"
+
+---
+
+## Important Principles
+
+- **Non-destructive by default**: Suggest improvements, don't impose them
+- **Incremental**: Prefer "improve this component" over "rewrite this module"
+- **Context-aware**: A greenfield project can adopt everything; a legacy company project needs gradual migration
+- **Honest**: If the project has a completely different architecture that works, say so — don't force standards where they don't fit
+- **No auto-execution**: This command only analyzes and suggests. The user decides what to implement.
+
+---
+
+## Example Output Format
+
+```
+## task-flow: audit — Coding Standards Report
+
+### Project: [detected project name]
+### Type: [Next.js / Expo / NestJS / Monorepo]
+
+---
+
+### Compatibility Score
+
+| Category | Score | Notes |
+|----------|-------|-------|
+| Folder structure | Partial | Has `src/components` and `src/pages` — no `features/` or `shared/` |
+| app/ is thin | Missing | `pages/dashboard.tsx` is 340 lines with business logic |
+| Feature-based organization | Missing | Code organized by type (components/, hooks/) not by domain |
+| Page as orchestrator | Missing | Pages fetch data and render complex JSX directly |
+| Component single responsibility | Partial | Some components are focused, others handle too much |
+| React Query | Missing | Using `useEffect + fetch` directly in components |
+| Forms (RHF + Zod) | Partial | Using react-hook-form but no Zod validation |
+| cn() for class merging | Missing | Using template literals: `className={\`btn \${isActive ? 'active' : ''}\`}` |
+| File naming | Partial | Inconsistent — mix of PascalCase and kebab-case |
+| TypeScript strictness | Partial | Some `any` usages found |
+| DataHandler pattern | Missing | Manual if/else for loading states in each component |
+| Providers composition | Full | Already uses an AppProviders component |
+| E2E tests | Missing | No test files found |
+
+---
+
+### Overall: 2 Full / 5 Partial / 6 Missing
+
+---
+
+### What would you like to improve?
+
+I can generate tasks for any of these. Note that restructuring to `app/features/shared` would be a significant change — I'd suggest tackling it only if you're planning a larger refactor.
+
+Quick wins (low effort, high impact):
+- [ ] Add `cn()` helper and apply to all components
+- [ ] Add Zod schemas to existing react-hook-form forms
+- [ ] Extract `DataHandler` component and apply to data-fetching components
+
+Medium effort:
+- [ ] Migrate `useEffect + fetch` to React Query (service + use-case pattern)
+- [ ] Split large pages into orchestrator + focused components
+
+Larger effort:
+- [ ] Introduce `features/` structure for new features going forward
+- [ ] Add E2E tests with Playwright/Cypress
+
+Which would you like me to generate tasks for?
+```
+
+---
+
+## Principle
+
+> **Audit is a conversation, not a verdict. The goal is to help the developer adopt better patterns at their own pace, respecting the reality of the project they're working on.**

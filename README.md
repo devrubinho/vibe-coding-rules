@@ -85,6 +85,7 @@ Após inicializar, use estes comandos na IA (Cursor/Claude) para gerenciar taref
 |---------|--------------|-------------------|
 | `task-flow: sync` | **Sincroniza** tarefas do arquivo texto com o sistema | Mantém tudo sincronizado automaticamente - adiciona novas, remove deletadas, preserva seu progresso |
 | `task-flow: think` | **Descobre** tarefas que você esqueceu | Analisa código e sugere tarefas que faltam (testes, refatoração, documentação) |
+| `task-flow: audit` | **Avalia** o quanto o código bate com os padrões de codificação | Analisa a codebase, dá um score por categoria e pergunta quais melhorias você quer adotar — sem impor nada |
 | `task-flow: status` | **Visualiza** o progresso rapidamente | Vê resumo com tasks completas, em andamento e quantas subtarefas faltam |
 | `task-flow: run next X` | **Automatiza** o trabalho nas próximas subtarefas | A IA trabalha nas próximas X subtarefas sequencialmente, você só acompanha |
 | `task-flow: run X` | **Completa** uma tarefa inteira de uma vez | Executa todas as subtarefas de uma tarefa específica (permite trabalho paralelo) |
@@ -428,6 +429,7 @@ After initializing, use these commands in your AI (Cursor/Claude) to automatical
 |---------|------------|-------------|
 | `task-flow: sync` | **Sync** tasks from text file with system | Keeps everything synchronized automatically - adds new, removes deleted, preserves your progress |
 | `task-flow: think` | **Discover** tasks you forgot | Analyzes code and suggests missing tasks (tests, refactoring, documentation) |
+| `task-flow: audit` | **Evaluate** how well your code matches coding standards | Scans the codebase, scores it by category and asks which improvements you want to adopt — never imposes changes |
 | `task-flow: status` | **Visualize** progress quickly | See summary with completed tasks, in progress, and remaining subtasks |
 | `task-flow: run next X` | **Automate** work on next subtasks | AI works on next X subtasks sequentially, you just follow along |
 | `task-flow: run X` | **Complete** an entire task at once | Executes all subtasks of a specific task (allows parallel work) |
