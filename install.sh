@@ -156,6 +156,10 @@ install_to_project() {
     cp "$SCRIPT_DIR/CLAUDE.md" "$target/CLAUDE.md" &&
     echo -e "${GREEN}✅ Claude instructions${NC}"
 
+  [ -f "$SCRIPT_DIR/AGENTS.md" ] &&
+    cp "$SCRIPT_DIR/AGENTS.md" "$target/AGENTS.md" &&
+    echo -e "${GREEN}✅ Codex instructions (AGENTS.md)${NC}"
+
   if [ -d "$SCRIPT_DIR/.task-flow" ]; then
     mkdir -p "$target/.task-flow"
     echo -e "${GREEN}✅ Task Flow directory${NC}"
@@ -182,6 +186,7 @@ install_to_project() {
   sed -i '' '/^\.cursor\/$/d' "$target/.gitignore" 2>/dev/null
   sed -i '' '/^\.task-flow\/$/d' "$target/.gitignore" 2>/dev/null
   sed -i '' '/^CLAUDE\.md$/d' "$target/.gitignore" 2>/dev/null
+  sed -i '' '/^AGENTS\.md$/d' "$target/.gitignore" 2>/dev/null
   sed -i '' '/^# RBIN Task Flow/d' "$target/.gitignore" 2>/dev/null
   sed -i '' '/^\.cursor\/rules\/$/d' "$target/.gitignore" 2>/dev/null
   sed -i '' '/^\.task-flow\/scripts\/tasks\.json$/d' "$target/.gitignore" 2>/dev/null
@@ -195,6 +200,7 @@ install_to_project() {
     echo ".cursor/"
     echo ".task-flow/"
     echo "CLAUDE.md"
+    echo "AGENTS.md"
   } >> "$target/.gitignore"
 
   echo -e "${GREEN}✅ .gitignore updated${NC}"
