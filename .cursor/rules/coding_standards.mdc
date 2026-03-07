@@ -21,12 +21,42 @@ src/
 └── shared/       # Global reusable code
 ```
 
+### Allowed folders in shared/ and features/ (Front web & Mobile only)
+
+In **front web** (Next.js, React, or other React-based web) or **mobile** (Expo, React Native) projects, only the following folder names may exist directly under `shared/` or under each feature in `features/`:
+
+| Folder        | Use                    |
+|---------------|------------------------|
+| `pages/`      | Web only — page components |
+| `screens/`    | Mobile only — screen components |
+| `components/` | UI components          |
+| `constants/`  | Constants              |
+| `utils/`      | Utilities              |
+| `validations/` | Validation helpers (e.g. `.validation.ts` for Zod) |
+| `hooks/`      | Custom hooks           |
+| `providers/`  | Context providers      |
+| `styles/`     | Styles                 |
+| `types/`      | TypeScript types       |
+| `libs/`       | Library wrappers       |
+| `services/`   | React Query / API wrappers |
+| `use-cases/`  | Pure API / business logic |
+| `schemas/`    | Zod (or similar) schemas |
+
+**No other folder names** are allowed under `shared/` or under `features/[feature-name]/`. Use only `pages/` for web and `screens/` for mobile; do not mix both in the same project type.
+
+### No subfolders in shared/ (Front web & Mobile only)
+
+In **front web** (Next.js, React) or **mobile** (Expo, React Native) projects, each folder under `shared/` must be **flat**: no subfolders. Files assume the responsibility through clear naming.
+
+- **shared/components/**: One file per component, directly in `shared/components/`. No nested folders (e.g. no `form/`, `inputs/`). Name files so the purpose is clear (e.g. `button.tsx`, `input-text.tsx`, `input-container.tsx`, `input-error.tsx`, `input-label.tsx`).
+- **shared/hooks/**, **shared/utils/**, **shared/validations/**, **shared/constants/**, etc.: Same rule — only files, no subfolders. Use the file name to carry the responsibility. Validation helpers (e.g. `required-email.validation.ts`) live in `shared/validations/`.
+
 ---
 
 ## Tech Stack
 
-### Front-end (Next.js)
-- **Framework**: Next.js 15+ with App Router
+### Front-end (Next.js / React)
+- **Framework**: Next.js 15+ with App Router, or React (Vite, CRA, or similar). These rules apply to any React-based web project.
 - **Language**: TypeScript (strict mode)
 - **Styling**: Tailwind CSS v4 + `clsx` + `tailwind-merge` via `cn()` helper
 - **UI Components**: shadcn/ui + `lucide-react` icons
@@ -37,7 +67,7 @@ src/
 - **E2E Testing**: Playwright and/or Cypress
 
 ### Mobile (Expo / React Native)
-- **Framework**: Expo with Expo Router
+- **Framework**: Expo with Expo Router, or React Native (bare or managed). These rules apply to both Expo and React Native.
 - **Language**: TypeScript (strict mode)
 - **Styling**: NativeWind + `clsx` + `tailwind-merge` via `cn()` helper
 - **Data Fetching**: `@tanstack/react-query`
@@ -61,7 +91,7 @@ src/
 
 The `app/` directory contains ONLY route definitions. Each file is a thin wrapper that imports and renders the feature page/screen.
 
-**Front-end (Next.js App Router):**
+**Front-end (Next.js App Router or React):**
 ```typescript
 // src/app/(private)/dashboard/page.tsx
 import { DashboardPage } from '@/features/dashboard/pages/dashboard.page'
@@ -71,7 +101,7 @@ export default function Dashboard() {
 }
 ```
 
-**Mobile (Expo Router):**
+**Mobile (Expo Router or React Native):**
 ```typescript
 // src/app/(private)/dashboard.tsx
 import { DashboardScreen } from '@/features/dashboard/screens/dashboard.screen'
@@ -283,6 +313,8 @@ export function DashboardActiveCard({ data, isLoading, isError }: DashboardActiv
 
 ## shared/ — Global Reusable Code
 
+In front web (Next.js, React) and mobile (Expo, React Native), `shared/` is flat per folder (no subfolders). One file per concern; naming carries the responsibility.
+
 ```
 shared/
 ├── components/
@@ -291,14 +323,11 @@ shared/
 │   ├── data-handler.tsx
 │   ├── skeleton.tsx
 │   ├── dialog.tsx
-│   └── form/
-│       └── inputs/
-│           ├── input-text.tsx
-│           ├── input-select.tsx
-│           └── shared/
-│               ├── input-container.tsx
-│               ├── input-error.tsx
-│               └── input-label.tsx
+│   ├── input-text.tsx
+│   ├── input-select.tsx
+│   ├── input-container.tsx
+│   ├── input-error.tsx
+│   └── input-label.tsx
 ├── hooks/
 │   ├── dialog.hook.tsx
 │   └── drawer.hook.tsx
@@ -312,11 +341,11 @@ shared/
 │   └── shared.ui.type.ts
 ├── constants/
 │   └── server-routes.constants.ts
+├── validations/
+│   ├── required-email.validation.ts
+│   ├── required-string.validation.ts
+│   └── required-phone.validation.ts
 └── utils/
-    ├── validation/
-    │   ├── required-email.validation.ts
-    │   ├── required-string.validation.ts
-    │   └── required-phone.validation.ts
     └── error.util.ts
 ```
 
@@ -516,8 +545,8 @@ export type ServiceInput<TData = unknown> = {
 ```typescript
 // src/features/auth/schemas/login.schema.ts
 import { z } from 'zod'
-import { requiredEmail } from '@/shared/utils/validation/required-email.validation'
-import { requiredString } from '@/shared/utils/validation/required-string.validation'
+import { requiredEmail } from '@/shared/validations/required-email.validation'
+import { requiredString } from '@/shared/validations/required-string.validation'
 
 export const loginSchema = z.object({
   email: requiredEmail(),
@@ -529,7 +558,7 @@ export type LoginSchema = z.infer<typeof loginSchema>
 
 **Reusable validators in shared/:**
 ```typescript
-// src/shared/utils/validation/required-string.validation.ts
+// src/shared/validations/required-string.validation.ts
 import { z } from 'zod'
 
 export const requiredString = ({ field, min = 1 }: { field: string; min?: number }) =>
@@ -547,7 +576,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import { LoginSchema, loginSchema } from '@/features/auth/schemas/login.schema'
 import { SessionCreateService } from '@/features/auth/services/session-create.service'
-import { InputText } from '@/shared/components/form/inputs/input-text'
+import { InputText } from '@/shared/components/input-text'
 import { Button } from '@/shared/components/button'
 
 export function LoginForm() {
@@ -572,7 +601,7 @@ export function LoginForm() {
 
 **Input uses `Controller` from RHF and is generic:**
 ```typescript
-// src/shared/components/form/inputs/input-text.tsx
+// src/shared/components/input-text.tsx
 import { Control, Controller, FieldValues, Path, PathValue } from 'react-hook-form'
 import { cn } from '@/shared/libs/tw-merge'
 
@@ -616,13 +645,24 @@ export function InputText<T extends FieldValues>({
 
 ## File Naming Conventions
 
-Use kebab-case for all filenames. Suffix reflects the file's role:
+### Rule for front (web & mobile): outside `app/` only
+
+Every file outside the `app/` folder must follow:
+
+- **Format**: lowercase, words separated by `-`, then `.tipo.ext` (suffix by role).
+- **Examples**: `pagina-exemplo.page.tsx`, `login.schema.ts`, `session-create.use-case.ts`, `dashboard-active.type.ts`.
+
+**Components are the exception**: do **not** use a `.component` suffix. Use only kebab-case + extension, e.g. `pagina-exemplo.tsx`, `dashboard-revenue-card.tsx`, `input-text.tsx`.
+
+**Another exception**: files inside any `styles/` folder do not need to follow this pattern (e.g. CSS/SCSS modules may use their own convention).
+
+### Suffix by role
 
 | Role | Suffix | Example |
 |------|--------|---------|
-| Page component | `.page.tsx` | `dashboard.page.tsx` |
+| Page component | `.page.tsx` | `pagina-exemplo.page.tsx` |
 | Screen component (mobile) | `.screen.tsx` | `login.screen.tsx` |
-| UI component | `.tsx` | `dashboard-revenue-card.tsx` |
+| UI component | (no suffix) `.tsx` | `dashboard-revenue-card.tsx`, `input-text.tsx` |
 | React Query service | `.service.tsx` | `session-create.service.tsx` |
 | API call (pure) | `.use-case.ts` | `session-create.use-case.ts` |
 | Zod schema | `.schema.ts` | `login.schema.ts` |
@@ -630,7 +670,7 @@ Use kebab-case for all filenames. Suffix reflects the file's role:
 | API response type | `.api.type.ts` | `session.api.type.ts` |
 | Domain type | `.type.ts` | `dashboard-active.type.ts` |
 | Utility | `.util.ts` | `error.util.ts` |
-| Validation helper | `.validation.ts` | `required-email.validation.ts` |
+| Validation helper | `.validation.ts` | `required-email.validation.ts` (in `validations/`) |
 | Constants | `.constants.ts` | `server-routes.constants.ts` |
 
 ---
@@ -684,7 +724,7 @@ export const useAuth = () => useContext(AuthContext)
 
 ## Testing
 
-### Front-end (Next.js)
+### Front-end (Next.js / React)
 - **E2E**: Playwright and/or Cypress
 - Tests live in `e2e/` or `cypress/` at project root
 - Test files: `[feature].spec.ts` (Playwright) or `[feature].cy.ts` (Cypress)
@@ -710,3 +750,4 @@ export const useAuth = () => useContext(AuthContext)
 8. **Type everything**: No `any`. All props, params, and return values must be typed.
 9. **Shared is truly shared**: Only put in `shared/` what is used by 2+ features.
 10. **Naming reflects role**: File name + suffix must make the file's purpose immediately obvious.
+11. **No barrel files for re-exports**: Do not use `index.ts` (or `index.tsx`) only to re-export other modules. Import directly from the source file (e.g. `from '@/shared/components/button'` not `from '@/shared/components'`). An `index.ts` is only allowed when it contains real logic or composition, not mere re-exports.
