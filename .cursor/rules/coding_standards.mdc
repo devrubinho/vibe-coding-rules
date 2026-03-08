@@ -797,6 +797,37 @@ export const useAuth = () => useContext(AuthContext)
 - Test files: `[feature].spec.ts` (Playwright) or `[feature].cy.ts` (Cypress)
 - Cover critical user flows: auth, main feature interactions, form submissions
 
+### Playwright — single root folder (e2e/)
+
+Do **not** create `playwright-report/` or `test-results/` at project root. Use **only** `e2e/` at root; put all Playwright outputs inside it:
+
+- **`e2e/`** — tests, helpers, and outputs (single folder at root)
+- **`e2e/.results/`** — test artifacts (traces, screenshots; replaces default `test-results/`)
+- **`e2e/.report/`** — HTML report (replaces default `playwright-report/`)
+
+**playwright.config.ts:**
+
+```typescript
+import { defineConfig } from '@playwright/test'
+
+export default defineConfig({
+  testDir: './e2e',
+  outputDir: './e2e/.results',
+  fullyParallel: true,
+  forbidOnly: !!process.env.CI,
+  retries: process.env.CI ? 2 : 0,
+  workers: process.env.CI ? 1 : undefined,
+  reporter: [['html', { outputFolder: './e2e/.report' }]],
+  use: {
+    baseURL: 'http://localhost:3000',
+    trace: 'on-first-retry',
+    // ...
+  },
+})
+```
+
+**.gitignore:** add `e2e/.results/` and `e2e/.report/` so outputs stay untracked. The leading `.` keeps the folders collapsed in the editor.
+
 ### Mobile (Expo / React Native)
 - **E2E**: Detox
 - Tests live in `e2e/` at project root
