@@ -97,7 +97,7 @@ In **Next.js App Router** projects, organize `app/` with route groups:
 
 - **`(public)/`** — Public routes (login, signup, landing, etc.)
 - **`(private)/`** — Private routes (dashboard, profile, etc.; protect via layout or middleware)
-- **`(server)/`** — API / server routes (Route Handlers, e.g. `route.ts`)
+- **`(server)/`** — API / server routes (Route Handlers, e.g. `route.ts`). **Any route under `/api` must live inside `(server)`** — i.e. `app/(server)/api/...`, not `app/api/...`.
 
 Example structure:
 
@@ -110,7 +110,7 @@ app/
 │   ├── dashboard/page.tsx
 │   └── admin/question/page.tsx
 ├── (server)/
-│   └── api/
+│   └── api/              # /api/* routes live here
 │       └── .../route.ts
 ├── layout.tsx
 └── ...
@@ -158,7 +158,7 @@ export class CreateSessionController {
 **Rules:**
 - **Front-end/Mobile**: `page.tsx` / route files NEVER contain logic, state, or imports beyond the feature component
 - **Backend**: `app/` contains controllers and validators only — no business logic
-- **Next.js App Router**: Use `(public)/` for public routes, `(private)/` for private routes, `(server)/` for API/Route Handlers. Other React front-ends and mobile may use only `(public)` and `(private)` as needed.
+- **Next.js App Router**: Use `(public)/` for public routes, `(private)/` for private routes, `(server)/` for API/Route Handlers; **routes under `/api` must be under `app/(server)/api/`**, not `app/api/`. Other React front-ends and mobile may use only `(public)` and `(private)` as needed.
 - `layout.tsx` files may contain auth guards and providers
 - All business logic lives in `features/`
 

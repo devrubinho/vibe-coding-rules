@@ -1,6 +1,6 @@
 {
   "name": "rbin-task-flow",
-  "version": "1.9.0",
+  "version": "1.10.0",
   "description": "AI-powered task management for Claude and Cursor",
   "main": "index.js",
   "bin": {
