@@ -376,6 +376,14 @@ Each component has a single responsibility. Components:
 - Follow the **page prefix** naming above when they are page-specific (inside a feature)
 - Stay small and focused; child components stay in the same `components/` folder with the inherited prefix in the name
 
+### Base components — no raw usage (Front web & Mobile)
+
+Do **not** use raw `<button>`, `<input>`, or other base HTML/primitive elements scattered in the code. If a screen uses a button or an input, there must be a **reusable component** for it (in `shared/components/` or, when feature-specific, in the feature’s `components/`). This applies to all base-level UI: buttons, inputs, selects, checkboxes, textareas, links, etc.
+
+- **Shared**: Use `shared/components/` for app-wide primitives (e.g. `button.tsx`, `input-text.tsx`, `input-select.tsx`). Pages and feature components import and use these.
+- **Feature-specific**: If the variant is only used in one feature, create it in `features/[feature]/components/` and reuse it inside that feature; do not repeat the same JSX in multiple files.
+- **Never**: Inline `<button>`, `<input type="text">`, etc. in a page or component without going through a defined component. Every button/input on a screen must come from a named, reusable component.
+
 ---
 
 ## shared/ — Global Reusable Code
@@ -850,3 +858,4 @@ export default defineConfig({
 10. **Naming reflects role**: File name + suffix must make the file's purpose immediately obvious.
 11. **No barrel files for re-exports**: Do not use `index.ts` (or `index.tsx`) only to re-export other modules. Import directly from the source file (e.g. `from '@/shared/components/button'` not `from '@/shared/components'`). An `index.ts` is only allowed when it contains real logic or composition, not mere re-exports.
 12. **Page-specific components use page prefix**: In features, the page file is `[page-name].page.tsx`; components specific to that page use the same prefix in file and function name (e.g. `admin-question-card.tsx` → `AdminQuestionCard`). Child components stay in the same `components/` folder and inherit the parent prefix (e.g. `admin-question-card-item.tsx` → `AdminQuestionCardItem`). App route exports `AdminQuestion`, feature page exports `AdminQuestionPage`.
+13. **No raw base UI in screens**: Buttons, inputs, selects, and other base elements must not be used in isolation in the code. Create and reuse a component (in `shared/components/` or in the feature’s `components/`) for each usage; no inline `<button>` or `<input>` without a dedicated component.
