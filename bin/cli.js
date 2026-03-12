@@ -6,6 +6,7 @@ const { installInProject } = require('../lib/install');
 const { checkVersionUpdates } = require('../lib/version');
 const { estimateTask } = require('../lib/estimate');
 const { generateReport } = require('../lib/report');
+const { runAudit } = require('../lib/audit');
 const chalk = require('chalk');
 
 program
@@ -59,6 +60,15 @@ program
   });
 
 program
+  .command('audit')
+  .description('List files with unstaged changes (not yet git add)')
+  .option('-p, --path <path>', 'Target directory (default: current directory)')
+  .action(async (options) => {
+    const targetPath = options.path || process.cwd();
+    await runAudit(targetPath);
+  });
+
+program
   .command('info')
   .description('Show information about RBIN Task Flow')
   .action(() => {
@@ -74,6 +84,7 @@ program
     console.log(chalk.cyan('  rbin-task-flow version-check') + ' - Check for model updates');
     console.log(chalk.cyan('  rbin-task-flow estimate <ids>') + ' - Estimate time (e.g., "1" or "1,2" or "all")');
     console.log(chalk.cyan('  rbin-task-flow report <ids>') + '  - Generate report (e.g., "1" or "1,2" or "all")');
+    console.log(chalk.cyan('  rbin-task-flow audit') + '       - List unstaged files (not yet git add)');
     console.log(chalk.cyan('  rbin-task-flow info') + '         - Show this information\n');
   });
 

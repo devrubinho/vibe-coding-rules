@@ -1,0 +1,74 @@
+---
+description: Run lint fix and build, then audit only uncommitted files against coding standards
+globs: **/*
+alwaysApply: true
+---
+
+# task-flow: improve changes
+
+When the user runs `task-flow: improve changes`:
+
+1. **Lint and build**: Check if the project has a lint-fix script and a build script; run lint fix, fix any warnings or errors, then run build and fix until it passes.
+2. **Audit uncommitted only**: Then do the **same as** [task-flow: audit](mdc:.cursor/rules/task_audit.mdc) (codebase audit against [coding_standards.mdc](mdc:.cursor/rules/coding_standards.mdc)), but **restricted to files that were changed and not yet committed**.
+
+---
+
+## Scope: uncommitted files only
+
+1. **Get the list of uncommitted files** (read-only git; do not run `git add`/`git commit`). Use the list of paths from:
+   - Modified but not staged: `git diff --name-only`
+   - Staged but not committed: `git diff --name-only --cached`
+   - Combined: all files that differ from `HEAD` → `git diff --name-only HEAD`
+   - **Use** `git diff --name-only HEAD` so that both unstaged and staged (but uncommitted) changes are included.
+
+2. If there are **no uncommitted changes**, tell the user and stop.
+
+3. **Lint and build** (see below): run lint fix if available; fix any lint warnings or errors; run build and fix if it fails.
+
+4. **Restrict the audit to those paths**: when performing the steps from [task_audit.mdc](mdc:.cursor/rules/task_audit.mdc) (explore, score, report, ask what to adopt, generate tasks), consider **only** the files in the list above. Do not score or suggest improvements for files that were not changed.
+
+5. **Same principles as audit**: non-destructive, incremental, suggest improvements and let the user choose. Only the scope is different: uncommitted files only.
+
+---
+
+## Lint fix and build (mandatory before audit)
+
+Before running the coding-standards audit on uncommitted files:
+
+1. **Check for lint fix**: Read `package.json` and look for scripts that run lint with fix (e.g. `lint:fix`, `lint --fix`, `lint-fix`, or `lint` with a fix option). Common names: `lint:fix`, `lint -- --fix`, `eslint . --fix`, `npm run lint -- --fix`.
+
+2. **Run lint fix**: If such a script exists, run it (e.g. `npm run lint:fix` or `pnpm run lint -- --fix`). You may run npm/pnpm/yarn without asking per project rules.
+
+3. **Fix lint output**: If lint reports **warnings or errors** after the fix run, correct them in the code (only in the affected files when possible). Re-run lint until there are no errors; reduce warnings where feasible.
+
+4. **Check for build**: Look for a `build` (or `build:prod`, `build:dev`) script in `package.json`.
+
+5. **Run build**: If a build script exists, run it (e.g. `npm run build`). If the **build fails**, fix the failing errors (compile errors, type errors, missing deps) and re-run until the build passes.
+
+6. **Order**: Run lint fix (and fix issues) first, then build (and fix issues). Only after both are passing, proceed with the coding-standards audit on uncommitted files.
+
+If the project has no lint fix script or no build script, skip the missing step and continue with the audit.
+
+---
+
+## How to execute
+
+- **Step 1**: Obtain uncommitted file list (e.g. run `git diff --name-only HEAD` or use your tools to get the list). If empty, stop.
+- **Step 2**: **Lint and build**: run lint fix if available; fix any lint warnings/errors; run build and fix until it passes (see "Lint fix and build" above).
+- **Step 3**: Read and analyze **only** the uncommitted files (and their immediate context if needed).
+- **Step 4**: For that subset, apply the same categories and scoring as in task-flow: audit (folder structure, thin app/, naming, cn(), forms, etc.) and note which of those categories are relevant to the changed files.
+- **Step 5**: Present findings and suggested improvements **only for the uncommitted files**.
+- **Step 6**: Ask which improvements the user wants; generate tasks or concrete edits only for the selected items, touching only uncommitted files where possible.
+
+---
+
+## Natural language
+
+- **FAST FORMAT**: `task-flow: improve changes` or `task-flow improve changes`
+- "improve my changes", "audit my uncommitted changes", "check my changes against standards" → same command
+
+---
+
+## Principle
+
+> **Same as audit, but scoped to what the developer is about to commit. First ensure lint fix runs and build passes (fixing any warnings/errors); then run the coding-standards audit on uncommitted files. Use it to tighten quality and standards on the current change set before committing.**

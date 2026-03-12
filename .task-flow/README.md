@@ -15,6 +15,9 @@
 | `task-flow: refactor X` | Refactors specific task(s) (e.g., `task-flow: refactor 1` or `task-flow: refactor 10,11` or `task-flow: refactor all`) |
 | `task-flow: estimate X` | Estimates time for task X (e.g., `task-flow: estimate 1` or `task-flow: estimate 10,11`) |
 | `task-flow: report X` | Generates implementation report for task X (e.g., `task-flow: report 1` or `task-flow: report 10,11`) |
+| `task-flow: audit` | Audits codebase against coding standards and suggests incremental improvements |
+| `task-flow: improve changes` | Run lint fix + build (fix issues), then audit only uncommitted files |
+| `rbin-task-flow audit` | **(CLI)** Lists files with unstaged changes (not yet `git add`) |
 
 **See complete details below ↓**
 
@@ -35,6 +38,16 @@ Analyzes code and suggests new tasks. Asks before adding to `tasks.input.txt`.
 
 ### `task-flow: status`
 Shows current status of tasks and subtasks from the `tasks.status.md` file.
+
+### `task-flow: audit`
+Audits the **entire codebase** against the coding standards in [coding_standards.mdc](.cursor/rules/coding_standards.mdc). Non-destructive: reports gaps and suggests incremental improvements; the user chooses what to adopt. See [task_audit.mdc](.cursor/rules/task_audit.mdc) for the full flow.
+
+### `task-flow: improve changes`
+1. **Lint and build**: Run lint fix if the project has it; fix any lint warnings or errors; run build and fix until it passes.  
+2. **Audit uncommitted only**: Same as **task-flow: audit**, but **only for files that were changed and not yet committed** (unstaged + staged). Use before committing to align the current change set with coding standards. The AI obtains the list of uncommitted files and runs the audit flow restricted to those paths.
+
+### `rbin-task-flow audit` (CLI only)
+Lists **unstaged** file paths (modified but not yet `git add`). Run in the project root: `rbin-task-flow audit`. Option: `-p, --path <path>`.
 
 ---
 
