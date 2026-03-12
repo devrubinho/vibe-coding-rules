@@ -73,6 +73,7 @@ rbin-task-flow init          # Inicializa no projeto atual
 rbin-task-flow update        # Atualiza configurações
 rbin-task-flow version-check # Verifica atualizações de modelos
 rbin-task-flow info          # Mostra informações
+rbin-task-flow check         # Roda lint/fix e build quando existirem
 rbin-task-flow estimate <ids> # Estima tempo (ex: "1" ou "1,2" ou "all")
 rbin-task-flow report <ids>  # Gera relatório (ex: "1" ou "1,2" ou "all")
 ```
@@ -86,6 +87,8 @@ Após inicializar, use estes comandos na IA (Cursor/Claude) para gerenciar taref
 | `task-flow: sync` | **Sincroniza** tarefas do arquivo texto com o sistema | Mantém tudo sincronizado automaticamente - adiciona novas, remove deletadas, preserva seu progresso |
 | `task-flow: think` | **Descobre** tarefas que você esqueceu | Analisa código e sugere tarefas que faltam (testes, refatoração, documentação) |
 | `task-flow: audit` | **Avalia** o quanto o código bate com os padrões de codificação | Analisa a codebase, dá um score por categoria e pergunta quais melhorias você quer adotar — sem impor nada |
+| `task-flow: check` | **Valida** lint e build antes de revisar ou commitar | Roda lint com fix quando disponível e depois build, corrigindo problemas do projeto atual |
+| `task-flow: improve changes` | **Audita** só o diff atual | Faz o mesmo audit de padrões, mas restrito aos arquivos alterados em relação ao `HEAD` |
 | `task-flow: status` | **Visualiza** o progresso rapidamente | Vê resumo com tasks completas, em andamento e quantas subtarefas faltam |
 | `task-flow: run next X` | **Automatiza** o trabalho nas próximas subtarefas | A IA trabalha nas próximas X subtarefas sequencialmente, você só acompanha |
 | `task-flow: run X` | **Completa** uma tarefa inteira de uma vez | Executa todas as subtarefas de uma tarefa específica (permite trabalho paralelo) |
@@ -417,6 +420,7 @@ rbin-task-flow init          # Initialize in current project
 rbin-task-flow update        # Update configurations
 rbin-task-flow version-check # Check for model updates
 rbin-task-flow info          # Show information
+rbin-task-flow check         # Run lint/fix and build when available
 rbin-task-flow estimate <ids> # Estimate time (e.g., "1" or "1,2" or "all")
 rbin-task-flow report <ids>   # Generate report (e.g., "1" or "1,2" or "all")
 ```
@@ -430,6 +434,8 @@ After initializing, use these commands in your AI (Cursor/Claude) to automatical
 | `task-flow: sync` | **Sync** tasks from text file with system | Keeps everything synchronized automatically - adds new, removes deleted, preserves your progress |
 | `task-flow: think` | **Discover** tasks you forgot | Analyzes code and suggests missing tasks (tests, refactoring, documentation) |
 | `task-flow: audit` | **Evaluate** how well your code matches coding standards | Scans the codebase, scores it by category and asks which improvements you want to adopt — never imposes changes |
+| `task-flow: check` | **Validate** lint and build before review or commit | Runs lint with autofix when available and then build, fixing current-project issues first |
+| `task-flow: improve changes` | **Audit** only the current diff | Runs the same standards audit, but restricted to files changed relative to `HEAD` |
 | `task-flow: status` | **Visualize** progress quickly | See summary with completed tasks, in progress, and remaining subtasks |
 | `task-flow: run next X` | **Automate** work on next subtasks | AI works on next X subtasks sequentially, you just follow along |
 | `task-flow: run X` | **Complete** an entire task at once | Executes all subtasks of a specific task (allows parallel work) |

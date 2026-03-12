@@ -22,7 +22,8 @@ This project uses RBIN Task Flow for task management:
   - `task-flow: sync` - Synchronize tasks from tasks.input.txt
   - `task-flow: think` - Analyze code and suggest new tasks
   - `task-flow: audit` - Audit codebase against coding standards and suggest incremental improvements
-  - `task-flow: improve changes` - Run lint fix and build (fix issues), then audit only uncommitted files
+  - `task-flow: check` - Run lint fix when available, then build the current project
+  - `task-flow: improve changes` - Audit only files changed in the current diff against `HEAD`
   - `task-flow: status` - View current task status
   - `task-flow: run next X` - Work on next X subtasks
   - `task-flow: run X` - Execute all pending subtasks of task X (simplified - no "task" needed)

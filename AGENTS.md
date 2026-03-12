@@ -29,9 +29,10 @@ This repo follows the same development norms as in `.cursor/rules/` and `CLAUDE.
 - **Task flow** always means **RBIN Task Flow**.
 - Tasks: `.task-flow/tasks.input.txt` (format: `- Task description`).
 - Status: `.task-flow/tasks.status.md` and `.task-flow/.internal/status.json`.
-- **Commands** to support: `task-flow: sync`, `task-flow: think`, `task-flow: audit`, `task-flow: improve changes`, `task-flow: status`, `task-flow: run next X`, `task-flow: run X` (or `X,Y` / `all`), `task-flow: review X`, `task-flow: refactor X`, `task-flow: estimate X`, `task-flow: report X`.
+- **Commands** to support: `task-flow: sync`, `task-flow: think`, `task-flow: audit`, `task-flow: check`, `task-flow: improve changes`, `task-flow: status`, `task-flow: run next X`, `task-flow: run X` (or `X,Y` / `all`), `task-flow: review X`, `task-flow: refactor X`, `task-flow: estimate X`, `task-flow: report X`.
 - When running `task-flow: audit`: scan the codebase, score it against `.cursor/rules/coding_standards.mdc`, present a report, and ask the user which improvements to adopt — never impose changes.
-- When running `task-flow: improve changes`: (1) run lint fix if present and fix lint warnings/errors; run build and fix until it passes; (2) then same as audit but only for files changed and not yet committed (obtain list via `git diff --name-only HEAD`, then audit only those paths).
+- When running `task-flow: check`: run lint fix if present and fix lint warnings/errors; run build and fix until it passes.
+- When running `task-flow: improve changes`: same as audit but only for files changed and not yet committed (obtain list via `git diff --name-only HEAD`, then audit only those paths).
 - When running subtasks: read `.task-flow/.internal/tasks.json` and `status.json`, implement, then update `status.json` and `tasks.status.md` (mark done, refresh summary).
 - Use context from `.task-flow/contexts/` when subtask instructions reference it.
 
