@@ -16,7 +16,8 @@
 | `task-flow: estimate X` | Estimates time for task X (e.g., `task-flow: estimate 1` or `task-flow: estimate 10,11`) |
 | `task-flow: report X` | Generates implementation report for task X (e.g., `task-flow: report 1` or `task-flow: report 10,11`) |
 | `task-flow: audit` | Audits codebase against coding standards and suggests incremental improvements |
-| `task-flow: improve changes` | Run lint fix + build (fix issues), then audit only uncommitted files |
+| `task-flow: check` | Run lint fix (if available) and build; fix any warnings or errors until both pass |
+| `task-flow: improve changes` | Audit only uncommitted files against coding standards (same as audit, restricted to current change set) |
 | `rbin-task-flow audit` | **(CLI)** Lists files with unstaged changes (not yet `git add`) |
 
 **See complete details below ↓**
@@ -42,9 +43,11 @@ Shows current status of tasks and subtasks from the `tasks.status.md` file.
 ### `task-flow: audit`
 Audits the **entire codebase** against the coding standards in [coding_standards.mdc](.cursor/rules/coding_standards.mdc). Non-destructive: reports gaps and suggests incremental improvements; the user chooses what to adopt. See [task_audit.mdc](.cursor/rules/task_audit.mdc) for the full flow.
 
+### `task-flow: check`
+Runs **lint fix** and **build** for the project. Check `package.json` for a lint-with-fix script (e.g. `lint:fix`, `lint -- --fix`) and a build script; run lint fix first, fix any warnings or errors, then run build and fix until it passes. Use before committing or before `task-flow: improve changes` to ensure the project is clean.
+
 ### `task-flow: improve changes`
-1. **Lint and build**: Run lint fix if the project has it; fix any lint warnings or errors; run build and fix until it passes.  
-2. **Audit uncommitted only**: Same as **task-flow: audit**, but **only for files that were changed and not yet committed** (unstaged + staged). Use before committing to align the current change set with coding standards. The AI obtains the list of uncommitted files and runs the audit flow restricted to those paths.
+Same as **task-flow: audit**, but **only for files that were changed and not yet committed** (unstaged + staged). The AI obtains the list via `git diff --name-only HEAD`, and runs the audit flow restricted to those paths. Use before committing to align the current change set with coding standards. Does **not** run lint or build — use `task-flow: check` for that.
 
 ### `rbin-task-flow audit` (CLI only)
 Lists **unstaged** file paths (modified but not yet `git add`). Run in the project root: `rbin-task-flow audit`. Option: `-p, --path <path>`.
