@@ -85,6 +85,29 @@ In **front web** (Next.js, React) or **mobile** (Expo, React Native) projects, e
 - **Validation**: Zod (not class-validator/class-transformer)
 - **Structure**: `src/app/` (controllers), `src/features/` (use-cases, repositories), `src/shared/` (guards, pipes, gateways)
 
+### ESLint — @rbinflow/eslint-config
+
+When the project uses `@rbinflow/eslint-config`, **do not add any other ESLint plugins or configs** — `@rbinflow/eslint-config` already configures everything. The `.eslintrc.cjs` file must stay minimal:
+
+**Available configurations:**
+
+| Project type | extends |
+|--------------|---------|
+| Node.js (no semicolons) | `@rbinflow/eslint-config/node` |
+| Node.js (with semicolons) | `@rbinflow/eslint-config/node-with-semi` |
+| React | `@rbinflow/eslint-config/react` |
+| Next.js | `@rbinflow/eslint-config/next` |
+| Expo | `@rbinflow/eslint-config/expo` |
+
+**Example (.eslintrc.cjs):**
+```javascript
+module.exports = {
+  extends: ['@rbinflow/eslint-config/next'],
+}
+```
+
+**Node.js variants:** `node` uses `semi: false`; `node-with-semi` uses `semi: true`. All other settings are identical. No extra `plugins`, `rules`, or `extends` beyond this.
+
 ---
 
 ## app/ — Routes Only (Front-end & Mobile) / Controllers Only (Backend)
