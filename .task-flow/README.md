@@ -95,10 +95,10 @@ Refactors code from specific task(s). Removes explanatory comments, improves cod
 - `task-flow: refactor all` → Refactors all tasks
 
 ### `task-flow: estimate X` (simplified syntax)
-Estimates time required to complete task(s) based on task level, scope, risk, and developer experience level. Subtask count informs scope, but is not the sole criterion.
+Estimates time required to complete task(s) based on the real complexity of the task, assuming an average developer working at an average pace without AI acceleration. Subtask count informs scope, but is not the sole criterion.
 
 **Output includes:**
-- Time estimates for Junior (0-2 years), Intermediate (3-5 years), and Senior (6+ years) developers
+- A single estimate range for the majority of developers
 - Estimates in hours and business days
 - Recommendation for management with buffer
 

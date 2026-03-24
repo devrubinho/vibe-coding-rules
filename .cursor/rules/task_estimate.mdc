@@ -1,5 +1,5 @@
 ---
-description: Task time estimation based on task complexity and developer experience level
+description: Task time estimation based on real task complexity for an average developer pace
 globs: **/*
 alwaysApply: true
 ---
@@ -10,41 +10,36 @@ alwaysApply: true
   - **ALL TASKS**: `task-flow: estimate all` → Estimate all tasks
   - When user says "task-flow: estimate X", "estimate X", "estimate X,Y", "estimate all", or "how long will task X take":
     - **READ**: `.task-flow/.internal/tasks.json` to get task details
-    - **CALCULATE**: Time estimate based on task level, complexity signals, and developer experience level
-    - **DISPLAY**: Show time estimate with intervals for 3 experience levels (junior, mid, senior)
-    - **FORMAT**: Show estimates in hours with ranges (e.g., "10-14 hours" for intermediate)
+    - **CALCULATE**: Time estimate based on task level, intrinsic complexity signals, and average development pace
+    - **DISPLAY**: Show a single estimate range for the majority of developers
+    - **FORMAT**: Show estimates in hours with ranges (e.g. "10-14 hours")
 
 - **Estimation Rules:**
-  1. **Base Analysis**: Evaluate the task title and subtasks to infer real task level
-  2. **Experience Levels** (use internally; display "Intermediate" not "Mid-level" to user):
-     - **Junior** (0-2 years): Base time × 1.5 multiplier
-     - **Intermediate** (3-5 years): Base time × 1.0 multiplier (baseline)
-     - **Senior** (6+ years): Base time × 0.7 multiplier
+  1. **Base Analysis**: Evaluate the task title, description, and subtasks to infer the real complexity of the task itself
+  2. **Assumption**: Estimate for an average developer working at an average development pace, without AI acceleration
   3. **Task Level Heuristics**:
      - **Low**: localized change, clear requirement, low ambiguity, low regression risk
      - **Medium**: multi-file implementation, moderate ambiguity, moderate validation needs
      - **High**: architectural, cross-cutting, migration, security, performance, or high-risk change
-  4. **Subtask count is only one signal**: use it to inform scope, but never as the sole estimate driver
-  5. **Intermediate baseline per subtask**:
+  4. **Intrinsic complexity matters first**: scope, ambiguity, dependencies, validation, integration points, and regression risk must outweigh raw subtask count
+  5. **Subtask count is only one signal**: use it to inform scope, but never as the sole estimate driver
+  6. **Baseline per subtask for average pace**:
      - Low-level task: 1.5-2.5 hours
      - Medium-level task: 2.5-4 hours
      - High-level task: 4-6.5 hours
-  6. **Risk and scope adjustment**:
+  7. **Risk and scope adjustment**:
      - Increase estimate when the task mentions integrations, migrations, refactors, security, performance, billing, or architecture work
-  7. **Range Calculation**:
-     - Lower bound: (subtasks × baseline lower) × risk factor × experience multiplier
-     - Upper bound: (subtasks × baseline upper) × risk factor × experience multiplier
+  8. **Range Calculation**:
+     - Lower bound: subtasks × baseline lower × risk factor
+     - Upper bound: subtasks × baseline upper × risk factor
      - Round to nearest hour
 
 - **Estimation Formula:**
   ```
   1. Infer task level: low, medium, or high
-  2. Choose intermediate baseline per subtask from task level
+  2. Choose average-pace baseline per subtask from task level
   3. Apply risk/scope multiplier when complexity indicators exist
-  4. Apply experience multiplier:
-     Junior: × 1.5
-     Intermediate: × 1.0
-     Senior: × 0.7
+  4. Return one range that represents the majority of developers
   ```
 
 - **Display Format:**
@@ -52,10 +47,8 @@ alwaysApply: true
   📊 Time Estimation for Task X: [Task Title]
   
   Based on [N] subtasks and task-level analysis:
-  
-  👶 Junior (0-2 years):      [X-Y] hours
-  👨‍💼 Intermediate (3-5 years): [X-Y] hours
-  👴 Senior (6+ years):       [X-Y] hours
+
+  Average developer, average pace, no AI acceleration: [X-Y] hours
   ```
 
 - **Natural Language Phrases:**
@@ -78,9 +71,7 @@ alwaysApply: true
   
   Based on 5 subtasks and task-level analysis:
   
-  👶 Junior (0-2 years):      15-23 hours
-  👨‍💼 Intermediate (3-5 years): 10-15 hours
-  👴 Senior (6+ years):      7-11 hours
+  Average developer, average pace, no AI acceleration: 10-15 hours
   ```
 
 - **Integration:**
@@ -89,4 +80,4 @@ alwaysApply: true
   - Estimates are informational only (not stored)
 
 - **Principle:**
-  > **Provide realistic time estimates based on real task level, scope, ambiguity, and risk. Subtask count informs scope, but must not be the sole estimation criterion.**
+  > **Provide realistic time estimates for an average developer, based on the real complexity of the task itself. Subtask count informs scope, but must not be the sole estimation criterion, and estimates must not assume AI acceleration.**

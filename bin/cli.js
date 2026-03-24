@@ -42,7 +42,7 @@ program
 
 program
   .command('estimate')
-  .description('Estimate time for task(s) based on subtasks and experience level')
+  .description('Estimate time for task(s) based on real task complexity and average development pace')
   .argument('<taskIds>', 'Task ID(s) to estimate (comma-separated or "all")')
   .option('-p, --path <path>', 'Target directory (default: current directory)')
   .action(async (taskIds, options) => {

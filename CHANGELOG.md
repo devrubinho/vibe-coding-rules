@@ -2,13 +2,20 @@
 
 ## [Unreleased]
 
+## [1.19.4] - 2026-03-24
+
+### Changed
+
+- **task_estimate.mdc / lib/estimate.js / bin/cli.js** - Estimates use one hours range for an average developer at average pace (no junior/mid/senior bands); assumption stated explicitly, including no AI acceleration.
+- **.task-flow/README.md** - `task-flow: estimate` documentation aligned with the single-range output.
+
 ## [1.19.3] - 2026-03-24
 
 ### Changed
 
 - **task_generate_flow.mdc** - Replaced legacy `Codex` recommendation with current `GPT-5.x` family guidance for flow generation.
 - **task_generate_flow.mdc** - Model priority and effort are now defined from task context, not fixed ordering or subtask count.
-- **task_estimate.mdc / lib/estimate.js** - Estimation now uses task-level heuristics, risk, and scope signals instead of relying only on subtask totals.
+- **task_estimate.mdc / lib/estimate.js** - Estimation now uses task-level heuristics, risk, and scope signals instead of relying only on subtask totals, and outputs a single average-developer estimate without AI acceleration.
 - **lib/install.js / install.sh** - `rbin-task-flow init` now preserves existing `.task-flow/tasks.input.txt`, `.task-flow/tasks.status.md`, and `.task-flow/tasks.flow.md` while still overwriting the rest of the template.
 
 ## [1.19.2] - 2025-03-07
