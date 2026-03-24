@@ -62,6 +62,7 @@ alwaysApply: true
      - Rebuild tasks.json with all tasks in correct order (matching tasks.input.txt order)
      - Rebuild status.json preserving all existing statuses (or updating if needed)
      - Rebuild tasks.status.md with all tasks and correct status marks (synchronized with status.json)
+     - **DO NOT** update or populate `.task-flow/tasks.flow.md` — that file is filled only by `task-flow: generate flow`
      - **ALWAYS regenerate summary section** at the top of tasks.status.md:
        - Count completed tasks (all subtasks done)
        - Count in-progress tasks (some subtasks done)

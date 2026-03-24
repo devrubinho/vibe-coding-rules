@@ -15,6 +15,7 @@
 | `task-flow: refactor X` | Refactors specific task(s) (e.g., `task-flow: refactor 1` or `task-flow: refactor 10,11` or `task-flow: refactor all`) |
 | `task-flow: estimate X` | Estimates time for task X (e.g., `task-flow: estimate 1` or `task-flow: estimate 10,11`) |
 | `task-flow: report X` | Generates implementation report for task X (e.g., `task-flow: report 1` or `task-flow: report 10,11`) |
+| `task-flow: generate flow` | Populates tasks.flow.md with dependencies, estimated hours, and AI model recommendations |
 | `task-flow: audit` | Audits codebase against coding standards and suggests incremental improvements |
 | `task-flow: check` | Run lint fix (if available) and build; fix any warnings or errors until both pass |
 | `task-flow: improve changes` | Audit only uncommitted files against coding standards (same as audit, restricted to current change set) |
@@ -106,6 +107,9 @@ Estimates time required to complete task(s) based on the number of subtasks and 
 - `task-flow: estimate 10,11` → Shows time estimates for tasks 10 and 11
 - `task-flow: estimate all` → Shows time estimates for all tasks
 
+### `task-flow: generate flow`
+Populates `tasks.flow.md` with: (1) task dependencies (for parallelization), (2) estimated hours, and (3) AI model recommendations (Codex, Composer, Claude) with effort levels. Run after `task-flow: sync` when you want to know which tasks can run in parallel and which model/effort to use.
+
 ### `task-flow: report X` (simplified syntax)
 Generates a detailed implementation report for completed task(s) in Markdown format.
 
@@ -129,4 +133,5 @@ Generates a detailed implementation report for completed task(s) in Markdown for
 
 - `.task-flow/tasks.input.txt` - Edit tasks here (format: `- Task description`)
 - `.task-flow/tasks.status.md` - ⚠️ **DO NOT EDIT** - Automatically updated by AI
+- `.task-flow/tasks.flow.md` - Dependencies, estimated hours, and model recommendations (populated by `task-flow: generate flow`)
 - `.task-flow/.internal/` - ⚠️ **IGNORE** - Internal system files (no need to read or edit)

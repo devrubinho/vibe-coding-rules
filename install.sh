@@ -170,13 +170,15 @@ install_to_project() {
     [ ! -f "$target/.task-flow/tasks.status.md" ] &&
       [ -f "$SCRIPT_DIR/.task-flow/tasks.status.md" ] &&
       cp "$SCRIPT_DIR/.task-flow/tasks.status.md" "$target/.task-flow/tasks.status.md"
+    [ ! -f "$target/.task-flow/tasks.flow.md" ] && {
+      printf '# Task Flow — Dependencies, Hours & Model Recommendations\n\n<!-- Populated by task-flow: generate flow. Do not edit manually. -->\n<!-- Horas: dev mediano (3-5 anos), uso para cobrança ao cliente -->\n' > "$target/.task-flow/tasks.flow.md"
+      echo -e "${GREEN}✅ Task Flow tasks.flow.md (empty - run task-flow: generate flow to populate)${NC}"
+    }
     [ -f "$SCRIPT_DIR/.task-flow/README.md" ] &&
       cp "$SCRIPT_DIR/.task-flow/README.md" "$target/.task-flow/README.md" &&
       echo -e "${GREEN}✅ Task Flow README${NC}"
     mkdir -p "$target/.task-flow/contexts" &&
       echo -e "${GREEN}✅ Contexts directory (.task-flow/contexts/)${NC}"
-    mkdir -p "$target/.task-flow/docs" &&
-      echo -e "${GREEN}✅ Documentation directory (.task-flow/docs/)${NC}"
   fi
 
   [ ! -f "$target/.gitignore" ] && touch "$target/.gitignore"

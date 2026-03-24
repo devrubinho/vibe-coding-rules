@@ -1,6 +1,6 @@
 {
   "name": "rbin-task-flow",
-  "version": "1.18.1",
+  "version": "1.19.0",
   "description": "AI-powered task management for Claude and Cursor",
   "main": "index.js",
   "bin": {
@@ -18,7 +18,9 @@
     "cursor",
     "cli",
     "task-management",
-    "ai-powered"
+    "ai-powered",
+    "generate-flow",
+    "tasks-flow"
   ],
   "author": "Rubens de Oliveira",
   "license": "MIT",

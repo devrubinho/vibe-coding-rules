@@ -1,0 +1,18 @@
+# Changelog
+
+## [1.19.0] - 2025-03-07
+
+### Added
+
+- **tasks.flow.md** - New file created on `rbin-task-flow init` for dependencies, estimated hours, and AI model recommendations
+- **task-flow: generate flow** - Command to populate tasks.flow.md with:
+  - Task dependencies (for parallelization)
+  - Estimated development hours (mid-level dev, billing)
+  - AI model recommendations (Codex, Composer, Claude) with effort levels
+- Web search for current AI model versions during flow generation
+- Keywords: `generate-flow`, `tasks-flow`
+
+### Changed
+
+- `task-flow: sync` explicitly does not update tasks.flow.md (only `generate flow` populates it)
+- CLAUDE.md, README, and docs updated with generate flow command

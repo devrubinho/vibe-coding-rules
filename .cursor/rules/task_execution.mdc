@@ -37,6 +37,7 @@ alwaysApply: true
   - `task-flow: report X` - Generate implementation report for task X (simplified - no "task" needed)
   - `task-flow: report X,Y` - Generate reports for multiple tasks (comma-separated)
   - `task-flow: report all` - Generate reports for all tasks
+  - `task-flow: generate flow` - Populate tasks.flow.md with dependencies, estimated hours (mid-level dev, billing), and AI model recommendations
 
 - **Workflow Example:**
   ```markdown
@@ -101,6 +102,10 @@ alwaysApply: true
 - **Task Refactor:**
   - See [task_refactor.mdc](mdc:.cursor/rules/task_refactor.mdc) for refactoring code from current commit
   - When user says "task-flow: refactor", improve code quality without changing functionality
+
+- **Task Flow Generation:**
+  - See [task_generate_flow.mdc](mdc:.cursor/rules/task_generate_flow.mdc) for populating tasks.flow.md
+  - When user says "task-flow: generate flow", populate dependencies and model recommendations
 
 - **Task Flow Commands - Natural Language Interpretation:**
   - **CRITICAL**: When user mentions **"task flow"**, they **ALWAYS** refer to **RBIN Task Flow**
