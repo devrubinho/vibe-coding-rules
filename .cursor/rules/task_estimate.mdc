@@ -10,48 +10,48 @@ alwaysApply: true
   - **ALL TASKS**: `task-flow: estimate all` → Estimate all tasks
   - When user says "task-flow: estimate X", "estimate X", "estimate X,Y", "estimate all", or "how long will task X take":
     - **READ**: `.task-flow/.internal/tasks.json` to get task details
-    - **CALCULATE**: Time estimate based on number of subtasks and developer experience level
+    - **CALCULATE**: Time estimate based on task level, complexity signals, and developer experience level
     - **DISPLAY**: Show time estimate with intervals for 3 experience levels (junior, mid, senior)
     - **FORMAT**: Show estimates in hours with ranges (e.g., "10-14 hours" for intermediate)
 
 - **Estimation Rules:**
-  1. **Base Calculation**: Count total number of subtasks in the task
+  1. **Base Analysis**: Evaluate the task title and subtasks to infer real task level
   2. **Experience Levels** (use internally; display "Intermediate" not "Mid-level" to user):
      - **Junior** (0-2 years): Base time × 1.5 multiplier
      - **Intermediate** (3-5 years): Base time × 1.0 multiplier (baseline)
      - **Senior** (6+ years): Base time × 0.7 multiplier
-  3. **Time per Subtask**:
-     - Simple subtask: 1-2 hours (intermediate baseline)
-     - Medium subtask: 2-4 hours (intermediate baseline)
-     - Complex subtask: 4-6 hours (intermediate baseline)
-  4. **Default Assumption**: Average 2-3 hours per subtask for intermediate (baseline)
-  5. **Range Calculation**: 
-     - Lower bound: (subtasks × 2) × multiplier
-     - Upper bound: (subtasks × 3) × multiplier
+  3. **Task Level Heuristics**:
+     - **Low**: localized change, clear requirement, low ambiguity, low regression risk
+     - **Medium**: multi-file implementation, moderate ambiguity, moderate validation needs
+     - **High**: architectural, cross-cutting, migration, security, performance, or high-risk change
+  4. **Subtask count is only one signal**: use it to inform scope, but never as the sole estimate driver
+  5. **Intermediate baseline per subtask**:
+     - Low-level task: 1.5-2.5 hours
+     - Medium-level task: 2.5-4 hours
+     - High-level task: 4-6.5 hours
+  6. **Risk and scope adjustment**:
+     - Increase estimate when the task mentions integrations, migrations, refactors, security, performance, billing, or architecture work
+  7. **Range Calculation**:
+     - Lower bound: (subtasks × baseline lower) × risk factor × experience multiplier
+     - Upper bound: (subtasks × baseline upper) × risk factor × experience multiplier
      - Round to nearest hour
 
 - **Estimation Formula:**
   ```
-  Base hours per subtask: 2-3 hours (intermediate)
-  
-  Junior (0-2 years):
-    Lower: (subtasks × 2) × 1.5
-    Upper: (subtasks × 3) × 1.5
-  
-  Intermediate (3-5 years):
-    Lower: subtasks × 2
-    Upper: subtasks × 3
-  
-  Senior (6+ years):
-    Lower: (subtasks × 2) × 0.7
-    Upper: (subtasks × 3) × 0.7
+  1. Infer task level: low, medium, or high
+  2. Choose intermediate baseline per subtask from task level
+  3. Apply risk/scope multiplier when complexity indicators exist
+  4. Apply experience multiplier:
+     Junior: × 1.5
+     Intermediate: × 1.0
+     Senior: × 0.7
   ```
 
 - **Display Format:**
   ```
   📊 Time Estimation for Task X: [Task Title]
   
-  Based on [N] subtasks:
+  Based on [N] subtasks and task-level analysis:
   
   👶 Junior (0-2 years):      [X-Y] hours
   👨‍💼 Intermediate (3-5 years): [X-Y] hours
@@ -72,11 +72,11 @@ alwaysApply: true
   ```
   User: "task-flow: estimate 1"
   
-  Task 1 has 5 subtasks:
+  Task 1 has 5 subtasks and medium complexity signals:
   
   📊 Time Estimation for Task 1: Create authentication system
   
-  Based on 5 subtasks:
+  Based on 5 subtasks and task-level analysis:
   
   👶 Junior (0-2 years):      15-23 hours
   👨‍💼 Intermediate (3-5 years): 10-15 hours
@@ -89,4 +89,4 @@ alwaysApply: true
   - Estimates are informational only (not stored)
 
 - **Principle:**
-  > **Provide realistic time estimates based on task complexity (number of subtasks) and developer experience level. Show ranges to account for variability in implementation speed.**
+  > **Provide realistic time estimates based on real task level, scope, ambiguity, and risk. Subtask count informs scope, but must not be the sole estimation criterion.**

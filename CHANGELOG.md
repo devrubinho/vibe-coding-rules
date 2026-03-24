@@ -1,5 +1,16 @@
 # Changelog
 
+## [Unreleased]
+
+## [1.19.3] - 2026-03-24
+
+### Changed
+
+- **task_generate_flow.mdc** - Replaced legacy `Codex` recommendation with current `GPT-5.x` family guidance for flow generation.
+- **task_generate_flow.mdc** - Model priority and effort are now defined from task context, not fixed ordering or subtask count.
+- **task_estimate.mdc / lib/estimate.js** - Estimation now uses task-level heuristics, risk, and scope signals instead of relying only on subtask totals.
+- **lib/install.js / install.sh** - `rbin-task-flow init` now preserves existing `.task-flow/tasks.input.txt`, `.task-flow/tasks.status.md`, and `.task-flow/tasks.flow.md` while still overwriting the rest of the template.
+
 ## [1.19.2] - 2025-03-07
 
 ### Fixed

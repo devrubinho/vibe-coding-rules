@@ -95,7 +95,7 @@ Refactors code from specific task(s). Removes explanatory comments, improves cod
 - `task-flow: refactor all` → Refactors all tasks
 
 ### `task-flow: estimate X` (simplified syntax)
-Estimates time required to complete task(s) based on the number of subtasks and developer experience level.
+Estimates time required to complete task(s) based on task level, scope, risk, and developer experience level. Subtask count informs scope, but is not the sole criterion.
 
 **Output includes:**
 - Time estimates for Junior (0-2 years), Intermediate (3-5 years), and Senior (6+ years) developers
@@ -108,7 +108,7 @@ Estimates time required to complete task(s) based on the number of subtasks and 
 - `task-flow: estimate all` → Shows time estimates for all tasks
 
 ### `task-flow: generate flow`
-Populates `tasks.flow.md` with: (1) task dependencies (for parallelization), (2) estimated hours, and (3) AI model recommendations (Codex, Composer, Claude) with effort levels. Run after `task-flow: sync` when you want to know which tasks can run in parallel and which model/effort to use.
+Populates `tasks.flow.md` with: (1) task dependencies (for parallelization), (2) estimated hours, and (3) AI model recommendations (GPT-5.x, Composer, Claude) with effort levels. Model ranking and effort must be defined by the AI from task context, not from a fixed order or only from subtask count. Run after `task-flow: sync` when you want to know which tasks can run in parallel and which model/effort to use.
 
 ### `task-flow: report X` (simplified syntax)
 Generates a detailed implementation report for completed task(s) in Markdown format.

@@ -163,7 +163,7 @@ install_to_project() {
   if [ -d "$SCRIPT_DIR/.task-flow" ]; then
     mkdir -p "$target/.task-flow"
     echo -e "${GREEN}✅ Task Flow directory${NC}"
-    echo -e "${CYAN}   ℹ️  Note: .internal/tasks.json and .internal/status.json are NOT overwritten (your data is safe)${NC}"
+    echo -e "${CYAN}   ℹ️  Note: .internal/ is protected, and on init tasks.input.txt, tasks.status.md, and tasks.flow.md are preserved if they already exist${NC}"
     [ ! -f "$target/.task-flow/tasks.input.txt" ] &&
       [ -f "$SCRIPT_DIR/.task-flow/tasks.input.txt" ] &&
       cp "$SCRIPT_DIR/.task-flow/tasks.input.txt" "$target/.task-flow/tasks.input.txt"
