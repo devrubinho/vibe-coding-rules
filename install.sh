@@ -171,7 +171,7 @@ install_to_project() {
       [ -f "$SCRIPT_DIR/.task-flow/tasks.status.md" ] &&
       cp "$SCRIPT_DIR/.task-flow/tasks.status.md" "$target/.task-flow/tasks.status.md"
     [ ! -f "$target/.task-flow/tasks.flow.md" ] && {
-      printf '# Task Flow — Dependencies, Hours & Model Recommendations\n\n<!-- Populated by task-flow: generate flow. Do not edit manually. -->\n<!-- Horas: dev mediano (3-5 anos), uso para cobrança ao cliente -->\n' > "$target/.task-flow/tasks.flow.md"
+      printf '# Task Flow — Dependencies, Hours & Model Recommendations\n\n<!-- Populated by task-flow: generate flow. Do not edit manually. -->\n<!-- Horas: uso para cobrança ao cliente -->\n' > "$target/.task-flow/tasks.flow.md"
       echo -e "${GREEN}✅ Task Flow tasks.flow.md (empty - run task-flow: generate flow to populate)${NC}"
     }
     [ -f "$SCRIPT_DIR/.task-flow/README.md" ] &&

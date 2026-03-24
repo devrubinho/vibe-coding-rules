@@ -1,73 +1,79 @@
 ---
-description: Generate task flow with dependencies, estimated hours (billing), and AI model recommendations
+description: Generate task flow with dependencies, estimated hours, and AI model recommendations
 globs: **/*
 alwaysApply: true
 ---
 
 - **Task Flow Generation - Dependencies, Hours & Model Recommendations:**
-  - **FAST FORMAT**: `task-flow: generate flow` → Populate tasks.flow.md with dependencies, estimated hours, and model recommendations
+  - **FAST FORMAT**: `task-flow: generate flow` → Populate tasks.flow.md
   - When user says "task-flow: generate flow", "generate flow", "gerar flow", or "flow":
-    - **READ**: `.task-flow/.internal/tasks.json` to get all tasks
-    - **READ**: `.task-flow/.internal/status.json` (optional, for context)
-    - **ANALYZE**: For each task, determine dependencies, estimated hours, and model recommendations
+    - **READ**: `.task-flow/.internal/tasks.json` and optionally `status.json`
+    - **SEARCH**: Current versions of Codex, Composer, Claude (Haiku, Sonnet) via web search
     - **WRITE**: Populate `.task-flow/tasks.flow.md` with the generated flow
-  - **DO NOT**: Populate tasks.flow.md when running `task-flow: sync` — only when `task-flow: generate flow`
+  - **DO NOT**: Populate tasks.flow.md when running `task-flow: sync`
 
 - **Generation Process:**
-  1. **Search for current model versions** (quick web search): Codex, Composer (Cursor), Claude (Haiku, Sonnet, Opus). Use the latest available versions in recommendations.
-  2. Read all tasks from tasks.json (id, title, description, subtasks)
+  1. **Search for current model versions** (web search): Codex, Composer (Cursor), Claude Haiku, Claude Sonnet. Include version next to each model (e.g. "Claude Sonnet 4.6").
+  2. Read tasks from tasks.json
   3. For each task, determine:
-     - **Estimated hours** (dev mediano, cobrança ao cliente): Range in hours for mid-level developer (3-5 years). Formula: subtasks × 2 to subtasks × 3 hours (same as [task_estimate.mdc](mdc:.cursor/rules/task_estimate.mdc)). Round to nearest hour. Purpose: developer billing.
-     - **Dependencies**: Which tasks (if any) must be completed first
-       - Infer from task order, descriptions, subtask content
-       - Task 1 typically has no dependencies
-       - Task N may depend on 1..N-1 if it builds on their output
-       - Use "none" or "nenhuma" when no dependencies
-     - **Model recommendations** (in order, most to least indicated):
-       - **Codex** (variants): include current version from web search
-       - **Composer** (Cursor): include current version from web search
-       - **Claude**: Haiku, Sonnet, Opus — include current version from web search
-     - **Effort**: low, medium, or high (based on subtask count, complexity)
-  4. Output format per task (simple, one line):
-     - `task X - depende da task Y - X-Yh (dev mediano, cobrança) - model1 effort E, model2, model3 effort E`
-     - Or: `task X - nenhuma dependência - X-Yh (dev mediano, cobrança) - model1 effort E, model2, model3 effort E`
+     - **Dependencies**: Which tasks must be completed first (or "—" if none)
+     - **Estimated hours** (for billing): subtasks × 2 to subtasks × 3 hours. Do NOT show "dev mediano" or "mid-level".
+     - **3 model options** (in order of priority): one Codex, one Composer, one Claude — always these 3. Include version and effort for each.
+     - **Effort** per model: low (1-3 subtasks), medium (4-6), high (7+ or complex)
+  4. **Claude**: Use only Haiku or Sonnet — **never Opus**
 
-- **Output Format for tasks.flow.md:**
+- **Output Format (direct blocks per task):**
   ```markdown
   # Task Flow — Dependencies, Hours & Model Recommendations
 
   <!-- Populated by task-flow: generate flow. Do not edit manually. -->
-  <!-- Horas: dev mediano (3-5 anos), uso para cobrança ao cliente -->
+  <!-- Horas: uso para cobrança ao cliente -->
 
-  ## Tasks
+  ## Legenda
 
-  task 1 - nenhuma dependência - 6-9h (dev mediano, cobrança) - codex effort medium, composer, claude sonnet effort medium
-  task 2 - depende da task 1 - 8-12h (dev mediano, cobrança) - codex effort medium, composer, claude sonnet effort medium
-  task 3 - depende da task 2 - 14-21h (dev mediano, cobrança) - codex effort high, composer, claude opus effort high
+  | Símbolo | Significado |
+  |---------|-------------|
+  | ✅ | Task concluída |
+  | ⚡ | Pode iniciar agora (deps satisfeitas) |
+  | 🔒 | Bloqueada por dependências |
+
+  **Esforço (Effort):** low (1-3 subtasks), medium (4-6), high (7+)
+  **Claude:** Haiku ou Sonnet — **não use Opus**
+
+  ## Tasks (blocos diretos por task)
+
+  ### ✅ Task 1 — [Título]
+  - **Depende de:** —
+  - **Horas cobrança:** 10-15h
+  - **Modelos sugeridos** (ordem de prioridade):
+    1. Codex [versão] — effort medium
+    2. Composer [versão] — effort medium
+    3. Claude Sonnet [versão] — effort medium
+
+  ### ⚡ Task 2 — [Título]
+  - **Depende de:** Task 1 ✅
+  - **Horas cobrança:** 10-15h
+  - **Modelos sugeridos** (ordem de prioridade):
+    1. Codex [versão] — effort medium
+    2. Composer [versão] — effort medium
+    3. Claude Sonnet [versão] — effort medium
+
+  ### 🔒 Task 3 — [Título]
+  - **Depende de:** Task 2
+  - **Horas cobrança:** 8-12h
+  - **Modelos sugeridos** (ordem de prioridade):
+    1. Claude Haiku [versão] — effort low
+    2. Codex [versão] — effort low
+    3. Composer [versão] — effort low
   ```
 
-- **Model Recommendation Rules:**
-  - **MUST list multiple models** in order (most to least indicated), not just one
-  - **Order**: Codex first, then Composer, then Claude (unless task clearly favors another order)
-  - **Consider**: Subtask count, description complexity, integration needs
-  - **Effort**: low (1-3 subtasks), medium (4-6), high (7+ or complex)
-  - **VERSIONS**: Do a quick web search for current Codex, Composer, Claude model versions before generating; include them in the output. If search fails or is unclear, use model names only.
+- **Model Rules:**
+  - **3 models per task**: One Codex, one Composer, one Claude — always in order of priority
+  - **Version required**: Include current version next to each model name (from web search)
+  - **Effort required**: low, medium, or high for each model
+  - **No Opus**: Claude = Haiku or Sonnet only
 
-- **Dependency Inference Rules:**
-  - Sequential order: Task 2 often depends on 1, Task 3 on 2, etc.
-  - Semantic analysis: If task mentions "using X from task Y" or similar, add dependency
-  - Independent tasks: Can mark as "nenhuma dependência" or "none" to enable parallelization
-
-- **Natural Language Phrases:**
-  - **FAST FORMAT**: `task-flow: generate flow` or `task-flow generate flow`
-  - "generate flow", "gerar flow", "flow", "gerar tasks.flow"
-  - Any variation asking to generate/populate the task flow
-
-- **Integration:**
-  - Uses data from `.task-flow/.internal/tasks.json`
-  - Writes to `.task-flow/tasks.flow.md` (created by `rbin-task-flow init`)
-  - Does NOT run on `task-flow: sync` — only when user explicitly requests `task-flow: generate flow`
-  - Works with [task_execution.mdc](mdc:.cursor/rules/task_execution.mdc) workflow
+- **Natural Language:** "generate flow", "gerar flow", "flow"
 
 - **Principle:**
-  > **Populate tasks.flow.md with dependencies (for parallelization), estimated hours for billing (dev mediano), and AI model recommendations in order. Enable users to decide which tasks can run in parallel, how many hours to charge the client, and which model/effort to use for each.**
+  > **Populate tasks.flow.md with direct blocks per task. Dependencies, hours, and 3 model options (Codex, Composer, Claude) with version and effort. Never use Opus.**

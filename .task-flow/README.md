@@ -98,7 +98,7 @@ Refactors code from specific task(s). Removes explanatory comments, improves cod
 Estimates time required to complete task(s) based on the number of subtasks and developer experience level.
 
 **Output includes:**
-- Time estimates for Junior (0-2 years), Mid-level (3-5 years), and Senior (6+ years) developers
+- Time estimates for Junior (0-2 years), Intermediate (3-5 years), and Senior (6+ years) developers
 - Estimates in hours and business days
 - Recommendation for management with buffer
 

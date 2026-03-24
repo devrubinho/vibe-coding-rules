@@ -37,11 +37,11 @@ This project uses RBIN Task Flow for task management:
   - `task-flow: report X` - Generate implementation report for task X (simplified - no "task" needed)
   - `task-flow: report X,Y` - Generate reports for multiple tasks (comma-separated)
   - `task-flow: report all` - Generate reports for all tasks
-  - `task-flow: generate flow` - Populate tasks.flow.md with dependencies, estimated hours (mid-level dev, billing), and AI model recommendations
+  - `task-flow: generate flow` - Populate tasks.flow.md with dependencies, estimated hours, and AI model recommendations
 - **Files**:
   - `.task-flow/tasks.input.txt` - Define your tasks here
   - `.task-flow/tasks.status.md` - Auto-generated status (DO NOT EDIT manually)
-  - `.task-flow/tasks.flow.md` - Dependencies, estimated hours (mid-level dev, billing), and model recommendations (populated by `task-flow: generate flow`)
+  - `.task-flow/tasks.flow.md` - Dependencies, estimated hours, and model recommendations (populated by `task-flow: generate flow`)
   - `.task-flow/.internal/` - Internal system files (ignore)
 
 Follow all rules defined in `.cursor/rules/` for consistent development practices.

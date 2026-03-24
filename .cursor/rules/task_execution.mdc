@@ -37,7 +37,7 @@ alwaysApply: true
   - `task-flow: report X` - Generate implementation report for task X (simplified - no "task" needed)
   - `task-flow: report X,Y` - Generate reports for multiple tasks (comma-separated)
   - `task-flow: report all` - Generate reports for all tasks
-  - `task-flow: generate flow` - Populate tasks.flow.md with dependencies, estimated hours (mid-level dev, billing), and AI model recommendations
+  - `task-flow: generate flow` - Populate tasks.flow.md with dependencies, estimated hours, and AI model recommendations
 
 - **Workflow Example:**
   ```markdown

@@ -12,19 +12,19 @@ alwaysApply: true
     - **READ**: `.task-flow/.internal/tasks.json` to get task details
     - **CALCULATE**: Time estimate based on number of subtasks and developer experience level
     - **DISPLAY**: Show time estimate with intervals for 3 experience levels (junior, mid, senior)
-    - **FORMAT**: Show estimates in hours with ranges (e.g., "10-14 hours" for mid-level)
+    - **FORMAT**: Show estimates in hours with ranges (e.g., "10-14 hours" for intermediate)
 
 - **Estimation Rules:**
   1. **Base Calculation**: Count total number of subtasks in the task
-  2. **Experience Levels**:
+  2. **Experience Levels** (use internally; display "Intermediate" not "Mid-level" to user):
      - **Junior** (0-2 years): Base time × 1.5 multiplier
-     - **Mid-level** (3-5 years): Base time × 1.0 multiplier (baseline)
+     - **Intermediate** (3-5 years): Base time × 1.0 multiplier (baseline)
      - **Senior** (6+ years): Base time × 0.7 multiplier
   3. **Time per Subtask**:
-     - Simple subtask: 1-2 hours (mid-level baseline)
-     - Medium subtask: 2-4 hours (mid-level baseline)
-     - Complex subtask: 4-6 hours (mid-level baseline)
-  4. **Default Assumption**: Average 2-3 hours per subtask for mid-level (baseline)
+     - Simple subtask: 1-2 hours (intermediate baseline)
+     - Medium subtask: 2-4 hours (intermediate baseline)
+     - Complex subtask: 4-6 hours (intermediate baseline)
+  4. **Default Assumption**: Average 2-3 hours per subtask for intermediate (baseline)
   5. **Range Calculation**: 
      - Lower bound: (subtasks × 2) × multiplier
      - Upper bound: (subtasks × 3) × multiplier
@@ -32,13 +32,13 @@ alwaysApply: true
 
 - **Estimation Formula:**
   ```
-  Base hours per subtask: 2-3 hours (mid-level)
+  Base hours per subtask: 2-3 hours (intermediate)
   
   Junior (0-2 years):
     Lower: (subtasks × 2) × 1.5
     Upper: (subtasks × 3) × 1.5
   
-  Mid-level (3-5 years):
+  Intermediate (3-5 years):
     Lower: subtasks × 2
     Upper: subtasks × 3
   
@@ -53,9 +53,9 @@ alwaysApply: true
   
   Based on [N] subtasks:
   
-  👶 Junior (0-2 years):     [X-Y] hours
-  👨‍💼 Mid-level (3-5 years): [X-Y] hours
-  👴 Senior (6+ years):      [X-Y] hours
+  👶 Junior (0-2 years):      [X-Y] hours
+  👨‍💼 Intermediate (3-5 years): [X-Y] hours
+  👴 Senior (6+ years):       [X-Y] hours
   ```
 
 - **Natural Language Phrases:**
@@ -78,9 +78,9 @@ alwaysApply: true
   
   Based on 5 subtasks:
   
-  👶 Junior (0-2 years):     15-23 hours
-  👨‍💼 Mid-level (3-5 years): 10-15 hours
-  👴 Senior (6+ years):     7-11 hours
+  👶 Junior (0-2 years):      15-23 hours
+  👨‍💼 Intermediate (3-5 years): 10-15 hours
+  👴 Senior (6+ years):      7-11 hours
   ```
 
 - **Integration:**
