@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.19.1] - 2025-03-07
+
+### Fixed
+
+- **coding_standards.mdc** - ESLint section: document @rbinflow/eslint-config only, no extra plugins. Add table with all available configs (node, node-with-semi, react, next, expo).
+
 ## [1.19.0] - 2025-03-07
 
 ### Added
