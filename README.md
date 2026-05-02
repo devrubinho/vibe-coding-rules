@@ -71,6 +71,7 @@ rbin-task-flow init
 ```bash
 rbin-task-flow init          # Inicializa no projeto atual
 rbin-task-flow update        # Atualiza configurações
+rbin-task-flow reset         # Reinstala o Task Flow do zero
 rbin-task-flow version-check # Verifica atualizações de modelos
 rbin-task-flow info          # Mostra informações
 rbin-task-flow check         # Roda lint/fix e build quando existirem
@@ -253,6 +254,9 @@ Para atualizar configurações em um projeto existente:
 cd /caminho/para/seu/projeto
 rbin-task-flow update
 
+# Para reiniciar o Task Flow do zero, incluindo .task-flow/.internal
+rbin-task-flow reset
+
 # Ou usando método legacy
 ~/.rbin-task-flow/install.sh
 # Digite o caminho do projeto
@@ -418,6 +422,7 @@ rbin-task-flow init
 ```bash
 rbin-task-flow init          # Initialize in current project
 rbin-task-flow update        # Update configurations
+rbin-task-flow reset         # Reinstall Task Flow from scratch
 rbin-task-flow version-check # Check for model updates
 rbin-task-flow info          # Show information
 rbin-task-flow check         # Run lint/fix and build when available
@@ -599,6 +604,9 @@ To update configs in an existing project:
 # Using NPM (recommended)
 cd /path/to/your/project
 rbin-task-flow update
+
+# To reset Task Flow from scratch, including .task-flow/.internal
+rbin-task-flow reset
 
 # Or using legacy method
 ~/.rbin-task-flow/install.sh

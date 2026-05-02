@@ -2,6 +2,12 @@
 
 ## [Unreleased]
 
+## [1.19.5] - 2026-05-02
+
+### Added
+
+- **bin/cli.js / lib/install.js** - Added `rbin-task-flow reset` to recreate `.task-flow` from scratch, including removal of existing `.task-flow/.internal` task state.
+
 ## [1.19.4] - 2026-03-24
 
 ### Changed
