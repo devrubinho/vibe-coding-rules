@@ -1,7 +1,6 @@
 ---
-description: Generate implementation reports for completed tasks
-globs: **/*
-alwaysApply: true
+description: Generates task-flow implementation report for completed task X. Use for task-flow report.
+alwaysApply: false
 ---
 
 - **Task Report - Generate Implementation Reports:**
@@ -104,7 +103,7 @@ alwaysApply: true
   - If docs directory doesn't exist: Create it automatically
 
 - **Integration:**
-  - Works with [task_execution.mdc](mdc:.cursor/rules/task_execution.mdc) workflow
+  - Works with [task-flow-cursor.mdc](mdc:.cursor/rules/task-flow-cursor.mdc) / `@task-flow-report`
   - Uses task data from `.task-flow/.internal/tasks.json` and `.task-flow/.internal/status.json`
   - Reports are stored in `.task-flow/docs/` directory
   - Can reference git history for implementation details

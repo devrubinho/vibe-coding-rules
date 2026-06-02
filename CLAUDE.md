@@ -1,51 +1,59 @@
-# Claude Code Instructions
+# Claude Code — RBIN Task Flow
+
+## Task flow = RBIN Task Flow
+
+| Path | Purpose |
+|------|---------|
+| `.task-flow/tasks.input.txt` | Define tasks (`- description`) |
+| `.task-flow/tasks.status.md` | Progress (auto; do not edit) |
+| `.task-flow/.internal/` | `tasks.json`, `status.json` (system) |
+| `.task-flow/contexts/` | Mockups, specs |
+
+## Skills (prefer `/` commands)
+
+| Action | Skill |
+|--------|--------|
+| Sync input → system | `/task-flow-sync` |
+| Run subtasks | `/task-flow-run` |
+| Status | `/task-flow-status` |
+| Suggest new tasks | `/task-flow-think` |
+| Lint + build | `/task-flow-check` |
+| Audit repo | `/task-flow-audit` |
+| Audit diff only | `/task-flow-improve-changes` |
+| Verify done | `/task-flow-review` |
+| Refactor task code | `/task-flow-refactor` |
+| Estimate hours | `/task-flow-estimate` |
+| Implementation report | `/task-flow-report` |
+| tasks.flow.md | `/task-flow-generate-flow` |
+| Implement code | `/rbin-coding-standards` (invoke explicitly; checklist first, full doc sections only if needed) |
+| Commit suggestion | `/rbin-git` |
+
+Natural language `task-flow: …` works the same. Details: [.task-flow/README.md](.task-flow/README.md).
+
+## Anti-patterns (save context)
+
+- Prefer **`/task-flow-run`** (or `@task-flow-run`) for executing subtasks — avoid `@task_work` plus duplicate `.cursor/rules/task_work.mdc` in the same turn.
+- Do **not** load `.task-flow/docs/coding-standards-full.md` unless the user asks for depth; use `/rbin-coding-standards` checklist or `coding_standards.mdc` for normal implementation.
+- Cursor users: see [.task-flow/CURSOR.md](.task-flow/CURSOR.md) for always-on vs skills (`@task-flow-*`).
+
+## Git
+
+**Never** run `git add`, `commit`, `push`, `pull`, `merge`, `checkout`, `reset`, or `rebase`. Read-only git is OK. After work, use `/rbin-git` to suggest a Conventional Commit message.
+
+## Graphify (optional)
+
+During `/task-flow-run`, if `graphify-out/` exists, use `graphify query` before broad search. See [.task-flow/GRAPHIFY.md](.task-flow/GRAPHIFY.md).
+
+## Cursor rules (reference)
+
+Full procedures also live in `.cursor/rules/` (shared with Cursor). Claude Code should use **skills first** to save context.
+
+## Other platforms
+
+- Index: [.task-flow/AI-PLATFORMS.md](.task-flow/AI-PLATFORMS.md)
+- Claude: [.task-flow/platforms/claude-code.md](.task-flow/platforms/claude-code.md)
+- Codex: [AGENTS.md](AGENTS.md) · [.task-flow/CODEX.md](.task-flow/CODEX.md)
 
 ## Models
 
-Claude and Cursor use the **default model** of each environment. No specific model is set in this project; do not specify or require a particular model.
-
-## Development Rules
-
-All development rules are automatically loaded from `.cursor/rules/` directory. These rules include:
-- Cursor rules formatting guidelines
-- Self-improvement processes
-- Code commenting standards
-- Commit practices
-- Git command control
-- Task execution management with RBIN Task Flow
-
-## RBIN Task Flow
-
-This project uses RBIN Task Flow for task management:
-- **Task Definition**: Edit `.task-flow/tasks.input.txt` using simple format: `- Task description`
-- **AI Commands**: Use AI-powered commands for task management:
-  - `task-flow: sync` - Synchronize tasks from tasks.input.txt
-  - `task-flow: think` - Analyze code and suggest new tasks
-  - `task-flow: audit` - Audit codebase against coding standards and suggest incremental improvements
-  - `task-flow: check` - Run lint fix when available, then build the current project
-  - `task-flow: improve changes` - Audit only files changed in the current diff against `HEAD`
-  - `task-flow: status` - View current task status
-  - `task-flow: run next X` - Work on next X subtasks
-  - `task-flow: run X` - Execute all pending subtasks of task X (simplified - no "task" needed)
-  - `task-flow: run X,Y` - Execute multiple tasks (comma-separated)
-  - `task-flow: run all` - Execute all tasks
-  - `task-flow: review X` - Review specific task(s) (comma-separated or "all")
-  - `task-flow: refactor X` - Refactor specific task(s) (comma-separated or "all")
-  - `task-flow: estimate X` - Estimate time for task X (simplified - no "task" needed)
-  - `task-flow: estimate X,Y` - Estimate multiple tasks (comma-separated)
-  - `task-flow: estimate all` - Estimate all tasks
-  - `task-flow: report X` - Generate implementation report for task X (simplified - no "task" needed)
-  - `task-flow: report X,Y` - Generate reports for multiple tasks (comma-separated)
-  - `task-flow: report all` - Generate reports for all tasks
-  - `task-flow: generate flow` - Populate tasks.flow.md with dependencies, estimated hours, and AI model recommendations
-- **Files**:
-  - `.task-flow/tasks.input.txt` - Define your tasks here
-  - `.task-flow/tasks.status.md` - Auto-generated status (DO NOT EDIT manually)
-  - `.task-flow/tasks.flow.md` - Dependencies, estimated hours, and model recommendations (populated by `task-flow: generate flow`)
-  - `.task-flow/.internal/` - Internal system files (ignore)
-
-Follow all rules defined in `.cursor/rules/` for consistent development practices.
-
-## Codex
-
-When using OpenAI Codex in this repo, it reads **AGENTS.md** at the project root. That file summarizes the same norms (git, commits, comments, RBIN Task Flow) so Codex follows the same conventions as Cursor/Claude. Full details remain in `.cursor/rules/` and this file.
+Use the default model of this environment; do not require a specific model name.

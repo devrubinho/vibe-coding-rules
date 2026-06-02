@@ -33,6 +33,8 @@
 <a id="português"></a>
 # 🇧🇷 Português
 
+> **v1.23.0** — Menos tokens no Cursor (2 regras always-on, checklist de standards, skills). De **1.22**: `npm install -g rbin-task-flow@1.23` e `rbin-task-flow update`. [CHANGELOG](CHANGELOG.md) · [Publicação](RELEASE-1.23.0.md).
+
 ## O Que É Este Projeto?
 
 RBIN Task Flow é um sistema de gerenciamento de tarefas alimentado por IA que configura automaticamente Claude Code e Cursor IDE em qualquer projeto. Você define tarefas em texto simples e a IA gera subtarefas detalhadas e acionáveis automaticamente.
@@ -70,8 +72,12 @@ rbin-task-flow init
 
 ```bash
 rbin-task-flow init          # Inicializa no projeto atual
-rbin-task-flow update        # Atualiza configurações
+rbin-task-flow init --profile minimal  # Só 2 regras always-on + skills (menos tokens no Cursor)
+rbin-task-flow init --share-ai-config  # Versiona .cursor/skills/ e .cursor/rules/ no git (time)
+rbin-task-flow update        # Atualiza configurações (mantém profile em install-meta.json)
+rbin-task-flow update --profile standard  # Passa a copiar todas as regras .mdc
 rbin-task-flow reset         # Reinstala o Task Flow do zero
+rbin-task-flow reset --graphify  # Reset + graphify extract (CLI Graphify no PATH)
 rbin-task-flow version-check # Verifica atualizações de modelos
 rbin-task-flow info          # Mostra informações
 rbin-task-flow check         # Roda lint/fix e build quando existirem
@@ -81,7 +87,21 @@ rbin-task-flow report <ids>  # Gera relatório (ex: "1" ou "1,2" ou "all")
 
 ### Comandos da IA - Por Que Usar?
 
-Após inicializar, use estes comandos na IA (Cursor/Claude) para gerenciar tarefas automaticamente:
+Após inicializar, use estes comandos na IA (Cursor/Claude/Codex) para gerenciar tarefas automaticamente.
+
+**Otimizar por plataforma:** [.task-flow/AI-PLATFORMS.md](.task-flow/AI-PLATFORMS.md) · [Claude](.task-flow/platforms/claude-code.md) · [Cursor](.task-flow/platforms/cursor.md) · [Codex](.task-flow/platforms/codex.md) · [Graphify](.task-flow/GRAPHIFY.md)
+
+**Graphify (opcional):** `rbin-task-flow init --graphify` configura coexistência e pode rodar `graphify extract` (CLI via `rbin-install-dev`).
+
+**Claude Code / Cursor skills (v1.20+):** `init` copia 14 skills para `.claude/skills/` e `.cursor/skills/` — use `/task-flow-sync`, `/task-flow-run`, etc.
+
+**Codex (v1.21+):** `AGENTS.md` com sync/run embutidos, `.task-flow/CODEX.md` sob demanda, `.codex/config.toml` (64 KiB).
+
+**Cursor (v1.23+):** `task-flow-cursor.mdc` + `rbin-git-policy.mdc` (2 always-on) + skills — ver `.task-flow/CURSOR.md`.
+
+**Perfil minimal:** `init --profile minimal` instala só as 2 regras always-on e as 14 skills; workflows via `@task-flow-*` (sem `task_work`, `coding_standards` glob, etc.). `standard` (padrão) copia todas as regras `.cursor/rules/`.
+
+**Compartilhar com o time:** `init --share-ai-config` não ignora `.cursor/skills/` nem `.cursor/rules/` no `.gitignore` (só `.cursor/settings.json` e overrides locais). Padrão: `.cursor/` inteiro ignorado — menos ruído no repo, config local por dev.
 
 | Comando | Por Que Usar | Feature Principal |
 |---------|--------------|-------------------|
@@ -161,9 +181,10 @@ seu-projeto/
 │   │   ├── cursor_rules.mdc
 │   │   ├── self_improve.mdc
 │   │   ├── code_comments.mdc
-│   │   ├── commit_practices.mdc
-│   │   ├── git_control.mdc
-│   │   └── task_execution.mdc
+│   │   ├── rbin-git-policy.mdc    # always-on (git + commits)
+│   │   ├── git_control.mdc        # legacy pointer
+│   │   ├── commit_practices.mdc   # legacy pointer
+│   │   └── task_execution.mdc   # command index stub
 │   └── settings.json             # Configurações do modelo Cursor
 │
 ├── .claude/
@@ -256,6 +277,8 @@ rbin-task-flow update
 
 # Para reiniciar o Task Flow do zero, incluindo .task-flow/.internal
 rbin-task-flow reset
+# Com grafo de código (requer graphify no PATH):
+rbin-task-flow reset --graphify
 
 # Ou usando método legacy
 ~/.rbin-task-flow/install.sh
@@ -298,6 +321,17 @@ rbin-task-flow/
 ├── install.sh                    # Script de instalação
 └── README.md                     # Este arquivo
 ```
+
+## Desenvolvimento (template / CI)
+
+Regressão de tamanho das regras always-on (meta P0: ≤ ~5 KB):
+
+```bash
+npm run measure:rules
+# ou: node scripts/measure-rule-bytes.js --max-kb 5
+```
+
+Lista cada `.cursor/rules/*.mdc` (bytes, linhas, `alwaysApply`), soma always-on vs demais e sai com código **1** se always-on exceder o limite (`--max-kb` ou `RBIN_MAX_ALWAYS_ON_KB`).
 
 ## Notas Importantes
 
@@ -384,6 +418,8 @@ Para problemas ou perguntas:
 <a id="english"></a>
 # 🇬🇧 English
 
+> **v1.23.0** — Lower Cursor token use (2 always-on rules, standards checklist, skills). From **1.22**: `npm install -g rbin-task-flow@1.23` then `rbin-task-flow update`. [CHANGELOG](CHANGELOG.md) · [Release guide](RELEASE-1.23.0.md).
+
 ## What Is This Project?
 
 RBIN Task Flow is an AI-powered task management system that automatically configures Claude Code and Cursor IDE in any project. You define tasks in plain text and the AI automatically generates detailed, actionable subtasks.
@@ -421,8 +457,12 @@ rbin-task-flow init
 
 ```bash
 rbin-task-flow init          # Initialize in current project
-rbin-task-flow update        # Update configurations
+rbin-task-flow init --profile minimal  # 2 always-on rules + skills only (lower Cursor token cost)
+rbin-task-flow init --share-ai-config  # Commit .cursor/skills and rules with the team
+rbin-task-flow update        # Update configs (keeps profile from .task-flow/install-meta.json)
+rbin-task-flow update --profile standard  # Install all .cursor/rules/*.mdc
 rbin-task-flow reset         # Reinstall Task Flow from scratch
+rbin-task-flow reset --graphify  # Reset + graphify extract (Graphify CLI on PATH)
 rbin-task-flow version-check # Check for model updates
 rbin-task-flow info          # Show information
 rbin-task-flow check         # Run lint/fix and build when available
@@ -432,7 +472,21 @@ rbin-task-flow report <ids>   # Generate report (e.g., "1" or "1,2" or "all")
 
 ### AI Commands - Why Use Them?
 
-After initializing, use these commands in your AI (Cursor/Claude) to automatically manage tasks:
+After initializing, use these commands in your AI (Cursor/Claude/Codex) to automatically manage tasks.
+
+**Per-platform optimization:** [index](.task-flow/AI-PLATFORMS.md) · [Claude](.task-flow/platforms/claude-code.md) · [Cursor](.task-flow/platforms/cursor.md) · [Codex](.task-flow/platforms/codex.md) · [Graphify](.task-flow/GRAPHIFY.md)
+
+**Graphify (optional):** `rbin-task-flow init --graphify` — cooperative setup + optional `graphify extract` (CLI from `rbin-install-dev`).
+
+**Claude / Cursor skills (v1.20+):** installs 14 skills — use `/task-flow-sync`, `/task-flow-run`, etc.
+
+**Codex (v1.21+):** optimized `AGENTS.md`, `.task-flow/CODEX.md`, `.codex/config.toml`.
+
+**Cursor (v1.23+):** 2 always-on rules + 14 skills — `@task-flow-sync`, `@task-flow-run`.
+
+**Minimal profile:** `init --profile minimal` copies only `task-flow-cursor.mdc` and `rbin-git-policy.mdc` plus skills; use `@task-flow-*` for workflows. `standard` (default) copies all rules under `.cursor/rules/`.
+
+**Share with team:** `init --share-ai-config` leaves `.cursor/skills/` and `.cursor/rules/` out of `.gitignore` (see comment block in `.gitignore` for token vs team trade-off). Default ignores all of `.cursor/`.
 
 | Command | Why Use It | Key Feature |
 |---------|------------|-------------|
@@ -512,9 +566,10 @@ your-project/
 │   │   ├── cursor_rules.mdc
 │   │   ├── self_improve.mdc
 │   │   ├── code_comments.mdc
-│   │   ├── commit_practices.mdc
-│   │   ├── git_control.mdc
-│   │   └── task_execution.mdc
+│   │   ├── rbin-git-policy.mdc    # always-on (git + commits)
+│   │   ├── git_control.mdc        # legacy pointer
+│   │   ├── commit_practices.mdc   # legacy pointer
+│   │   └── task_execution.mdc   # command index stub
 │   └── settings.json             # Cursor model settings
 │
 ├── .claude/
@@ -607,6 +662,8 @@ rbin-task-flow update
 
 # To reset Task Flow from scratch, including .task-flow/.internal
 rbin-task-flow reset
+# With code knowledge graph (requires graphify on PATH):
+rbin-task-flow reset --graphify
 
 # Or using legacy method
 ~/.rbin-task-flow/install.sh
@@ -649,6 +706,17 @@ rbin-task-flow/
 ├── install.sh                    # Installation script
 └── README.md                     # This file
 ```
+
+## Development (template / CI)
+
+Always-on rule size regression (P0 target: ≤ ~5 KB):
+
+```bash
+npm run measure:rules
+# or: node scripts/measure-rule-bytes.js --max-kb 5
+```
+
+Prints each `.cursor/rules/*.mdc` (bytes, lines, `alwaysApply`), totals always-on vs other, exits **1** if always-on exceeds the limit (`--max-kb` or `RBIN_MAX_ALWAYS_ON_KB`).
 
 ## Important Notes
 

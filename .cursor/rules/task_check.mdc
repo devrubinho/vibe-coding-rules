@@ -1,7 +1,6 @@
 ---
-description: Run lint fix when available, then build the current project
-globs: **/*
-alwaysApply: true
+description: Runs lint fix and build for task-flow check until project passes.
+alwaysApply: false
 ---
 
 # task-flow: check

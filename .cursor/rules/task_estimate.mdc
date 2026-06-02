@@ -1,7 +1,6 @@
 ---
-description: Task time estimation based on real task complexity for an average developer pace
-globs: **/*
-alwaysApply: true
+description: Estimates hours for task-flow estimate X. Average developer pace, no AI acceleration.
+alwaysApply: false
 ---
 
 - **Task Estimation - Time Estimation for Tasks:**
@@ -75,7 +74,7 @@ alwaysApply: true
   ```
 
 - **Integration:**
-  - Works with [task_execution.mdc](mdc:.cursor/rules/task_execution.mdc) workflow
+  - Works with [task-flow-cursor.mdc](mdc:.cursor/rules/task-flow-cursor.mdc) / `@task-flow-estimate`
   - Uses task data from `.task-flow/.internal/tasks.json`
   - Estimates are informational only (not stored)
 

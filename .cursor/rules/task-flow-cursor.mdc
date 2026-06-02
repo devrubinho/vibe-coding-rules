@@ -1,0 +1,51 @@
+---
+description: RBIN Task Flow entry point for Cursor. When the user says task flow, task-flow, or any task-flow colon command, follow Task Flow paths and invoke the matching skill or rule below.
+alwaysApply: true
+---
+
+# RBIN Task Flow (Cursor)
+
+**Task flow** = **RBIN Task Flow**. Data lives in `.task-flow/` — never edit `.internal/` by hand.
+
+| Path | Purpose |
+|------|---------|
+| `.task-flow/tasks.input.txt` | Define tasks (`- description`) |
+| `.task-flow/tasks.status.md` | Progress (auto) |
+| `.task-flow/.internal/tasks.json` | Definitions |
+| `.task-flow/.internal/status.json` | Status source of truth |
+| `.task-flow/contexts/` | Specs / mockups |
+
+## Prefer skills (`.cursor/skills/`)
+
+| User intent | Invoke |
+|-------------|--------|
+| `task-flow: sync` | `@task-flow-sync` or [task-flow-sync.mdc](mdc:.cursor/rules/task-flow-sync.mdc) |
+| `task-flow: run next X`, `run N` | `@task-flow-run` |
+| `task-flow: status` | `@task-flow-status` |
+| `task-flow: think` | `@task-flow-think` |
+| `task-flow: check` | `@task-flow-check` |
+| `task-flow: audit` | `@task-flow-audit` |
+| `task-flow: improve changes` | `@task-flow-improve-changes` |
+| `task-flow: review X` | `@task-flow-review` |
+| `task-flow: refactor X` | `@task-flow-refactor` |
+| `task-flow: estimate X` | `@task-flow-estimate` |
+| `task-flow: report X` | `@task-flow-report` |
+| `task-flow: generate flow` | `@task-flow-generate-flow` |
+| Implementing code | `@rbin-coding-standards` |
+| Suggest commit | `@rbin-git` |
+
+Natural language (`work on next 3 subtasks`) = same as `task-flow: run next 3`.
+
+## Git (always)
+
+Never write git — user runs all commits. Policy: [rbin-git-policy.mdc](mdc:.cursor/rules/rbin-git-policy.mdc). Suggest via `@rbin-git`.
+
+## Graphify (optional)
+
+On `run` / `think`, if `graphify-out/` exists: `graphify query` before repo-wide grep. Rule: `graphify-task-flow`. Guide: `.task-flow/GRAPHIFY.md`.
+
+## More detail
+
+- Workflows: `.task-flow/CURSOR.md`
+- Full guide: `.task-flow/platforms/cursor.md`
+- Codex parity: `.task-flow/CODEX.md`

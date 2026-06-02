@@ -1,7 +1,6 @@
 ---
-description: Refactor code from current commit tasks without changing functionality
-globs: **/*
-alwaysApply: true
+description: Refactors task-flow task code without behavior change. Use for task-flow refactor X.
+alwaysApply: false
 ---
 
 - **Task Refactor - Improve Code Quality:**
@@ -88,8 +87,8 @@ alwaysApply: true
 
 - **Integration:**
   - Follows [code_comments.mdc](mdc:.cursor/rules/code_comments.mdc) - comment removal rules
-  - Works with [task_execution.mdc](mdc:.cursor/rules/task_execution.mdc) workflow
-  - Respects [git_control.mdc](mdc:.cursor/rules/git_control.mdc) - never commit automatically
+  - Works with [task-flow-cursor.mdc](mdc:.cursor/rules/task-flow-cursor.mdc) / `@task-flow-refactor`
+  - Respects [rbin-git-policy.mdc](mdc:.cursor/rules/rbin-git-policy.mdc) — never commit automatically
 
 - **Principle:**
   > **Refactor code to improve quality without changing behavior. Remove explanatory comments, keep only separation comments, improve structure and naming. Code must work exactly the same.**

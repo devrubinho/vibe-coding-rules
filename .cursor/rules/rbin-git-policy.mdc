@@ -1,0 +1,47 @@
+---
+description: RBIN git policy — never write git; suggest Conventional Commits after Task Flow work. User runs all git write commands.
+alwaysApply: true
+---
+
+# RBIN — Git policy (always)
+
+## Non-git commands
+
+- **May run without asking:** npm, tests, linters, docker, scripts, read-only shell (`cat`, `grep`, `ls`, `read_file`), etc.
+- **Do not run without approval:** cloud/remote provisioning, DB migrations against remote DB, production deploy.
+
+## Git write — never execute
+
+Never run: `git add`, `commit`, `push`, `pull`, `merge`, `checkout`, `reset`, `rebase`, `tag`, `branch -d`/`-D`, or any command that modifies the repo.
+
+Even if the user asks to commit — **suggest** the command; they execute it.
+
+## Git read — allowed
+
+`git status`, `git diff`, `git log`, `git show`, `git branch` (list only) — use to analyze changes before suggesting a commit.
+
+## After Task Flow subtask or task `done`
+
+1. Notify completion (clear message).
+2. If there are uncommitted changes: suggest commit (never run it).
+3. Read-only: `git status --short`, `git diff --stat` (optional).
+4. Include Task/Subtask ID and title in the message.
+
+**Do not suggest commit** if: no changes, merge conflicts, or not a git repo.
+
+## Conventional Commits
+
+Types: `feat`, `fix`, `refactor`, `docs`, `style`, `test`, `chore`.
+
+```bash
+git commit -m "feat(scope): Short description
+
+- Detail
+- Subtask ID: 3.2"
+```
+
+## On demand
+
+Extended examples and presentation: `@rbin-git` skill · legacy [commit_practices.mdc](mdc:.cursor/rules/commit_practices.mdc), [git_control.mdc](mdc:.cursor/rules/git_control.mdc).
+
+**Principle:** AI may act freely except git writes and risky remote ops — user owns git history.

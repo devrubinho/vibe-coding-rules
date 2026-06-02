@@ -1,5 +1,20 @@
 # RBIN Task Flow - Quick Commands
 
+**Optimize by AI platform:**
+
+| Platform | Guide |
+|----------|--------|
+| Index | [AI-PLATFORMS.md](AI-PLATFORMS.md) |
+| Claude Code | [platforms/claude-code.md](platforms/claude-code.md) |
+| Cursor | [platforms/cursor.md](platforms/cursor.md) |
+| Codex | [platforms/codex.md](platforms/codex.md) |
+| Graphify + Task Flow | [GRAPHIFY.md](GRAPHIFY.md) |
+| Codex | [CODEX.md](CODEX.md) · [platforms/codex.md](platforms/codex.md) |
+| Cursor | [CURSOR.md](CURSOR.md) · [platforms/cursor.md](platforms/cursor.md) |
+| Otimização (tokens / roadmap) | [OPTIMIZATION-PLAN.md](OPTIMIZATION-PLAN.md) |
+| Subtarefas para implementar otimização | [OPTIMIZATION-IMPLEMENTATION-TASKS.md](OPTIMIZATION-IMPLEMENTATION-TASKS.md) |
+| Coding standards (full, on demand) | [docs/coding-standards-full.md](docs/coding-standards-full.md) |
+
 ## 🚀 Quick Commands
 
 | Command | Description |
@@ -16,9 +31,9 @@
 | `task-flow: estimate X` | Estimates time for task X (e.g., `task-flow: estimate 1` or `task-flow: estimate 10,11`) |
 | `task-flow: report X` | Generates implementation report for task X (e.g., `task-flow: report 1` or `task-flow: report 10,11`) |
 | `task-flow: generate flow` | Populates tasks.flow.md with dependencies, estimated hours, and AI model recommendations |
-| `task-flow: audit` | Audits codebase against coding standards and suggests incremental improvements |
+| `task-flow: audit` | Audits codebase against **coding standards checklist**; full doc on demand |
 | `task-flow: check` | Run lint fix (if available) and build; fix any warnings or errors until both pass |
-| `task-flow: improve changes` | Audit only uncommitted files against coding standards (same as audit, restricted to current change set) |
+| `task-flow: improve changes` | Audit only uncommitted files vs **checklist** (same as audit, scoped to diff) |
 | `rbin-task-flow audit` | **(CLI)** Lists files with unstaged changes (not yet `git add`) |
 
 **See complete details below ↓**
@@ -42,13 +57,13 @@ Analyzes code and suggests new tasks. Asks before adding to `tasks.input.txt`.
 Shows current status of tasks and subtasks from the `tasks.status.md` file.
 
 ### `task-flow: audit`
-Audits the **entire codebase** against the coding standards in [coding_standards.mdc](.cursor/rules/coding_standards.mdc). Non-destructive: reports gaps and suggests incremental improvements; the user chooses what to adopt. See [task_audit.mdc](.cursor/rules/task_audit.mdc) for the full flow.
+Audits the **entire codebase** against the **checklist** in [coding_standards.mdc](.cursor/rules/coding_standards.mdc). Deep reference: [docs/coding-standards-full.md](docs/coding-standards-full.md) (sections only, on demand). Non-destructive: reports gaps and suggests incremental improvements; the user chooses what to adopt. See [task_audit.mdc](.cursor/rules/task_audit.mdc) for the full flow.
 
 ### `task-flow: check`
 Runs **lint fix** and **build** for the project. Check `package.json` for a lint-with-fix script (e.g. `lint:fix`, `lint -- --fix`) and a build script; run lint fix first, fix any warnings or errors, then run build and fix until it passes. Use before committing or before `task-flow: improve changes` to ensure the project is clean.
 
 ### `task-flow: improve changes`
-Same as **task-flow: audit**, but **only for files that were changed and not yet committed** (unstaged + staged). The AI obtains the list via `git diff --name-only HEAD`, and runs the audit flow restricted to those paths. Use before committing to align the current change set with coding standards. Does **not** run lint or build — use `task-flow: check` for that.
+Same as **task-flow: audit**, but **only for files that were changed and not yet committed** (unstaged + staged). The AI obtains the list via `git diff --name-only HEAD`, and scores those paths against the **checklist** in `coding_standards.mdc` (not the full standards doc unless depth is needed). Use before committing. Does **not** run lint or build — use `task-flow: check` for that.
 
 ### `rbin-task-flow audit` (CLI only)
 Lists **unstaged** file paths (modified but not yet `git add`). Run in the project root: `rbin-task-flow audit`. Option: `-p, --path <path>`.

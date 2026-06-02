@@ -3,6 +3,7 @@
 const { program } = require('commander');
 const path = require('path');
 const { installInProject } = require('../lib/install');
+const { parseProfileOption } = require('../lib/profiles');
 const { checkVersionUpdates } = require('../lib/version');
 const { estimateTask } = require('../lib/estimate');
 const { generateReport } = require('../lib/report');
@@ -15,32 +16,42 @@ program
   .description('AI-powered task management for Claude and Cursor')
   .version(require('../package.json').version);
 
-program
-  .command('init')
-  .description('Initialize RBIN Task Flow in current directory')
-  .option('-p, --path <path>', 'Target directory (default: current directory)')
-  .action(async (options) => {
-    const targetPath = options.path || process.cwd();
-    await installInProject(targetPath);
-  });
+function addInstallCommand(name, description, extra = {}) {
+  program
+    .command(name)
+    .description(description)
+    .option('-p, --path <path>', 'Target directory (default: current directory)')
+    .option('-g, --graphify', 'Run graphify extract after install (requires graphify CLI)')
+    .option(
+      '--profile <profile>',
+      'Cursor rules: minimal (2 always-on + skills) or standard (all rules); update without flag keeps .task-flow/install-meta.json'
+    )
+    .option(
+      '--share-ai-config',
+      'Do not gitignore .cursor/skills/ or .cursor/rules/ (team can commit shared AI config; see .gitignore comment)'
+    )
+    .action(async (options) => {
+      const targetPath = options.path || process.cwd();
+      try {
+        const profile =
+          options.profile !== undefined ? parseProfileOption(options.profile) : undefined;
+        const shareAiConfig = options.shareAiConfig ? true : undefined;
+        await installInProject(targetPath, {
+          ...extra,
+          graphify: options.graphify,
+          profile,
+          shareAiConfig,
+        });
+      } catch (error) {
+        console.error(chalk.red('\n' + error.message + '\n'));
+        process.exit(1);
+      }
+    });
+}
 
-program
-  .command('update')
-  .description('Update RBIN Task Flow in current directory')
-  .option('-p, --path <path>', 'Target directory (default: current directory)')
-  .action(async (options) => {
-    const targetPath = options.path || process.cwd();
-    await installInProject(targetPath, { update: true });
-  });
-
-program
-  .command('reset')
-  .description('Reset RBIN Task Flow in current directory')
-  .option('-p, --path <path>', 'Target directory (default: current directory)')
-  .action(async (options) => {
-    const targetPath = options.path || process.cwd();
-    await installInProject(targetPath, { reset: true });
-  });
+addInstallCommand('init', 'Initialize RBIN Task Flow in current directory');
+addInstallCommand('update', 'Update RBIN Task Flow in current directory', { update: true });
+addInstallCommand('reset', 'Reset RBIN Task Flow in current directory', { reset: true });
 
 program
   .command('version-check')
@@ -99,8 +110,12 @@ program
     console.log(chalk.yellow('Repository:'), 'https://github.com/rbinoliveira/rbin-task-flow');
     console.log(chalk.yellow('\nCommands:'));
     console.log(chalk.cyan('  rbin-task-flow init') + '         - Initialize in current directory');
+    console.log(chalk.cyan('  rbin-task-flow init --profile minimal') + ' - Low-token install (2 always-on rules + skills)');
+    console.log(chalk.cyan('  rbin-task-flow init --share-ai-config') + ' - Version .cursor/skills and rules in git');
+    console.log(chalk.cyan('  rbin-task-flow init --graphify') + ' - Init + graphify extract (if CLI installed)');
     console.log(chalk.cyan('  rbin-task-flow update') + '       - Update configurations');
     console.log(chalk.cyan('  rbin-task-flow reset') + '        - Reset task flow files from scratch');
+    console.log(chalk.cyan('  rbin-task-flow reset --graphify') + ' - Reset + graphify extract (if CLI installed)');
     console.log(chalk.cyan('  rbin-task-flow version-check') + ' - Check for model updates');
     console.log(chalk.cyan('  rbin-task-flow estimate <ids>') + ' - Estimate time (e.g., "1" or "1,2" or "all")');
     console.log(chalk.cyan('  rbin-task-flow report <ids>') + '  - Generate report (e.g., "1" or "1,2" or "all")');

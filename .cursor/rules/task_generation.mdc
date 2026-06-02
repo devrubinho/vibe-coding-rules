@@ -1,155 +1,37 @@
 ---
-description: Direct task generation from tasks.input.txt - be efficient and direct
-globs: .task-flow/tasks.input.txt, .task-flow/.internal/tasks.json, .task-flow/.internal/status.json
-alwaysApply: true
+description: Subtask generation templates and context rules for new tasks from tasks.input.txt. For task-flow sync use task-flow-sync.mdc or @task-flow-sync — not this file alone.
+globs: .task-flow/**
+alwaysApply: false
 ---
 
-- **Task Generation - Direct and Efficient:**
-  - When user asks to "Read tasks.input.txt and generate detailed subtasks updating task status":
-    - **READ**: `.task-flow/tasks.input.txt` (only process lines starting with `- `)
-    - **READ**: `.task-flow/contexts/` directory to list available context files (ALWAYS check this directory)
-    - **GENERATE**: Two JSON files and one markdown file with the exact structure below
-    - **SAVE**: All files to `.task-flow/`
-    - **DON'T**: Check existing JSONs, explore codebase, or ask questions
+# Task generation (subtasks only)
 
-- **Context Reference System:**
-  - **PURPOSE**: `.task-flow/contexts/` is for AIs to consult reference material (any type: .md, .txt, .png, .jpg, .json, etc.) when generating and working on tasks
-  - **AUTOMATIC**: Always check `.task-flow/contexts/` directory for available context files (all file types)
-  - **NO LISTING NEEDED**: Don't require context files to be listed in tasks.input.txt - always scan the directory
-  - **AUTOMATIC MATCHING**: Match context files to tasks by keywords (e.g., "login" → `login-mockup.png` or `api-login.md`, "dashboard" → `dashboard.png`)
-  - **SPECIFIC REFERENCE**: If task contains `task-flow-screen nome_arquivo.ext`, reference that file from `.task-flow/contexts/`
-  - **PATH ALWAYS**: `task-flow-screen` always references files in `.task-flow/contexts/`
-  - **INCLUDE**: In subtask instructions, add the reference: "Context/reference: `.task-flow/contexts/filename.ext`" (or "Visual reference" for images)
+**Primary sync workflow:** [task-flow-sync.mdc](mdc:.cursor/rules/task-flow-sync.mdc) · `@task-flow-sync`
 
-- **Required Actions:**
-  1. Read `tasks.input.txt`:
-     - Process task lines (only process lines starting with `- `)
-     - Check for `task-flow-screen nome_do_arquivo.png` markers in task descriptions
-  2. **ALWAYS** list available context files from `.task-flow/contexts/` directory (all file types: .md, .txt, .png, .jpg, .json, etc.)
-  3. For each task line, create a task with sequential ID starting at 1
-  4. Generate 3-8 subtasks per task with:
-     - Clear title
-     - Brief description
-     - Step-by-step instructions (3-5 steps)
-     - **AUTOMATIC**: Include relevant context references when applicable (match by keywords)
-     - **SPECIFIC**: If task has `task-flow-screen nome_arquivo.ext`, reference that file from `.task-flow/contexts/`
-  5. Create `.task-flow/.internal/tasks.json` with structure below
-  6. Create `.task-flow/.internal/status.json` with all tasks/subtasks as "pending"
-  7. Create `.task-flow/tasks.status.md` with all tasks and subtasks marked as `- [ ]` (pending)
-  8. Write all three files immediately
+Use this rule for **subtask shape** when `task-flow-sync` creates or regenerates tasks.
 
-- **tasks.json Structure:**
-  ```json
-  {
-    "tasks": [
-      {
-        "id": 1,
-        "title": "Task Title",
-        "description": "Task description",
-        "originalRequest": "- Task description from tasks.input.txt",
-        "createdAt": "ISO 8601 timestamp",
-        "subtasks": [
-          {
-            "id": 1,
-            "title": "Subtask Title",
-            "description": "What this subtask does",
-            "instructions": "Step 1: Action\nStep 2: Action\nStep 3: Verify"
-          }
-        ]
-      }
-    ]
-  }
-  ```
+## Contexts
 
-- **status.json Structure:**
-  ```json
-  {
-    "tasks": {
-      "1": {
-        "status": "pending",
-        "subtasks": {
-          "1": "pending",
-          "2": "pending"
-        }
-      }
-    }
-  }
-  ```
+- Always list `.task-flow/contexts/` (all file types)
+- Match by keywords or `task-flow-screen nome.ext` → `.task-flow/contexts/nome.ext`
+- In instructions: `Context/reference: .task-flow/contexts/filename.ext`
 
-- **tasks.status.md Structure:**
-  ```markdown
-  # Task Status
+## Subtasks (per task)
 
-  <!-- ⚠️ WARNING: This file is automatically updated by AI. DO NOT edit manually. -->
+- 3–8 subtasks; sequential ids 1, 2, 3…
+- Title, description, instructions (3–5 steps)
+- Follow **checklist** in [coding_standards.mdc](mdc:.cursor/rules/coding_standards.mdc): `src/app/`, `src/features/`, `src/shared/`, naming suffixes, service+use-case, `cn()`, RHF+zod
 
-  ## 📊 Summary
+## File structures (minimal)
 
-  - ✅ **Completed Tasks**: 0
-  - ⏳ **Tasks in Progress**: 2
-  - 📝 **Remaining Subtasks**: 8
+**tasks.json:** `id`, `title`, `description`, `originalRequest`, `createdAt`, `subtasks[]` with `id`, `title`, `description`, `instructions`.
 
-  **Tasks:**
-  - ✅ Task 1: First task (complete)
-  - ⏳ Task 2: Second task (3 remaining subtasks out of 5)
+**status.json:** `tasks.{id}.status`, `tasks.{id}.subtasks.{subtaskId}` → `pending` | `done` | `in_progress`.
 
-  ---
+**tasks.status.md:** banner “do not edit”; 📊 Summary; tasks `- [ ]`/`- [x]`; subtasks indented with two spaces.
 
-  ## Tasks
+## Rules
 
-  - [x] First task
-
-    - [x] Subtask Title 1
-    - [x] Subtask Title 2
-
-  - [ ] Second task
-
-    - [x] Subtask Title 1
-    - [ ] Subtask Title 2
-    - [ ] Subtask Title 3
-  ```
-  - **ALWAYS include summary section** at the top with:
-    - ✅ Completed tasks (all subtasks done)
-    - ⏳ Tasks in progress (some subtasks done)
-    - 📝 Total remaining subtasks
-    - List of tasks with status and how many subtasks remain
-  - All tasks and subtasks start as `- [ ]` (pending)
-  - Format: Task title with `- [ ]` or `- [x]`, then subtasks indented with `  - [ ]` or `  - [x]`
-  - **CRITICAL**: Always regenerate summary when updating tasks.status.md
-
-- **Example:**
-  - Input (`tasks.input.txt`): `- Create authentication system`
-  - Context files available: `login_recover_signup.png`
-  - Output: Task with ID 1, 5 subtasks with context references:
-    - Subtask 1: "Setup database schema" (no context)
-    - Subtask 2: "Create login form" → Instructions include: "Visual reference: `.task-flow/contexts/login_recover_signup.png`"
-    - Subtask 3: "Implement registration" → Instructions include context reference
-    - Subtask 4: "Add JWT authentication" (no context)
-    - Subtask 5: "Test authentication flow" → Instructions include context reference
-  
-- **Context Reference Examples:**
-  - Task: `- Dentist authentication system` → Automatically matches and references `login_recover_signup.png` from `.task-flow/contexts/`
-  - Task: `- Basic dashboard with structure task-flow-screen dashboard.png` → References specific `.task-flow/contexts/dashboard.png`
-  - Task: `- Complete patient CRUD` → Automatically matches and references `patient.png` and `patient_profile.png` from `.task-flow/contexts/` if available
-  - **IMPORTANT**: `task-flow-screen` always references files in `.task-flow/contexts/` - no need to specify full path
-  - **FILE TYPES**: Contexts can be any type (images, markdown, text, JSON, etc.) for the AI to read and use when working on tasks
-
-- **Critical Rules:**
-  - ✅ Be direct: Read → Generate → Save
-  - ✅ **ALWAYS** check `.task-flow/contexts/` directory for available context files (automatic, no need to list in tasks.input.txt)
-  - ✅ Automatically match and reference relevant context files in subtask instructions based on keywords
-  - ✅ Support `task-flow-screen nome_do_arquivo.png` format - always references `.task-flow/contexts/nome_do_arquivo.png`
-  - ✅ No exploration of codebase beyond `.task-flow/contexts/` directory
-  - ✅ No questions - just generate
-  - ✅ Use current timestamp for `createdAt`
-  - ✅ All statuses start as "pending"
-  - ✅ Subtask IDs are sequential per task (1, 2, 3...)
-
-- **Coding Standards:**
-  - When generating subtask instructions, always follow the patterns defined in [coding_standards.mdc](mdc:.cursor/rules/coding_standards.mdc)
-  - Subtask instructions must reference the correct file structure: `src/app/`, `src/features/`, `src/shared/`
-  - Subtask instructions must specify the correct file naming suffix (`.page.tsx`, `.service.tsx`, `.use-case.ts`, etc.)
-  - Subtask instructions must enforce the service + use-case split for API calls
-  - Subtask instructions must enforce `cn()` for class merging, `Controller` for form inputs, and `zodResolver` for validation
-
-- **Principle:**
-  > **When generating tasks, be fast and direct. Read tasks.input.txt, generate JSONs and tasks.status.md with proper structure, save files. Always follow coding_standards.mdc patterns in subtask instructions.**
+- Be direct: generate → save; no codebase exploration beyond `contexts/`
+- No questions during generation
+- Regenerate summary in `tasks.status.md` when that file is rebuilt

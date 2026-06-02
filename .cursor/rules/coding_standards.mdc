@@ -1,853 +1,100 @@
 ---
-description: Coding standards and architecture patterns for all projects
-globs: **/*
-alwaysApply: true
+description: RBIN coding standards checklist for TypeScript React Next.js Expo NestJS. Use when implementing or editing src/ or app/ code. Full reference on demand only.
+globs: src/**,app/**
+alwaysApply: false
 ---
 
-# Coding Standards & Architecture
+# Coding Standards — Checklist
 
-These rules define how code MUST be written when implementing tasks. Always follow these patterns without deviation.
+Apply when implementing Task Flow subtasks or feature code (this file is the **checklist**). For workflows and section index: invoke `@rbin-coding-standards` (`disable-model-invocation: true` — not auto). **Full guide:** [.task-flow/docs/coding-standards-full.md](mdc:.task-flow/docs/coding-standards-full.md) — **sections only**; never paste entire file into chat.
 
 ---
 
-## Project Structure
-
-All projects use TypeScript and follow this structure:
+## Structure
 
 ```
 src/
-├── app/          # Route definitions only (Next.js App Router or Expo Router)
-├── features/     # Business domain logic, organized by feature
-└── shared/       # Global reusable code
+├── app/        # Routes only — thin wrappers
+├── features/   # Domain logic per feature
+└── shared/     # Cross-feature reuse (2+ features)
 ```
 
-### Allowed folders in shared/ and features/ (Front web & Mobile only)
+**`app/`:** `page.tsx` / route files import and render feature page/screen only — no business logic, no extra state.
 
-In **front web** (Next.js, React, or other React-based web) or **mobile** (Expo, React Native) projects, only the following folder names may exist directly under `shared/` or under each feature in `features/`:
+**Next.js App Router:** `(public)/`, `(private)/`, `(server)/` — API under `app/(server)/api/`, not `app/api/`.
 
-| Folder        | Use                    |
-|---------------|------------------------|
-| `pages/`      | Web only — page components |
-| `screens/`    | Mobile only — screen components |
-| `components/` | UI components          |
-| `constants/`  | Constants              |
-| `utils/`      | Utilities              |
-| `validations/` | Validation helpers (e.g. `.validation.ts` for Zod) |
-| `hooks/`      | Custom hooks           |
-| `providers/`  | Context providers      |
-| `styles/`     | Styles                 |
-| `types/`      | TypeScript types       |
-| `libs/`       | Library wrappers       |
-| `services/`   | React Query / API wrappers |
-| `use-cases/`  | Pure API / business logic |
-| `schemas/`    | Zod (or similar) schemas |
+**`features/[name]/` allowed folders:** `components/`, `hooks/`, `pages/` (web), `screens/` (mobile), `schemas/`, `services/`, `use-cases/`, `types/`, `constants/`, `utils/`, `validations/`, `providers/`, `styles/`, `libs/` — no other top-level names.
 
-**No other folder names** are allowed under `shared/` or under `features/[feature-name]/`. Use only `pages/` for web and `screens/` for mobile; do not mix both in the same project type.
-
-### No subfolders in shared/ (Front web & Mobile only)
-
-In **front web** (Next.js, React) or **mobile** (Expo, React Native) projects, each folder under `shared/` must be **flat**: no subfolders. Files assume the responsibility through clear naming.
-
-- **shared/components/**: One file per component, directly in `shared/components/`. No nested folders (e.g. no `form/`, `inputs/`). Name files so the purpose is clear (e.g. `button.tsx`, `input-text.tsx`, `input-container.tsx`, `input-error.tsx`, `input-label.tsx`).
-- **shared/hooks/**, **shared/utils/**, **shared/validations/**, **shared/constants/**, etc.: Same rule — only files, no subfolders. Use the file name to carry the responsibility. Validation helpers (e.g. `required-email.validation.ts`) live in `shared/validations/`.
+**`shared/` (web/mobile):** flat folders only — no subfolders; one file per concern (e.g. `shared/components/button.tsx`).
 
 ---
 
-## Tech Stack
+## Stack (defaults)
 
-### Front-end (Next.js / React)
-- **Framework**: Next.js 15+ with App Router, or React (Vite, CRA, or similar). These rules apply to any React-based web project.
-- **Language**: TypeScript (strict mode)
-- **Styling**: Tailwind CSS v4 + `clsx` + `tailwind-merge` via `cn()` helper
-- **UI Components**: shadcn/ui + `lucide-react` icons
-- **Data Fetching**: `@tanstack/react-query`
-- **Forms**: `react-hook-form` + `zod` + `@hookform/resolvers/zod`
-- **Notifications**: `sonner`
-- **ESLint**: `@rbinflow/eslint-config`
-- **E2E Testing**: Cypress or equivalent browser E2E tooling
+| Layer | Use |
+|-------|-----|
+| Web | Next 15+ App Router or React; Tailwind + `cn()`; shadcn; react-query; RHF + zod |
+| Mobile | Expo Router / RN; NativeWind + `cn()`; react-query; RHF + zod |
+| Backend | NestJS 10+; Prisma; Zod pipes (not class-validator); `app/` controllers, `features/` use-cases |
 
-### Mobile (Expo / React Native)
-- **Framework**: Expo with Expo Router, or React Native (bare or managed). These rules apply to both Expo and React Native.
-- **Language**: TypeScript (strict mode)
-- **Styling**: NativeWind + `clsx` + `tailwind-merge` via `cn()` helper
-- **Data Fetching**: `@tanstack/react-query`
-- **Forms**: `react-hook-form` + `zod` + `@hookform/resolvers/zod`
-- **Build**: EAS (Expo Application Services)
-- **ESLint**: `@rbinflow/eslint-config`
-- **E2E Testing**: Detox
-
-### Backend (NestJS)
-- **Framework**: NestJS 10+
-- **Language**: TypeScript (strict mode)
-- **ORM**: Prisma
-- **Database**: PostgreSQL
-- **Auth**: JWT + Passport
-- **Validation**: Zod (not class-validator/class-transformer)
-- **Structure**: `src/app/` (controllers), `src/features/` (use-cases, repositories), `src/shared/` (guards, pipes, gateways)
-
-### ESLint — @rbinflow/eslint-config
-
-When the project uses `@rbinflow/eslint-config`, **do not add any other ESLint plugins or configs** — `@rbinflow/eslint-config` already configures everything. The `.eslintrc.cjs` file must stay minimal:
-
-**Available configurations:**
-
-| Project type | extends |
-|--------------|---------|
-| Node.js (no semicolons) | `@rbinflow/eslint-config/node` |
-| Node.js (with semicolons) | `@rbinflow/eslint-config/node-with-semi` |
-| React | `@rbinflow/eslint-config/react` |
-| Next.js | `@rbinflow/eslint-config/next` |
-| Expo | `@rbinflow/eslint-config/expo` |
-
-**Example (.eslintrc.cjs):**
-```javascript
-module.exports = {
-  extends: ['@rbinflow/eslint-config/next'],
-}
-```
-
-**Node.js variants:** `node` uses `semi: false`; `node-with-semi` uses `semi: true`. All other settings are identical. No extra `plugins`, `rules`, or `extends` beyond this.
+**ESLint:** `@rbinflow/eslint-config` only — no extra plugins in `.eslintrc.cjs`.
 
 ---
 
-## app/ — Routes Only (Front-end & Mobile) / Controllers Only (Backend)
+## Patterns (non-negotiable)
 
-The `app/` directory contains ONLY route definitions. Each file is a thin wrapper that imports and renders the feature page/screen.
-
-### Next.js App Router — Route groups in app/
-
-In **Next.js App Router** projects, organize `app/` with route groups:
-
-- **`(public)/`** — Public routes (login, signup, landing, etc.)
-- **`(private)/`** — Private routes (dashboard, profile, etc.; protect via layout or middleware)
-- **`(server)/`** — API / server routes (Route Handlers, e.g. `route.ts`). **Any route under `/api` must live inside `(server)`** — i.e. `app/(server)/api/...`, not `app/api/...`.
-
-Example structure:
-
-```
-app/
-├── (public)/
-│   ├── login/page.tsx
-│   └── signup/page.tsx
-├── (private)/
-│   ├── dashboard/page.tsx
-│   └── admin/question/page.tsx
-├── (server)/
-│   └── api/              # /api/* routes live here
-│       └── .../route.ts
-├── layout.tsx
-└── ...
-```
-
-**Front-end (Next.js App Router or React):**
-```typescript
-// src/app/(private)/dashboard/page.tsx
-import { DashboardPage } from '@/features/dashboard/pages/dashboard.page'
-
-export default function Dashboard() {
-  return <DashboardPage />
-}
-```
-
-**Mobile (Expo Router or React Native):**
-```typescript
-// src/app/(private)/dashboard.tsx
-import { DashboardScreen } from '@/features/dashboard/screens/dashboard.screen'
-
-export default function Dashboard() {
-  return <DashboardScreen />
-}
-```
-
-**Backend (NestJS):**
-```typescript
-// src/app/account/controllers/create-session.controller.ts
-import { Body, Controller, HttpCode, Post } from '@nestjs/common'
-import { CreateSessionBodySchema, createSessionValidator } from '@/app/account/validators/create-session.validator'
-import { CreateSessionUseCase } from '@/features/account/use-cases/create-session.use-case'
-
-@Controller('/session')
-export class CreateSessionController {
-  constructor(private createSessionUseCase: CreateSessionUseCase) {}
-
-  @Post()
-  @HttpCode(200)
-  async handle(@Body(createSessionValidator) data: CreateSessionBodySchema) {
-    return this.createSessionUseCase.execute(data)
-  }
-}
-```
-
-**Rules:**
-- **Front-end/Mobile**: `page.tsx` / route files NEVER contain logic, state, or imports beyond the feature component
-- **Backend**: `app/` contains controllers and validators only — no business logic
-- **Next.js App Router**: Use `(public)/` for public routes, `(private)/` for private routes, `(server)/` for API/Route Handlers; **routes under `/api` must be under `app/(server)/api/`**, not `app/api/`. Other React front-ends and mobile may use only `(public)` and `(private)` as needed.
-- `layout.tsx` files may contain auth guards and providers
-- All business logic lives in `features/`
+1. **Page/screen = orchestrator** — short; compose components; no long JSX blocks.
+2. **Components = single responsibility** — split when growing; page-prefixed names in feature `components/`.
+3. **`cn()`** for all class merging — never template literal conditionals for Tailwind.
+4. **API:** use-case (pure, no React) + service (react-query) — never `axios`/`api` in components.
+5. **Forms:** zod schema + `react-hook-form` + `zodResolver` + **`Controller`** on inputs — no uncontrolled inputs.
+6. **Types:** no `any`; API types `.api.type.ts`, domain `.type.ts`.
+7. **UI primitives:** no raw `<button>`, `<input>`, etc. — use `shared/components/` or feature components.
+8. **No barrel `index.ts`** re-exports — import from source file.
+9. **No explanatory code comments** — `dev-logs/` for complex docs; separation comments `// ───` only.
+10. **Git:** [rbin-git-policy.mdc](mdc:.cursor/rules/rbin-git-policy.mdc) — suggest only.
 
 ---
 
-## features/ — Feature Organization
-
-Each feature is self-contained. Structure:
-
-```
-features/[feature-name]/
-├── components/     # UI components specific to this feature
-├── hooks/          # Context providers and custom hooks
-├── pages/          # Page component (front-end) — orchestrator
-├── screens/        # Screen component (mobile) — orchestrator
-├── schemas/        # Zod validation schemas
-├── services/       # React Query wrappers (useQuery / useMutation)
-├── types/          # TypeScript types for this feature
-├── use-cases/      # Pure API call logic
-└── utils/          # Feature-specific utilities (optional)
-```
-
-### Backend Feature Structure
-
-```
-features/[feature-name]/
-├── use-cases/        # Business logic
-│   └── create-account.use-case.ts
-├── repositories/     # Data access (abstract + Prisma implementation)
-│   ├── account.repository.ts          # Abstract class
-│   └── prisma-account.repository.ts   # Prisma implementation
-├── types/            # TypeScript types
-│   └── account.type.ts
-└── utils/            # Feature-specific utilities (optional)
-```
-
-**Use Case (backend):**
-```typescript
-// src/features/account/use-cases/create-session.use-case.ts
-import { Injectable, UnauthorizedException } from '@nestjs/common'
-import { AccountRepository } from '@/features/account/repositories/account.repository'
-import { EncryptionGateway } from '@/shared/gateways/encryption.gateway'
-import { JwtGateway } from '@/shared/gateways/jwt.gateway'
-
-@Injectable()
-export class CreateSessionUseCase {
-  constructor(
-    private accountRepository: AccountRepository,
-    private encryption: EncryptionGateway,
-    private jwt: JwtGateway,
-  ) {}
-
-  async execute(data: { email: string; password: string }) {
-    const account = await this.accountRepository.findByEmail(data.email)
-    if (!account) throw new UnauthorizedException('Invalid credentials')
-
-    const isValid = await this.encryption.validateHash({
-      value: data.password,
-      hashedValue: account.password,
-    })
-    if (!isValid) throw new UnauthorizedException('Invalid credentials')
-
-    return this.jwt.generateAuthTokens({ accountId: account.id })
-  }
-}
-```
-
-**Zod validation in NestJS (not class-validator):**
-```typescript
-// src/app/account/validators/create-session.validator.ts
-import { z } from 'zod'
-import { ZodValidationPipe } from '@/shared/pipes/zod-validation.pipe'
-
-const createSessionBodySchema = z.object({
-  email: z.string().email(),
-  password: z.string().min(6),
-})
-
-export type CreateSessionBodySchema = z.infer<typeof createSessionBodySchema>
-export const createSessionValidator = new ZodValidationPipe(createSessionBodySchema)
-```
-
-```typescript
-// src/shared/pipes/zod-validation.pipe.ts
-import { BadRequestException, PipeTransform } from '@nestjs/common'
-import { ZodError, ZodSchema } from 'zod'
-
-export class ZodValidationPipe implements PipeTransform {
-  constructor(private schema: ZodSchema) {}
-
-  transform(value: unknown) {
-    try {
-      return this.schema.parse(value)
-    } catch (error) {
-      if (error instanceof ZodError) {
-        throw new BadRequestException({
-          message: 'Validation failed',
-          errors: error.errors.map((e) => ({ field: e.path.join('.'), message: e.message })),
-        })
-      }
-      throw new BadRequestException('Validation failed')
-    }
-  }
-}
-```
-
-**Gateways (abstract services in shared/):**
-```typescript
-// src/shared/gateways/encryption.gateway.ts
-export abstract class EncryptionGateway {
-  abstract createHash(value: string): Promise<string>
-  abstract validateHash(params: { value: string; hashedValue: string }): Promise<boolean>
-}
-```
-
-Gateways abstract external concerns (encryption, JWT, date, email). Implementations live alongside in `shared/gateways/` and are bound via NestJS modules.
-
-### Page / Screen — Orchestrator Pattern (Front-end/Mobile)
-
-The page/screen is an orchestrator. It:
-- Calls services (React Query hooks)
-- Manages form state with `useForm`
-- Passes data down to components as props
-- Is NEVER a long file — delegates rendering to components
-
-```typescript
-// src/features/dashboard/pages/dashboard.page.tsx
-'use client'
-
-import { DashboardRevenueCard } from '@/features/dashboard/components/dashboard-revenue-card'
-import { DashboardActiveCard } from '@/features/dashboard/components/dashboard-active-card'
-import { GetDashboardActiveService } from '@/features/dashboard/services/get-dashboard-active.service'
-
-export function DashboardPage() {
-  const { data: active, isLoading, isError } = GetDashboardActiveService()
-
-  return (
-    <section className="grid grid-cols-2 gap-5 my-10">
-      <DashboardActiveCard data={active} isLoading={isLoading} isError={isError} />
-      <DashboardRevenueCard />
-    </section>
-  )
-}
-```
-
-### Page-specific component naming (Front web & Mobile)
-
-When a component is specific to a page (lives under `features/[feature]/components/`), it must use the **page prefix** in the file name and in the function name.
-
-**File names (kebab-case):**
-- Page: `[page-name].page.tsx` → e.g. `admin-question.page.tsx`
-- Page-specific components: prefix = page name (no `.page`) → `admin-question-card.tsx`, `admin-question-card-item.tsx`
-- A **child component** of another component stays in the same `components/` folder (same level as parent) and **inherits the parent prefix**: `admin-question-card-item.tsx` (child of `admin-question-card.tsx`). No subfolders.
-
-**Function/component names (PascalCase):**
-- Route in `app/`: one word from route + page name → `AdminQuestion` (export default)
-- Page in features: page name + `Page` → `AdminQuestionPage`
-- Components: PascalCase of the file name → `AdminQuestionCard`, `AdminQuestionCardItem`
-
-| Location | File | Export name |
-|----------|------|-------------|
-| `app/(private)/admin/question/page.tsx` | (route file) | `AdminQuestion` (default) |
-| `features/admin/question/pages/admin-question.page.tsx` | `admin-question.page.tsx` | `AdminQuestionPage` |
-| `features/admin/question/components/admin-question-card.tsx` | `admin-question-card.tsx` | `AdminQuestionCard` |
-| `features/admin/question/components/admin-question-card-item.tsx` | `admin-question-card-item.tsx` | `AdminQuestionCardItem` |
-
-```typescript
-// src/app/(private)/admin/question/page.tsx
-import { AdminQuestionPage } from '@/features/admin/question/pages/admin-question.page'
-
-export default function AdminQuestion() {
-  return <AdminQuestionPage />
-}
-```
-
-```typescript
-// src/features/admin/question/pages/admin-question.page.tsx
-'use client'
-
-import { AdminQuestionCard } from '@/features/admin/question/components/admin-question-card'
-
-export function AdminQuestionPage() {
-  return (
-    <section>
-      <AdminQuestionCard />
-    </section>
-  )
-}
-```
-
-```typescript
-// src/features/admin/question/components/admin-question-card.tsx
-import { AdminQuestionCardItem } from '@/features/admin/question/components/admin-question-card-item'
-
-export function AdminQuestionCard() {
-  return (
-    <ul>
-      <AdminQuestionCardItem />
-    </ul>
-  )
-}
-```
-
-```typescript
-// src/features/admin/question/components/admin-question-card-item.tsx
-export function AdminQuestionCardItem() {
-  return <li>...</li>
-}
-```
-
-### Components — Single Responsibility
-
-Each component has a single responsibility. Components:
-- Receive data via props (no direct service calls unless truly necessary)
-- Follow the **page prefix** naming above when they are page-specific (inside a feature)
-- Stay small and focused; child components stay in the same `components/` folder with the inherited prefix in the name
-
-### Base components — no raw usage (Front web & Mobile)
-
-Do **not** use raw `<button>`, `<input>`, or other base HTML/primitive elements scattered in the code. If a screen uses a button or an input, there must be a **reusable component** for it (in `shared/components/` or, when feature-specific, in the feature’s `components/`). This applies to all base-level UI: buttons, inputs, selects, checkboxes, textareas, links, etc.
-
-- **Shared**: Use `shared/components/` for app-wide primitives (e.g. `button.tsx`, `input-text.tsx`, `input-select.tsx`). Pages and feature components import and use these.
-- **Feature-specific**: If the variant is only used in one feature, create it in `features/[feature]/components/` and reuse it inside that feature; do not repeat the same JSX in multiple files.
-- **Never**: Inline `<button>`, `<input type="text">`, etc. in a page or component without going through a defined component. Every button/input on a screen must come from a named, reusable component.
-
----
-
-## shared/ — Global Reusable Code
-
-In front web (Next.js, React) and mobile (Expo, React Native), `shared/` is flat per folder (no subfolders). One file per concern; naming carries the responsibility.
-
-```
-shared/
-├── components/
-│   ├── button.tsx
-│   ├── card.tsx
-│   ├── data-handler.tsx
-│   ├── skeleton.tsx
-│   ├── dialog.tsx
-│   ├── input-text.tsx
-│   ├── input-select.tsx
-│   ├── input-container.tsx
-│   ├── input-error.tsx
-│   └── input-label.tsx
-├── hooks/
-│   ├── dialog.hook.tsx
-│   └── drawer.hook.tsx
-├── libs/
-│   ├── axios.ts
-│   ├── react-query.ts
-│   └── tw-merge.ts
-├── providers/
-│   └── react-query-provider.tsx
-├── types/
-│   └── shared.ui.type.ts
-├── constants/
-│   └── server-routes.constants.ts
-├── validations/
-│   ├── required-email.validation.ts
-│   ├── required-string.validation.ts
-│   └── required-phone.validation.ts
-└── utils/
-    └── error.util.ts
-```
-
----
-
-## DataHandler — Declarative Loading/Error States
-
-Use a `DataHandler` component to handle loading, error, and empty states declaratively instead of repeating `if (isLoading)` / `if (isError)` in every component.
-
-```typescript
-// src/shared/components/data-handler.tsx
-import { ReactNode } from 'react'
-import { Skeleton } from '@/shared/components/skeleton'
-
-type DataHandlerProps = {
-  isLoading: boolean
-  isError: boolean
-  children: ReactNode
-  skeleton?: ReactNode
-}
-
-export function DataHandler({ isLoading, isError, children, skeleton }: DataHandlerProps) {
-  if (isLoading) return skeleton ?? <Skeleton />
-  if (isError) return <ErrorState />
-  return <>{children}</>
-}
-```
-
-Usage in pages:
-```typescript
-<DataHandler isLoading={isLoading} isError={isError} skeleton={<DashboardSkeleton />}>
-  <DashboardRevenueCard revenue={revenue} />
-</DataHandler>
-```
-
----
-
-## Feature `platform` — Cross-Cutting Concerns
-
-Every project has a special `features/platform/` feature for app-wide concerns that don't belong in `shared/` (they are app-specific, not reusable across projects):
-
-```
-features/platform/
-├── components/       # App shell (menu, sidebar, header)
-├── constants/        # App routes, cookie keys, app name
-│   ├── platform-routes.constants.ts
-│   └── platform-cookies.constants.ts
-├── hooks/            # App-level hooks
-├── providers/        # AppProviders composition
-│   └── app-providers-client.tsx
-└── i18n/             # Internationalization (optional)
-```
-
----
-
-## Providers Composition
-
-Compose all providers in a dedicated `AppProviders` component instead of nesting them in `layout.tsx`:
-
-```typescript
-// src/features/platform/providers/app-providers-client.tsx
-'use client'
-
-import { ReactNode } from 'react'
-import { Toaster } from 'sonner'
-import { AuthProvider } from '@/features/auth/hooks/authentication.hook'
-import { DialogProvider } from '@/shared/hooks/dialog.hook'
-
-export function AppProvidersClient({ children }: { children: ReactNode }) {
-  return (
-    <AuthProvider>
-      <DialogProvider>
-        {children}
-        <Toaster position="top-right" />
-      </DialogProvider>
-    </AuthProvider>
-  )
-}
-```
-
-Then in the root layout:
-```typescript
-// src/app/layout.tsx
-export default function RootLayout({ children }: { children: ReactNode }) {
-  return (
-    <html lang="en">
-      <body>
-        <ReactQueryProvider>
-          <AppProvidersClient>{children}</AppProvidersClient>
-        </ReactQueryProvider>
-      </body>
-    </html>
-  )
-}
-```
-
----
-
-## cn() — Tailwind Class Merging
-
-Always use `cn()` for class names. Never use raw string concatenation or template literals with conditional classes.
-
-```typescript
-// src/shared/libs/tw-merge.ts
-import { type ClassValue, clsx } from 'clsx'
-import { twMerge } from 'tailwind-merge'
-
-export function cn(...inputs: ClassValue[]) {
-  return twMerge(clsx(inputs))
-}
-```
-
-Usage:
-```typescript
-import { cn } from '@/shared/libs/tw-merge'
-
-className={cn(
-  'flex flex-col rounded-lg bg-white px-5',
-  isActive && 'border-2 border-accent-500',
-  className,
-)}
-```
-
----
-
-## React Query — Service + Use Case Pattern
-
-Split API calls into two layers:
-
-**Use Case** — pure function, no React, just the API call:
-```typescript
-// src/features/auth/use-cases/session-create.use-case.ts
-import { api } from '@/shared/libs/axios'
-import { serverRoutes } from '@/shared/constants/server-routes.constants'
-import { LoginSchema } from '@/features/auth/schemas/login.schema'
-import { SessionType } from '@/features/auth/types/session.api.type'
-
-export async function sessionCreateUseCase(data: LoginSchema): Promise<SessionType> {
-  const response = await api.post(`${serverRoutes.session}/create`, data)
-  return response.data
-}
-```
-
-**Service** — React Query wrapper used in components:
-```typescript
-// src/features/auth/services/session-create.service.tsx
-'use client'
-
-import { useMutation } from '@tanstack/react-query'
-import { sessionCreateUseCase } from '@/features/auth/use-cases/session-create.use-case'
-import { SessionType } from '@/features/auth/types/session.api.type'
-import { ServiceInput } from '@/shared/types/shared.ui.type'
-import { handleError } from '@/shared/utils/error.util'
-
-export function SessionCreateService({ onSuccess }: ServiceInput<SessionType>) {
-  return useMutation({
-    mutationFn: sessionCreateUseCase,
-    onSuccess: (data) => onSuccess?.(data),
-    onError: (error) => handleError(error),
-  })
-}
-```
-
-**Query service:**
-```typescript
-// src/features/dashboard/services/get-dashboard-active.service.tsx
-'use client'
-
-import { useQuery } from '@tanstack/react-query'
-import { getDashboardActiveUseCase } from '@/features/dashboard/use-cases/get-dashboard-active.use-case'
-import { DashboardActiveType } from '@/features/dashboard/types/dashboard-active.type'
-
-export const getDashboardActiveQueryKey = 'getDashboardActiveQueryKey'
-
-export function GetDashboardActiveService() {
-  return useQuery<DashboardActiveType>({
-    queryKey: [getDashboardActiveQueryKey],
-    queryFn: getDashboardActiveUseCase,
-  })
-}
-```
-
-**Shared service input type:**
-```typescript
-// src/shared/types/shared.ui.type.ts
-export type ServiceInput<TData = unknown> = {
-  onSuccess?: (data?: TData) => void
-  onError?: () => void
-}
-```
-
----
-
-## Forms — React Hook Form + Zod
-
-**Schema:**
-```typescript
-// src/features/auth/schemas/login.schema.ts
-import { z } from 'zod'
-import { requiredEmail } from '@/shared/validations/required-email.validation'
-import { requiredString } from '@/shared/validations/required-string.validation'
-
-export const loginSchema = z.object({
-  email: requiredEmail(),
-  password: requiredString({ field: 'password' }),
-})
-
-export type LoginSchema = z.infer<typeof loginSchema>
-```
-
-**Reusable validators in shared/:**
-```typescript
-// src/shared/validations/required-string.validation.ts
-import { z } from 'zod'
-
-export const requiredString = ({ field, min = 1 }: { field: string; min?: number }) =>
-  z.string({ message: `${field} is required` }).min(min, {
-    message: `${field} must be at least ${min} characters`,
-  })
-```
-
-**Form component:**
-```typescript
-// src/features/auth/components/login-form.tsx
-'use client'
-
-import { zodResolver } from '@hookform/resolvers/zod'
-import { useForm } from 'react-hook-form'
-import { LoginSchema, loginSchema } from '@/features/auth/schemas/login.schema'
-import { SessionCreateService } from '@/features/auth/services/session-create.service'
-import { InputText } from '@/shared/components/input-text'
-import { Button } from '@/shared/components/button'
-
-export function LoginForm() {
-  const { control, handleSubmit } = useForm<LoginSchema>({
-    resolver: zodResolver(loginSchema),
-    defaultValues: { email: '', password: '' },
-  })
-
-  const { mutate: createSession, isPending } = SessionCreateService({
-    onSuccess: () => { /* redirect */ },
-  })
-
-  return (
-    <form onSubmit={handleSubmit((data) => createSession(data))} className="flex flex-col gap-4">
-      <InputText name="email" control={control} placeholder="Email" />
-      <InputText name="password" control={control} type="password" placeholder="Password" />
-      <Button type="submit" isLoading={isPending}>Sign in</Button>
-    </form>
-  )
-}
-```
-
-**Input uses `Controller` from RHF and is generic:**
-```typescript
-// src/shared/components/input-text.tsx
-import { Control, Controller, FieldValues, Path, PathValue } from 'react-hook-form'
-import { cn } from '@/shared/libs/tw-merge'
-
-type InputTextProps<T extends FieldValues> = {
-  name: Path<T>
-  control: Control<T>
-  defaultValue?: PathValue<T, Path<T>>
-  placeholder?: string
-  type?: 'text' | 'password' | 'email'
-  disabled?: boolean
-  className?: string
-}
-
-export function InputText<T extends FieldValues>({
-  name, control, defaultValue = '' as PathValue<T, Path<T>>,
-  placeholder, type = 'text', disabled, className,
-}: InputTextProps<T>) {
-  return (
-    <Controller
-      name={name}
-      control={control}
-      defaultValue={defaultValue}
-      render={({ field, fieldState: { error } }) => (
-        <div className={cn('flex flex-col gap-1', className)}>
-          <input
-            {...field}
-            type={type}
-            placeholder={placeholder}
-            disabled={disabled}
-            className={cn('border rounded-lg px-4 h-12 text-sm', error && 'border-red-500')}
-          />
-          {error && <span className="text-xs text-red-500">{error.message}</span>}
-        </div>
-      )}
-    />
-  )
-}
-```
-
----
-
-## File Naming Conventions
-
-### Rule for front (web & mobile): outside `app/` only
-
-Every file outside the `app/` folder must follow:
-
-- **Format**: lowercase, words separated by `-`, then `.tipo.ext` (suffix by role).
-- **Examples**: `pagina-exemplo.page.tsx`, `login.schema.ts`, `session-create.use-case.ts`, `dashboard-active.type.ts`.
-
-**Components are the exception**: do **not** use a `.component` suffix. Use only kebab-case + extension, e.g. `pagina-exemplo.tsx`, `dashboard-revenue-card.tsx`, `input-text.tsx`.
-
-**Another exception**: files inside any `styles/` folder do not need to follow this pattern (e.g. CSS/SCSS modules may use their own convention).
-
-### Suffix by role
-
-| Role | Suffix | Example |
-|------|--------|---------|
-| Page component | `.page.tsx` | `pagina-exemplo.page.tsx` |
-| Screen component (mobile) | `.screen.tsx` | `login.screen.tsx` |
-| UI component | (no suffix) `.tsx` | `dashboard-revenue-card.tsx`, `input-text.tsx` |
-| React Query service | `.service.tsx` | `session-create.service.tsx` |
-| API call (pure) | `.use-case.ts` | `session-create.use-case.ts` |
-| Zod schema | `.schema.ts` | `login.schema.ts` |
-| Context/hook | `.hook.tsx` | `authentication.hook.tsx` |
-| API response type | `.api.type.ts` | `session.api.type.ts` |
-| Domain type | `.type.ts` | `dashboard-active.type.ts` |
-| Utility | `.util.ts` | `error.util.ts` |
-| Validation helper | `.validation.ts` | `required-email.validation.ts` (in `validations/`) |
+## File naming (outside `app/`)
+
+| Role | Suffix / pattern | Example |
+|------|------------------|---------|
+| Page | `.page.tsx` | `dashboard.page.tsx` |
+| Screen | `.screen.tsx` | `login.screen.tsx` |
+| Component | kebab `.tsx` (no `.component`) | `dashboard-revenue-card.tsx` |
+| Service | `.service.tsx` | `session-create.service.tsx` |
+| Use case | `.use-case.ts` | `session-create.use-case.ts` |
+| Schema | `.schema.ts` | `login.schema.ts` |
+| Hook | `.hook.tsx` | `authentication.hook.tsx` |
+| Type | `.type.ts` / `.api.type.ts` | `session.api.type.ts` |
+| Util | `.util.ts` | `error.util.ts` |
+| Validation | `.validation.ts` in `validations/` | `required-email.validation.ts` |
 | Constants | `.constants.ts` | `server-routes.constants.ts` |
 
----
-
-## TypeScript Types
-
-- API response types: `[Name]Type` in a `.api.type.ts` file
-- Domain/internal types: `[Name]Type` in a `.type.ts` file
-- All types exported with `export type`
-- No `any` — ever
-
-```typescript
-// src/features/auth/types/session.api.type.ts
-export type SessionType = {
-  accessToken: string
-  refreshToken: string
-}
-```
+**Route export:** one word + page name (e.g. `AdminQuestion`); feature page `AdminQuestionPage`.
 
 ---
 
-## Context / Auth Hook Pattern
+## Platform feature
 
-```typescript
-// src/features/auth/hooks/authentication.hook.tsx
-'use client'
+`features/platform/` — app shell, routes constants, `AppProviders` composition (not generic shared).
 
-import { createContext, useContext, ReactNode } from 'react'
-
-type AuthContextData = {
-  account: AccountType | null
-  isAuthenticated: boolean
-  signOut: () => Promise<void>
-}
-
-const AuthContext = createContext<AuthContextData>({} as AuthContextData)
-
-export function AuthProvider({ children }: { children: ReactNode }) {
-  // state and derived values here via useMemo
-  return (
-    <AuthContext.Provider value={{ account, isAuthenticated, signOut }}>
-      {children}
-    </AuthContext.Provider>
-  )
-}
-
-export const useAuth = () => useContext(AuthContext)
-```
+**DataHandler** — use for loading/error/empty in pages (see full doc).
 
 ---
 
-## Testing
+## Audit / sync
 
-### Front-end (Next.js / React)
-- **E2E**: Cypress or equivalent browser E2E tooling
-- Tests live in `e2e/` or `cypress/` at project root
-- Test files should follow the tool convention in use consistently
-- Cover critical user flows: auth, main feature interactions, form submissions
-
-### Mobile (Expo / React Native)
-- **E2E**: Detox
-- Tests live in `e2e/` at project root
-- Test files: `[feature].test.ts`
-- Cover critical flows: login, main navigation, core feature interactions
+- **`task-flow: audit`:** score against this checklist; open [coding-standards-full.md](mdc:.task-flow/docs/coding-standards-full.md) only for deep dives or user-requested depth.
+- **`task-flow: sync`:** subtask instructions follow checklist patterns (structure, naming, service+use-case) — not full doc.
 
 ---
 
-## Critical Rules (Non-Negotiable)
+## Quick invoke
 
-1. **`app/` is thin**: `page.tsx` only renders the feature page/screen. No logic, no state, no extra imports.
-2. **Pages are orchestrators**: Feature pages compose components — they are short. If the page is getting long, extract a component.
-3. **Components have one job**: If a component grows, split it. Name reflects its single purpose.
-4. **Always use `cn()`** for class merging — never template literals with conditional classes.
-5. **Forms always use `Controller`** from react-hook-form — never uncontrolled inputs.
-6. **API logic in use-cases**: Components and services never call `axios`/`api` directly — always through a use-case function.
-7. **Zod for all validation**: No manual validation — always define a schema and use `zodResolver`.
-8. **Type everything**: No `any`. All props, params, and return values must be typed.
-9. **Shared is truly shared**: Only put in `shared/` what is used by 2+ features.
-10. **Naming reflects role**: File name + suffix must make the file's purpose immediately obvious.
-11. **No barrel files for re-exports**: Do not use `index.ts` (or `index.tsx`) only to re-export other modules. Import directly from the source file (e.g. `from '@/shared/components/button'` not `from '@/shared/components'`). An `index.ts` is only allowed when it contains real logic or composition, not mere re-exports.
-12. **Page-specific components use page prefix**: In features, the page file is `[page-name].page.tsx`; components specific to that page use the same prefix in file and function name (e.g. `admin-question-card.tsx` → `AdminQuestionCard`). Child components stay in the same `components/` folder and inherit the parent prefix (e.g. `admin-question-card-item.tsx` → `AdminQuestionCardItem`). App route exports `AdminQuestion`, feature page exports `AdminQuestionPage`.
-13. **No raw base UI in screens**: Buttons, inputs, selects, and other base elements must not be used in isolation in the code. Create and reuse a component (in `shared/components/` or in the feature’s `components/`) for each usage; no inline `<button>` or `<input>` without a dedicated component.
+| Need | Use |
+|------|-----|
+| Implementing code | `@rbin-coding-standards` |
+| Full examples / Nest / gateways | Sections of `coding-standards-full.md` |
+| Audit all categories | `@task-flow-audit` |

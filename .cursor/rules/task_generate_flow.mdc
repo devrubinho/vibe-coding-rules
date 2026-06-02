@@ -1,7 +1,6 @@
 ---
-description: Generate task flow with dependencies, estimated hours, and AI model recommendations
-globs: **/*
-alwaysApply: true
+description: Populates tasks.flow.md with dependencies and hours for task-flow generate flow.
+alwaysApply: false
 ---
 
 - **Task Flow Generation - Dependencies, Hours & Model Recommendations:**

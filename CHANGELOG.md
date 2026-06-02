@@ -2,53 +2,68 @@
 
 ## [Unreleased]
 
-## [1.19.5] - 2026-05-02
+## [1.23.0] - 2026-06-02
+
+**Minor release — token optimization** (breaking changes in Cursor rules; run `rbin-task-flow update` in each project).
+
+### Breaking changes (Cursor / rules)
+
+- **Always-on rules reduced to 2:** `task-flow-cursor.mdc`, `rbin-git-policy.mdc` (replaces separate always-on `git_control.mdc` + `commit_practices.mdc`).
+- **`git_control.mdc` / `commit_practices.mdc`** — legacy stubs (`alwaysApply: false`); use `rbin-git-policy.mdc` + `@rbin-git`.
+- **`coding_standards.mdc`** — compact checklist (~100 lines, glob `src/**` / `app/**` only); full reference in `.task-flow/docs/coding-standards-full.md` (by section on demand).
+- **`task_work.mdc` / `task_execution.mdc`** — short fallbacks; prefer `@task-flow-run` and `task-flow-cursor.mdc` + skills.
 
 ### Added
 
-- **bin/cli.js / lib/install.js** - Added `rbin-task-flow reset` to recreate `.task-flow` from scratch, including removal of existing `.task-flow/.internal` task state.
-
-## [1.19.4] - 2026-03-24
-
-### Changed
-
-- **task_estimate.mdc / lib/estimate.js / bin/cli.js** - Estimates use one hours range for an average developer at average pace (no junior/mid/senior bands); assumption stated explicitly, including no AI acceleration.
-- **.task-flow/README.md** - `task-flow: estimate` documentation aligned with the single-range output.
-
-## [1.19.3] - 2026-03-24
+- **`task-flow-sync.mdc`** — single primary rule for `task-flow: sync`.
+- **`rbin-git-policy.mdc`** — unified always-on git policy.
+- **`rbin-task-flow reset --graphify`** — reset template + optional `graphify extract`.
+- **CLI `--profile minimal|standard`** — minimal = 2 always-on rules + skills; `.task-flow/install-meta.json`.
+- **CLI `--share-ai-config`** — optional gitignore to commit `.cursor/skills/` and `.cursor/rules/`.
+- **`npm run measure:rules`** — always-on size regression (default fail if > 5 KB).
+- **`.task-flow/OPTIMIZATION-PLAN.md`** · **`.task-flow/OPTIMIZATION-IMPLEMENTATION-TASKS.md`**.
 
 ### Changed
 
-- **task_generate_flow.mdc** - Replaced legacy `Codex` recommendation with current `GPT-5.x` family guidance for flow generation.
-- **task_generate_flow.mdc** - Model priority and effort are now defined from task context, not fixed ordering or subtask count.
-- **task_estimate.mdc / lib/estimate.js** - Estimation now uses task-level heuristics, risk, and scope signals instead of relying only on subtask totals, and outputs a single average-developer estimate without AI acceleration.
-- **lib/install.js / install.sh** - `rbin-task-flow init` now preserves existing `.task-flow/tasks.input.txt`, `.task-flow/tasks.status.md`, and `.task-flow/tasks.flow.md` while still overwriting the rest of the template.
+- **14 skills** — `task-flow-run`, `task-flow-sync`, etc.; `rbin-coding-standards` with `disable-model-invocation: true`.
+- **Sync** — `task_generation.mdc` (templates); `task_analysis.mdc` (`think` only); `task-flow-sync.mdc` primary.
+- **P1 polish** — meta-rules `@` only; partial `tasks.json` in run; GRAPHIFY token discipline; install shows always-on KB.
+- **Cursor docs** — skills-first; 2 always-on; no full standards every chat.
+- **Audit / sync / Codex** — checklist scoring; full doc by section when needed.
 
-## [1.19.2] - 2025-03-07
+### Migration
 
-### Fixed
+```bash
+npm install -g rbin-task-flow@1.23
+cd your-project
+rbin-task-flow update
+```
 
-- **task_generate_flow.mdc** - New tasks.flow.md format: direct blocks per task, 3 models (Codex, Composer, Claude) with version and effort per task, Opus prohibited (only Haiku or Sonnet), simpler structure.
+Optional: `--profile minimal`, `--share-ai-config`, `--graphify`.
 
-## [1.19.1] - 2025-03-07
+After update: `rg 'alwaysApply: true' .cursor/rules` → **2** files. Use `@task-flow-run`, `@task-flow-sync`.
 
-### Fixed
+Template repo: `npm run measure:rules` (always-on ≤ 5 KB).
 
-- **coding_standards.mdc** - ESLint section: document @rbinflow/eslint-config only, no extra plugins. Add table with all available configs (node, node-with-semi, react, next, expo).
-
-## [1.19.0] - 2025-03-07
+## [1.22.0] - 2026-06-02
 
 ### Added
 
-- **tasks.flow.md** - New file created on `rbin-task-flow init` for dependencies, estimated hours, and AI model recommendations
-- **task-flow: generate flow** - Command to populate tasks.flow.md with:
-  - Task dependencies (for parallelization)
-  - Estimated development hours (for billing)
-  - AI model recommendations (Codex, Composer, Claude) with effort levels
-- Web search for current AI model versions during flow generation
-- Keywords: `generate-flow`, `tasks-flow`
+- **Cursor optimization** — `task-flow-cursor.mdc` (always-on bootstrap); `.task-flow/CURSOR.md`; `lib/cursor.js` on install.
 
 ### Changed
 
-- `task-flow: sync` explicitly does not update tasks.flow.md (only `generate flow` populates it)
-- CLAUDE.md, README, and docs updated with generate flow command
+- **`.cursor/rules/`** — Only `task-flow-cursor`, `git_control`, and `commit_practices` use `alwaysApply: true`; other rules Apply Intelligently, by glob, or via `@skill` / `@rule`.
+- **`coding_standards.mdc`** — activates for `src/**` and `app/**` instead of every session.
+
+## [1.21.0] - 2026-06-02
+
+### Added
+
+- **Codex optimization** — `AGENTS.md` with embedded sync/run workflows; `.task-flow/CODEX.md`; `.codex/config.toml`; `lib/codex.js`.
+
+### Changed
+
+- **`AGENTS.md`** — Codex-first.
+
+## [1.20.0] - 2026-06-02

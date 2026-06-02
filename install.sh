@@ -137,11 +137,17 @@ install_to_project() {
   echo -e "${BLUE}🚀 Installing/Updating...${NC}"
   echo -e "${BLUE}📁 Target: $target${NC}\n"
 
-  mkdir -p "$target"/{.cursor/rules,.claude,.task-flow}
+  mkdir -p "$target"/{.cursor/rules,.cursor/skills,.claude,.claude/skills,.codex,.task-flow}
 
   [ -d "$SCRIPT_DIR/.cursor/rules" ] &&
     cp -r "$SCRIPT_DIR/.cursor/rules/"* "$target/.cursor/rules/" &&
     echo -e "${GREEN}✅ Cursor rules${NC}"
+
+  if [ -d "$SCRIPT_DIR/.claude/skills" ]; then
+    cp -r "$SCRIPT_DIR/.claude/skills/"* "$target/.claude/skills/" 2>/dev/null || true
+    cp -r "$SCRIPT_DIR/.claude/skills/"* "$target/.cursor/skills/" 2>/dev/null || true
+    echo -e "${GREEN}✅ Agent skills (.claude/skills + .cursor/skills)${NC}"
+  fi
 
 
   [ -f "$SCRIPT_DIR/.cursor/settings.json" ] &&
@@ -160,6 +166,11 @@ install_to_project() {
     cp "$SCRIPT_DIR/AGENTS.md" "$target/AGENTS.md" &&
     echo -e "${GREEN}✅ Codex instructions (AGENTS.md)${NC}"
 
+  if [ -f "$SCRIPT_DIR/.codex/config.toml" ] && [ ! -f "$target/.codex/config.toml" ]; then
+    cp "$SCRIPT_DIR/.codex/config.toml" "$target/.codex/config.toml"
+    echo -e "${GREEN}✅ Codex config (.codex/config.toml)${NC}"
+  fi
+
   if [ -d "$SCRIPT_DIR/.task-flow" ]; then
     mkdir -p "$target/.task-flow"
     echo -e "${GREEN}✅ Task Flow directory${NC}"
@@ -177,6 +188,25 @@ install_to_project() {
     [ -f "$SCRIPT_DIR/.task-flow/README.md" ] &&
       cp "$SCRIPT_DIR/.task-flow/README.md" "$target/.task-flow/README.md" &&
       echo -e "${GREEN}✅ Task Flow README${NC}"
+    [ -f "$SCRIPT_DIR/.task-flow/GRAPHIFY.md" ] &&
+      cp "$SCRIPT_DIR/.task-flow/GRAPHIFY.md" "$target/.task-flow/GRAPHIFY.md" &&
+      echo -e "${GREEN}✅ Graphify + Task Flow guide${NC}"
+    [ -f "$SCRIPT_DIR/.task-flow/CODEX.md" ] &&
+      cp "$SCRIPT_DIR/.task-flow/CODEX.md" "$target/.task-flow/CODEX.md" &&
+      echo -e "${GREEN}✅ Codex workflows (CODEX.md)${NC}"
+    [ -f "$SCRIPT_DIR/.task-flow/CURSOR.md" ] &&
+      cp "$SCRIPT_DIR/.task-flow/CURSOR.md" "$target/.task-flow/CURSOR.md" &&
+      echo -e "${GREEN}✅ Cursor guide (CURSOR.md)${NC}"
+    if [ -d "$SCRIPT_DIR/.task-flow/docs" ]; then
+      mkdir -p "$target/.task-flow/docs"
+      cp -r "$SCRIPT_DIR/.task-flow/docs/"* "$target/.task-flow/docs/" 2>/dev/null || true
+      echo -e "${GREEN}✅ Task Flow docs (coding-standards-full.md)${NC}"
+    fi
+    [ -f "$SCRIPT_DIR/.task-flow/AI-PLATFORMS.md" ] &&
+      cp "$SCRIPT_DIR/.task-flow/AI-PLATFORMS.md" "$target/.task-flow/AI-PLATFORMS.md"
+    [ -d "$SCRIPT_DIR/.task-flow/platforms" ] &&
+      mkdir -p "$target/.task-flow/platforms" &&
+      cp -r "$SCRIPT_DIR/.task-flow/platforms/"* "$target/.task-flow/platforms/" 2>/dev/null || true
     mkdir -p "$target/.task-flow/contexts" &&
       echo -e "${GREEN}✅ Contexts directory (.task-flow/contexts/)${NC}"
   fi
@@ -194,6 +224,13 @@ install_to_project() {
   sed -i '' '/^\.task-flow\/scripts\/tasks\.json$/d' "$target/.gitignore" 2>/dev/null
   sed -i '' '/^\.task-flow\/scripts\/status\.json$/d' "$target/.gitignore" 2>/dev/null
   sed -i '' '/^\.cursor\/rules\/\*\.local\.mdc$/d' "$target/.gitignore" 2>/dev/null
+  sed -i '' '/^graphify-out\/$/d' "$target/.gitignore" 2>/dev/null
+
+  if [ -f "$target/.cursor/rules/graphify.mdc" ]; then
+    sed -i '' 's/alwaysApply: true/alwaysApply: false/g' "$target/.cursor/rules/graphify.mdc" 2>/dev/null || \
+      sed -i 's/alwaysApply: true/alwaysApply: false/g' "$target/.cursor/rules/graphify.mdc" 2>/dev/null || true
+    echo -e "${CYAN}   ℹ️  graphify.mdc set to alwaysApply: false (Task Flow priority)${NC}"
+  fi
 
   # Add entries without comments
   {
@@ -201,6 +238,7 @@ install_to_project() {
     echo ".claude/"
     echo ".cursor/"
     echo ".task-flow/"
+    echo "graphify-out/"
     echo "CLAUDE.md"
     echo "AGENTS.md"
   } >> "$target/.gitignore"
@@ -213,8 +251,10 @@ install_to_project() {
 
   echo -e "${BLUE}Next steps:${NC}"
   echo -e "   ${YELLOW}cd $target${NC}"
-  echo -e "   ${CYAN}Use AI commands: task-flow: sync, task-flow: run X, etc.${NC}"
-  echo -e "   ${CYAN}See .task-flow/README.md for all commands${NC}\n"
+  echo -e "   ${CYAN}Cursor: @task-flow-sync, @task-flow-run  |  Claude: /task-flow-sync${NC}"
+  echo -e "   ${CYAN}Codex: AGENTS.md + task-flow: sync / run (see .task-flow/CODEX.md)${NC}"
+  echo -e "   ${CYAN}See .task-flow/README.md for all commands${NC}"
+  echo -e "   ${CYAN}Graphify: graphify extract .  (see .task-flow/GRAPHIFY.md)${NC}\n"
 }
 
 main() {

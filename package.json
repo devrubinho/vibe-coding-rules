@@ -1,6 +1,6 @@
 {
   "name": "rbin-task-flow",
-  "version": "1.19.5",
+  "version": "1.23.0",
   "description": "AI-powered task management for Claude and Cursor",
   "main": "index.js",
   "bin": {
@@ -9,7 +9,8 @@
   },
   "scripts": {
     "test": "echo \"No tests yet\"",
-    "prepublishOnly": "chmod +x bin/cli.js"
+    "measure:rules": "node scripts/measure-rule-bytes.js",
+    "prepublishOnly": "npm run measure:rules && chmod +x bin/cli.js scripts/measure-rule-bytes.js"
   },
   "keywords": [
     "task-flow",
@@ -32,10 +33,13 @@
     "bin/",
     ".cursor/",
     ".claude/",
+    ".claude/skills/",
+    ".cursor/skills/",
     ".task-flow/",
     ".model-versions.json",
     "CLAUDE.md",
     "AGENTS.md",
+    ".codex/",
     "lib/"
   ],
   "preferGlobal": true,

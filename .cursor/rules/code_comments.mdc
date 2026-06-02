@@ -1,7 +1,7 @@
 ---
-description: Rules about code comments - prohibition of explanatory comments, use of dev-logs for documentation, and pattern for separation comments
-globs: **/*
-alwaysApply: true
+description: No explanatory code comments; use dev-logs. Applies when editing TypeScript or JavaScript source files.
+globs: **/*.{ts,tsx,js,jsx}
+alwaysApply: false
 ---
 
 - **Prohibition of Explanatory Comments:**
@@ -132,7 +132,7 @@ alwaysApply: true
 - **Integration with Other Rules:**
   - [cursor_rules.mdc](mdc:.cursor/rules/cursor_rules.mdc) - Rule formatting
   - [self_improve.mdc](mdc:.cursor/rules/self_improve.mdc) - Continuous improvement
-  - [commit_practices.mdc](mdc:.cursor/rules/commit_practices.mdc) - Commits can reference dev-logs
+  - [rbin-git-policy.mdc](mdc:.cursor/rules/rbin-git-policy.mdc) — commits can reference dev-logs in message body
 
 - **Fundamental Principle:**
   > **Code must be self-explanatory. If something needs explanation, document it in dev-logs/, not in code. Use comments only for visual organization following the exact pattern.**

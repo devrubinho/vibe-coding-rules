@@ -1,0 +1,31 @@
+---
+description: Use Graphify knowledge graph only when executing RBIN Task Flow commands that need codebase navigation (task-flow run, think, review, audit). Prefer graphify query over blind grep when graphify-out exists. Never override task-flow status updates or git rules.
+alwaysApply: false
+---
+
+- **Graphify + RBIN Task Flow (coexistence):**
+  - **Graphify** maps repo structure (`graphify-out/graph.json`, `GRAPH_REPORT.md`). **Task Flow** owns tasks (`.task-flow/`), status, and commands `task-flow: …`.
+  - **Do not compete:** Task Flow rules (`task_work`, `task-flow-sync`, `rbin-git-policy`, etc.) always win for workflow, git, and status files.
+
+- **When to use Graphify:**
+  - **`task-flow: run` / `run next X`:** Before implementing a subtask in a non-trivial codebase, if `graphify-out/graph.json` exists, use `graphify query "<feature or module from subtask>"` or read `graphify-out/GRAPH_REPORT.md` god nodes — then implement. If no graph exists, proceed with normal search or suggest `graphify extract .`.
+  - **`task-flow: think`:** Optional `graphify query` for gap analysis on large repos.
+  - **`task-flow: review X`:** Optional `graphify affected "<symbol>"` to verify impact surface.
+  - **`task-flow: audit`:** Graphify is structural only; scoring uses [coding_standards.mdc](mdc:.cursor/rules/coding_standards.mdc) checklist. Deep dive: sections of [coding-standards-full.md](mdc:.task-flow/docs/coding-standards-full.md) only if user asks for depth.
+
+- **When NOT to use Graphify:**
+  - `task-flow: sync`, `status`, `estimate`, `report`, `generate flow` — only `.task-flow/` files.
+  - Updating `status.json` / `tasks.status.md` — never defer to Graphify.
+  - Git write operations — [rbin-git-policy.mdc](mdc:.cursor/rules/rbin-git-policy.mdc) only suggests commits.
+
+- **If `.cursor/rules/graphify.mdc` exists with upstream Graphify install:**
+  - Prefer this rule (`graphify-task-flow`) for Task Flow sessions; avoid duplicating full `GRAPH_REPORT.md` into context unless needed.
+  - RBIN Task Flow init sets upstream `graphify.mdc` to `alwaysApply: false` to save context.
+
+- **CLI (project root):**
+  - Build graph: `graphify extract .` (re-run after large refactors).
+  - Query: `graphify query "question"` · `graphify affected "node"`.
+  - Guide: [.task-flow/GRAPHIFY.md](mdc:.task-flow/GRAPHIFY.md)
+
+- **Principle:**
+  > **Task Flow decides what to do; Graphify helps find where in the code — only during implementation and exploration commands.**

@@ -1,44 +1,82 @@
-# Project norms (Codex)
+# Codex — RBIN Task Flow
 
-This repo follows the same development norms as in `.cursor/rules/` and `CLAUDE.md`. When working here, follow these rules.
+**Task flow** always means **RBIN Task Flow**. Codex does not load `.cursor/rules/*.mdc` automatically — use this file plus **read on demand** files below.
+
+**Full Codex guide:** `.task-flow/platforms/codex.md` · **Workflows (read when executing a command):** `.task-flow/CODEX.md`
+
+## Paths
+
+| Path | Use |
+|------|-----|
+| `.task-flow/tasks.input.txt` | Tasks (`- description`) |
+| `.task-flow/tasks.status.md` | Human status (do not edit) |
+| `.task-flow/.internal/tasks.json` | Task definitions |
+| `.task-flow/.internal/status.json` | Status source of truth |
+| `.task-flow/contexts/` | Specs/mockups for subtasks |
 
 ## Git
 
-- **Never run** `git add`, `git commit`, `git push`, `git pull`, `git merge`, `git checkout`, `git reset`, `git rebase`, etc.
-- **Only suggest** git commands; the user runs them.
-- You **may** run read-only git: `git status`, `git diff`, `git log`, `git show`, `git branch` (list only).
+Never run: `git add`, `commit`, `push`, `pull`, `merge`, `checkout`, `reset`, `rebase`.  
+Read-only OK: `git status`, `git diff`, `git log`, `git show`, `git branch`.  
+After subtasks: suggest Conventional Commit with Task/Subtask ID — user runs git.
 
-## Commits
+## Code comments
 
-- After completing tasks, **suggest** a commit message (Conventional Commits: `feat`, `fix`, `refactor`, `docs`, `test`, `chore`).
-- Include task/subtask ID when relevant, e.g. `Task ID: 3.2`.
+No explanatory comments. Complex topics → `dev-logs/*.md`. Allowed: `// ────────────────────────────────` section separators only.
 
-## Code and comments
+## Commands → read before executing
 
-- **No explanatory comments** in code; keep code self-explanatory via names.
-- **Document non-obvious or complex topics** in `dev-logs/` (markdown).
-- **Allowed comments**: only section separators in this form:
-  ```text
-  // ────────────────────────────────
-  // Section Name
-  // ────────────────────────────────
-  ```
+| Command | Read first |
+|---------|------------|
+| `task-flow: sync` | Section **Sync** below; details `.task-flow/CODEX.md` |
+| `task-flow: run …` | Section **Run** below; details `.task-flow/CODEX.md` |
+| `task-flow: status` | `.task-flow/tasks.status.md` |
+| `task-flow: think` | `.task-flow/CODEX.md` · optional codebase scan |
+| `task-flow: check` | `.cursor/rules/task_check.mdc` · `package.json` |
+| `task-flow: improve changes` | `git diff --name-only HEAD` · `.cursor/rules/task_improve_changes.mdc` |
+| `task-flow: audit` | `.cursor/rules/task_audit.mdc` · checklist `coding_standards.mdc` (full: `.task-flow/docs/coding-standards-full.md` if needed) |
+| `task-flow: review X` | `.task-flow/CODEX.md` |
+| `task-flow: refactor X` | `.cursor/rules/task_refactor.mdc` |
+| `task-flow: estimate X` | `.task-flow/CODEX.md` |
+| `task-flow: report X` | `.task-flow/CODEX.md` |
+| `task-flow: generate flow` | `.cursor/rules/task_generate_flow.mdc` |
+| Implementing code | Checklist `.cursor/rules/coding_standards.mdc` · depth: `.task-flow/docs/coding-standards-full.md` (sections only) |
 
-## RBIN Task Flow
+## Sync (embedded)
 
-- **Task flow** always means **RBIN Task Flow**.
-- Tasks: `.task-flow/tasks.input.txt` (format: `- Task description`).
-- Status: `.task-flow/tasks.status.md` and `.task-flow/.internal/status.json`.
-- **Commands** to support: `task-flow: sync`, `task-flow: think`, `task-flow: audit`, `task-flow: check`, `task-flow: improve changes`, `task-flow: status`, `task-flow: run next X`, `task-flow: run X` (or `X,Y` / `all`), `task-flow: review X`, `task-flow: refactor X`, `task-flow: estimate X`, `task-flow: report X`, `task-flow: generate flow`.
-- When running `task-flow: audit`: scan the codebase, score it against `.cursor/rules/coding_standards.mdc`, present a report, and ask the user which improvements to adopt — never impose changes.
-- When running `task-flow: check`: run lint fix if present and fix lint warnings/errors; run build and fix until it passes.
-- When running `task-flow: improve changes`: same as audit but only for files changed and not yet committed (obtain list via `git diff --name-only HEAD`, then audit only those paths).
-- When running subtasks: read `.task-flow/.internal/tasks.json` and `status.json`, implement, then update `status.json` and `tasks.status.md` (mark done, refresh summary).
-- Use context from `.task-flow/contexts/` when subtask instructions reference it.
+1. Read `tasks.input.txt` (lines `- ` only), `tasks.json`, `status.json`.
+2. Diff by `originalRequest`: new / removed / modified / unchanged.
+3. **New:** 3–8 subtasks each, pending status, update `tasks.status.md`.
+4. **Removed:** drop from json + status + md.
+5. **Modified:** regen subtasks, **preserve** done/pending where possible.
+6. List `.task-flow/contexts/`; match to tasks; honor `task-flow-screen file.ext`.
+7. `status.json` = truth; sync `tasks.status.md` checkboxes + 📊 Summary.
+8. Do not fill `tasks.flow.md` (only `generate flow`).
 
-## Full rules
+## Run (embedded)
 
-For complete wording and examples, see:
+1. Read `tasks.json` + `status.json`.
+2. `run next X` (default X=1): next X **pending** subtasks in order 1.1, 1.2, …, 2.1…
+3. `run X` / `X,Y` / `all`: all pending for task(s); for `run X`, block if tasks `1..X-1` have any pending subtask.
+4. Per subtask: follow `instructions`; read `contexts/` if cited; implement + verify.
+5. If `graphify-out/graph.json` exists, prefer `graphify query` before repo-wide grep.
+6. Mark subtask `done` in `status.json`; update `tasks.status.md` Summary.
+7. Parent task `done` when all subtasks done. Suggest commit; never git write.
 
-- `CLAUDE.md` – overview and task-flow commands
-- `.cursor/rules/` – all rules (git, commits, comments, task-flow, etc.)
+## Prompt templates (copy)
+
+```
+Leia AGENTS.md. Execute task-flow: sync.
+```
+
+```
+Leia AGENTS.md e .task-flow/CODEX.md (Run). task-flow: run next 3.
+```
+
+```
+task-flow: improve changes — git diff --name-only HEAD, audite só esses arquivos.
+```
+
+## Other platforms
+
+Claude: `CLAUDE.md` + `.claude/skills/`. Cursor: `.cursor/rules/`. Index: `.task-flow/AI-PLATFORMS.md`.

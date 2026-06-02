@@ -1,0 +1,10 @@
+# RBIN Task Flow — optional Codex project config
+# Merged from repo root → cwd; see https://developers.openai.com/codex/config-advanced
+#
+# Installed by rbin-task-flow init. Edit as needed; preserved on update unless missing.
+
+# Default Codex cap is 32 KiB for combined AGENTS.md chain — raise if instructions truncate silently.
+project_doc_max_bytes = 65536
+
+# Optional: extra instruction filenames per directory (uncomment if needed)
+# project_doc_fallback_filenames = ["TEAM_AGENTS.md"]

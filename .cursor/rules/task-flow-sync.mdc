@@ -1,0 +1,46 @@
+---
+description: Full task-flow sync — reconciles tasks.input.txt with tasks.json, status.json, and tasks.status.md. Use for task-flow sync, sync tasks, or sincronizar tasks. Prefer @task-flow-sync skill.
+globs: .task-flow/**
+alwaysApply: false
+---
+
+# task-flow: sync
+
+**Prefer:** `@task-flow-sync` · Skill workflow: `.claude/skills/task-flow-sync/workflow.md`
+
+## 1. Read
+
+- `.task-flow/tasks.input.txt` (lines starting with `- ` only)
+- `.task-flow/.internal/tasks.json`, `status.json` if they exist
+- List `.task-flow/contexts/` for matching references
+
+## 2. Diff by `originalRequest`
+
+| Change | Action |
+|--------|--------|
+| **New** | Generate task + 3–8 subtasks; all `pending` |
+| **Removed** | Drop from `tasks.json`, `status.json`, `tasks.status.md` |
+| **Modified** | Update title/description; regen subtasks; **preserve** done/pending status where possible |
+| **Unchanged** | Leave task data and status as-is |
+
+Task IDs stay sequential (1, 2, 3…) matching `tasks.input.txt` order.
+
+## 3. New / regenerated subtasks
+
+- `originalRequest`: exact input line; `createdAt`: ISO 8601 for new tasks
+- 3–8 subtasks: title, description, instructions (3–5 steps)
+- Contexts: keyword match or `task-flow-screen file.ext` → `.task-flow/contexts/file.ext`
+- Subtask instructions: **checklist** in [coding_standards.mdc](mdc:.cursor/rules/coding_standards.mdc) only — not [coding-standards-full.md](mdc:.task-flow/docs/coding-standards-full.md)
+- More templates: [task_generation.mdc](mdc:.cursor/rules/task_generation.mdc)
+
+**Sync rules:** no codebase exploration; no questions; do not fill `tasks.flow.md` (only `generate flow`).
+
+## 4. Align status
+
+- `status.json` = source of truth
+- Rebuild `tasks.status.md` checkboxes to match; **regenerate 📊 Summary** (completed / in progress / remaining counts)
+- After regen: new subtasks → `pending`; keep `done` on matched subtasks when possible
+
+## 5. Principles
+
+> Preserve progress when possible. Fast: read → diff → write. User runs `task-flow: status` or `@task-flow-run` next.

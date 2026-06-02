@@ -1,7 +1,6 @@
 ---
-description: Review completed tasks to verify they are actually done or erroneously marked
-globs: **/*
-alwaysApply: true
+description: Verifies completed task-flow tasks are actually implemented. Use for task-flow review X or review all.
+alwaysApply: false
 ---
 
 - **Task Review - Verify Completed Tasks:**
@@ -81,8 +80,8 @@ alwaysApply: true
   ```
 
 - **Integration:**
-  - Works with [task_execution.mdc](mdc:.cursor/rules/task_execution.mdc) workflow
-  - Respects [git_control.mdc](mdc:.cursor/rules/git_control.mdc) - never commit automatically
+  - Works with [task-flow-cursor.mdc](mdc:.cursor/rules/task-flow-cursor.mdc) / `@task-flow-review`
+  - Respects [rbin-git-policy.mdc](mdc:.cursor/rules/rbin-git-policy.mdc) — never commit automatically
 
 - **Principle:**
   > **Review completed tasks to ensure quality. Verify that "done" means actually done, not just marked. Help maintain accurate task status.**

@@ -1,7 +1,7 @@
 ---
-description: Show task status from tasks.status.md - simple and direct
-globs: **/*
-alwaysApply: true
+description: Shows RBIN Task Flow progress from tasks.status.md. Use for task-flow status or show task status.
+globs: .task-flow/**
+alwaysApply: false
 ---
 
 - **Task Status - Show Current Status:**
@@ -38,7 +38,7 @@ alwaysApply: true
   ```
 
 - **Integration:**
-  - Works with [task_execution.mdc](mdc:.cursor/rules/task_execution.mdc) workflow
+  - Works with [task-flow-cursor.mdc](mdc:.cursor/rules/task-flow-cursor.mdc) / `@task-flow-status`
   - Status is maintained in tasks.status.md file
 
 - **Principle:**

@@ -1,19 +1,18 @@
 ---
-description: Audit codebase against coding standards and suggest incremental improvements
-globs: **/*
-alwaysApply: true
+description: Audits full codebase against coding standards for task-flow audit. Non-destructive; user chooses improvements.
+alwaysApply: false
 ---
 
 # task-flow: audit
 
-When the user runs `task-flow: audit`, perform a non-destructive analysis of the current project against the coding standards defined in [coding_standards.mdc](mdc:.cursor/rules/coding_standards.mdc).
+When the user runs `task-flow: audit`, perform a non-destructive analysis against the **checklist** in [coding_standards.mdc](mdc:.cursor/rules/coding_standards.mdc). For deep architecture or examples, read only relevant sections of [coding-standards-full.md](mdc:.task-flow/docs/coding-standards-full.md) — do not load the entire file unless the user asks for depth.
 
 ---
 
 ## What This Command Does
 
 1. **Scans the project** to understand its current structure, tech stack, and patterns
-2. **Compares against coding_standards.mdc** to identify gaps and misalignments
+2. **Compares against the coding_standards checklist** to identify gaps and misalignments
 3. **Reports a compatibility score** per category
 4. **Asks the user** which improvements they want to adopt — never assumes or imposes
 5. **Respects project context** — an existing company project can't be fully restructured overnight
@@ -36,6 +35,8 @@ Scan the codebase to understand:
 - Presence of tests and what kind
 
 ### Step 2 — Score each category
+
+Score using the **checklist** in [coding_standards.mdc](mdc:.cursor/rules/coding_standards.mdc). For a category that needs examples (Nest gateways, DataHandler, long patterns), read **one section** of [coding-standards-full.md](mdc:.task-flow/docs/coding-standards-full.md) — not the whole file unless the user requests depth.
 
 For each category below, rate adherence: **Full / Partial / Missing**
 
