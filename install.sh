@@ -254,7 +254,7 @@ install_to_project() {
   echo -e "   ${CYAN}Cursor: @task-flow-sync, @task-flow-run  |  Claude: /task-flow-sync${NC}"
   echo -e "   ${CYAN}Codex: AGENTS.md + task-flow: sync / run (see .task-flow/CODEX.md)${NC}"
   echo -e "   ${CYAN}See .task-flow/README.md for all commands${NC}"
-  echo -e "   ${CYAN}Graphify: graphify extract .  (see .task-flow/GRAPHIFY.md)${NC}\n"
+  echo -e "   ${CYAN}Graphify: rbin-task-flow init --graphify  (see .task-flow/GRAPHIFY.md)${NC}\n"
 }
 
 main() {

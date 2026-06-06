@@ -2,6 +2,25 @@
 
 ## [Unreleased]
 
+## [1.23.1] - 2026-06-05
+
+**Patch release — Graphify `--graphify` usa Claude Code CLI por padrão.**
+
+### Changed
+
+- **`--graphify`** (`init`, `update`, `reset`) — roda `graphify extract . --backend claude-cli` em vez de `graphify extract .` (evita erro `no LLM API key found` quando há assinatura Claude Code).
+- **Docs** — `GRAPHIFY.md`, `README.md`, `graphify-task-flow.mdc`, CLI help e mensagens de install alinhados ao novo comando padrão.
+
+### Migration
+
+```bash
+npm install -g rbin-task-flow@1.23.1
+cd your-project
+rbin-task-flow update --graphify   # opcional: regerar grafo com claude-cli
+```
+
+Requisitos para `--graphify`: CLI `graphify` no PATH + `claude` autenticado (Claude Code).
+
 ## [1.23.0] - 2026-06-02
 
 **Minor release — token optimization** (breaking changes in Cursor rules; run `rbin-task-flow update` in each project).

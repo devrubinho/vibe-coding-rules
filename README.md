@@ -33,7 +33,7 @@
 <a id="português"></a>
 # 🇧🇷 Português
 
-> **v1.23.0** — Menos tokens no Cursor (2 regras always-on, checklist de standards, skills). De **1.22**: `npm install -g rbin-task-flow@1.23` e `rbin-task-flow update`. [CHANGELOG](CHANGELOG.md) · [Publicação](RELEASE-1.23.0.md).
+> **v1.23.1** — Graphify `--graphify` usa `claude-cli` por padrão (sem API key extra). De **1.23.0**: `npm install -g rbin-task-flow@1.23.1` e `rbin-task-flow update`. [CHANGELOG](CHANGELOG.md) · [Publicação](RELEASE-1.23.1.md).
 
 ## O Que É Este Projeto?
 
@@ -77,7 +77,7 @@ rbin-task-flow init --share-ai-config  # Versiona .cursor/skills/ e .cursor/rule
 rbin-task-flow update        # Atualiza configurações (mantém profile em install-meta.json)
 rbin-task-flow update --profile standard  # Passa a copiar todas as regras .mdc
 rbin-task-flow reset         # Reinstala o Task Flow do zero
-rbin-task-flow reset --graphify  # Reset + graphify extract (CLI Graphify no PATH)
+rbin-task-flow reset --graphify  # Reset + graphify extract --backend claude-cli (CLI Graphify no PATH)
 rbin-task-flow version-check # Verifica atualizações de modelos
 rbin-task-flow info          # Mostra informações
 rbin-task-flow check         # Roda lint/fix e build quando existirem
@@ -91,7 +91,7 @@ Após inicializar, use estes comandos na IA (Cursor/Claude/Codex) para gerenciar
 
 **Otimizar por plataforma:** [.task-flow/AI-PLATFORMS.md](.task-flow/AI-PLATFORMS.md) · [Claude](.task-flow/platforms/claude-code.md) · [Cursor](.task-flow/platforms/cursor.md) · [Codex](.task-flow/platforms/codex.md) · [Graphify](.task-flow/GRAPHIFY.md)
 
-**Graphify (opcional):** `rbin-task-flow init --graphify` configura coexistência e pode rodar `graphify extract` (CLI via `rbin-install-dev`).
+**Graphify (opcional):** `rbin-task-flow init --graphify` configura coexistência e roda `graphify extract . --backend claude-cli` (CLI via `rbin-install-dev`; usa assinatura Claude Code).
 
 **Claude Code / Cursor skills (v1.20+):** `init` copia 14 skills para `.claude/skills/` e `.cursor/skills/` — use `/task-flow-sync`, `/task-flow-run`, etc.
 
@@ -418,7 +418,7 @@ Para problemas ou perguntas:
 <a id="english"></a>
 # 🇬🇧 English
 
-> **v1.23.0** — Lower Cursor token use (2 always-on rules, standards checklist, skills). From **1.22**: `npm install -g rbin-task-flow@1.23` then `rbin-task-flow update`. [CHANGELOG](CHANGELOG.md) · [Release guide](RELEASE-1.23.0.md).
+> **v1.23.1** — Graphify `--graphify` defaults to `claude-cli` (no separate API key). From **1.23.0**: `npm install -g rbin-task-flow@1.23.1` then `rbin-task-flow update`. [CHANGELOG](CHANGELOG.md) · [Release guide](RELEASE-1.23.1.md).
 
 ## What Is This Project?
 
@@ -462,7 +462,7 @@ rbin-task-flow init --share-ai-config  # Commit .cursor/skills and rules with th
 rbin-task-flow update        # Update configs (keeps profile from .task-flow/install-meta.json)
 rbin-task-flow update --profile standard  # Install all .cursor/rules/*.mdc
 rbin-task-flow reset         # Reinstall Task Flow from scratch
-rbin-task-flow reset --graphify  # Reset + graphify extract (Graphify CLI on PATH)
+rbin-task-flow reset --graphify  # Reset + graphify extract --backend claude-cli (Graphify CLI on PATH)
 rbin-task-flow version-check # Check for model updates
 rbin-task-flow info          # Show information
 rbin-task-flow check         # Run lint/fix and build when available
@@ -476,7 +476,7 @@ After initializing, use these commands in your AI (Cursor/Claude/Codex) to autom
 
 **Per-platform optimization:** [index](.task-flow/AI-PLATFORMS.md) · [Claude](.task-flow/platforms/claude-code.md) · [Cursor](.task-flow/platforms/cursor.md) · [Codex](.task-flow/platforms/codex.md) · [Graphify](.task-flow/GRAPHIFY.md)
 
-**Graphify (optional):** `rbin-task-flow init --graphify` — cooperative setup + optional `graphify extract` (CLI from `rbin-install-dev`).
+**Graphify (optional):** `rbin-task-flow init --graphify` — cooperative setup + runs `graphify extract . --backend claude-cli` (CLI from `rbin-install-dev`; uses Claude Code subscription).
 
 **Claude / Cursor skills (v1.20+):** installs 14 skills — use `/task-flow-sync`, `/task-flow-run`, etc.
 

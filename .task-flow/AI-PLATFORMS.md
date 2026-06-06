@@ -70,7 +70,7 @@ Com o [Graphify](https://pypi.org/project/graphifyyy/) instalado (`rbin-install-
 - Regra **`.cursor/rules/graphify-task-flow.mdc`** — só quando `task-flow: run`, `think`, `review`, etc. precisam navegar o código (`alwaysApply: false`).
 - **`graphify-out/`** no `.gitignore`.
 - Rebaixa **`graphify.mdc`** upstream para `alwaysApply: false` se existir.
-- **`rbin-task-flow init --graphify`** — roda `graphify extract .` após o init.
+- **`rbin-task-flow init --graphify`** — roda `graphify extract . --backend claude-cli` após o init.
 
 Guia completo: [GRAPHIFY.md](GRAPHIFY.md).
 

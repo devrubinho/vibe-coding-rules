@@ -259,7 +259,7 @@ Cursor também pode ler `AGENTS.md` em alguns fluxos; no RBIN ele é focado em *
 | `rbin-task-flow init` | Copia rules + task-flow |
 | `rbin-task-flow update` | Atualiza rules; preserva `.internal/` |
 | `rbin-task-flow reset` | Recria `.task-flow` do zero |
-| `rbin-task-flow reset --graphify` | Reset + `graphify extract .` |
+| `rbin-task-flow reset --graphify` | Reset + `graphify extract . --backend claude-cli` |
 | `rbin-task-flow audit` | Lista arquivos **unstaged** (não substitui `task-flow: improve changes`) |
 
 O Agent executa o workflow; o CLI prepara arquivos.

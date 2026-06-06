@@ -31,7 +31,7 @@ Graphify ([graphifyy](https://pypi.org/project/graphifyyy/)) cria um **grafo de 
 1. Copia **`.cursor/rules/graphify-task-flow.mdc`** — `alwaysApply: false` (não compete com `task_work`, etc.).
 2. Adiciona **`graphify-out/`** ao `.gitignore`.
 3. Se existir **`.cursor/rules/graphify.mdc`** do `graphify cursor install` (upstream com `alwaysApply: true`), o instalador **desativa** `alwaysApply` para economizar contexto.
-4. Com **`--graphify`** em `init`, `update` ou **`reset`**, roda `graphify extract .` se o CLI estiver no PATH.
+4. Com **`--graphify`** em `init`, `update` ou **`reset`**, roda `graphify extract . --backend claude-cli` se o CLI estiver no PATH (usa assinatura Claude Code — sem API key separada).
 
 **Não** rodamos `graphify claude install` / `graphify cursor install` automaticamente — o install upstream força `graphify.mdc` always-on e incham `CLAUDE.md` / `AGENTS.md`.
 
@@ -87,9 +87,9 @@ task-flow: run next 2 — se graphify-out existir, graphify query "<módulo da s
 
 | Evento | Ação |
 |--------|------|
-| Primeiro setup | `graphify extract .` ou `rbin-task-flow init --graphify` |
+| Primeiro setup | `rbin-task-flow init --graphify` ou `graphify extract . --backend claude-cli` |
 | Reset completo (tasks + template + grafo) | `rbin-task-flow reset --graphify` |
-| Refactor grande após vários `run` | `graphify update .` ou `graphify extract .` |
+| Refactor grande após vários `run` | `graphify update .` ou `graphify extract . --backend claude-cli` |
 | `task-flow: update` | Reaplica `graphify-task-flow.mdc` e pode rebaixar `graphify.mdc` |
 
 ---
@@ -101,7 +101,8 @@ task-flow: run next 2 — se graphify-out existir, graphify query "<módulo da s
 | IA ignora `task-flow:` | Graphify não é a causa — verifique rules Task Flow |
 | Contexto cheio no Cursor | Confirme `graphify.mdc` não está `alwaysApply: true` |
 | `graphify: command not found` | Rode `rbin-install-dev` (módulo Graphify) |
-| Grafo desatualizado | `graphify extract .` de novo |
+| `no LLM API key found` ao rodar `graphify extract .` manual | Use `rbin-task-flow init --graphify` (roda `--backend claude-cli`) ou exporte uma API key / `--backend ollama` |
+| Grafo desatualizado | `graphify extract . --backend claude-cli` de novo |
 
 ---
 
