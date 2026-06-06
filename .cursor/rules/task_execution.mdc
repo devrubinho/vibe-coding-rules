@@ -19,6 +19,7 @@ alwaysApply: false
 | `task-flow: audit` | `@task-flow-audit` |
 | `task-flow: improve changes` | `@task-flow-improve-changes` |
 | `task-flow: review X` | `@task-flow-review` |
+| `task-flow: validate` | `@task-flow-validate` |
 | `task-flow: refactor X` | `@task-flow-refactor` |
 | `task-flow: estimate X` | `@task-flow-estimate` |
 | `task-flow: report X` | `@task-flow-report` |

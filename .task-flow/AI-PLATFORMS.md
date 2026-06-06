@@ -56,7 +56,7 @@ Detalhes dos comandos: [README.md](README.md).
 | `.codex/config.toml` | — | — | ✅ (opcional, preservado no update) |
 | `task-flow-cursor.mdc` | — | ✅ always-on | — |
 | `rbin-git-policy.mdc` | — | ✅ always-on | — |
-| `.claude/skills/` | ✅ (14 skills) | — | — |
+| `.claude/skills/` | ✅ (15 skills) | — | — |
 | `.cursor/skills/` | — | ✅ (espelho) | — |
 
 Por padrão, `.claude/`, `.cursor/`, `.task-flow/`, `CLAUDE.md` e `AGENTS.md` entram no **`.gitignore`** do projeto cliente. Para versionar skills/regras com o time, ajuste o ignore — veja a seção “Versionamento” em cada guia.

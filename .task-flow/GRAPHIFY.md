@@ -54,7 +54,7 @@ task-flow: check
 |-------------------|----------------|
 | `sync`, `status`, `estimate`, `report`, `generate flow` | Não |
 | `run next X`, `run N` | Sim, se `graphify-out/` existir |
-| `think`, `review` | Opcional |
+| `think`, `review`, `validate` | Opcional |
 | `audit`, `improve changes` | Opcional (estrutura); padrões = checklist `coding_standards.mdc` |
 | `check` | Não |
 

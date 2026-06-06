@@ -88,6 +88,20 @@ Rule: `.cursor/rules/task_review.mdc`
 
 ---
 
+## task-flow: validate
+
+1. Read `tasks.input.txt`, `tasks.json`, `status.json` — scope `all` or task ID(s).
+2. Thoroughly verify each subtask against codebase (`done` + `pending`).
+3. Revert false `done` → `pending` in `status.json`.
+4. Append lacunas as `- Description` to `tasks.input.txt` (no duplicates).
+5. Run sync workflow (section **Sync** in AGENTS.md).
+
+Rule: `.cursor/rules/task_validate.mdc`
+
+Unlike `think` (asks before add) or `review` (done only, asks before revert).
+
+---
+
 ## task-flow: refactor X
 
 Refactor task-related files: no behavior change, remove explanatory comments, keep section separators.

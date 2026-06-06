@@ -26,6 +26,7 @@ Verify: `rg 'alwaysApply: true' .cursor/rules` → only the two files above.
 | `task-flow: status` | `@task-flow-status` |
 | `task-flow: check` | `@task-flow-check` |
 | `task-flow: improve changes` | `@task-flow-improve-changes` |
+| `task-flow: validate` | `@task-flow-validate` |
 | Implement feature code | `@rbin-coding-standards` (explicit; checklist glob on `src/**`) |
 
 **Avoid:** `@task_work` (short fallback only — prefer `@task-flow-run`).

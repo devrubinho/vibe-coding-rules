@@ -36,6 +36,7 @@ No explanatory comments. Complex topics → `dev-logs/*.md`. Allowed: `// ──
 | `task-flow: improve changes` | `git diff --name-only HEAD` · `.cursor/rules/task_improve_changes.mdc` |
 | `task-flow: audit` | `.cursor/rules/task_audit.mdc` · checklist `coding_standards.mdc` (full: `.task-flow/docs/coding-standards-full.md` if needed) |
 | `task-flow: review X` | `.task-flow/CODEX.md` |
+| `task-flow: validate` | `.cursor/rules/task_validate.mdc` · then sync |
 | `task-flow: refactor X` | `.cursor/rules/task_refactor.mdc` |
 | `task-flow: estimate X` | `.task-flow/CODEX.md` |
 | `task-flow: report X` | `.task-flow/CODEX.md` |

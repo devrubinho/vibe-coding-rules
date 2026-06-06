@@ -2,6 +2,31 @@
 
 ## [Unreleased]
 
+## [1.24.0] - 2026-06-05
+
+**Minor release — comando `task-flow: validate` (verificação profunda + lacunas automáticas).**
+
+### Added
+
+- **`task-flow: validate`** — audita subtasks `done` e `pending` contra o código, reverte `done` falso, adiciona lacunas em `tasks.input.txt` e executa sync (sem perguntar).
+- **Skill** `@task-flow-validate` / `/task-flow-validate` · **regra** `task_validate.mdc`.
+- **15 skills** no `init` (antes 14).
+
+### Changed
+
+- Índices atualizados: `task-flow-cursor.mdc`, `CLAUDE.md`, `AGENTS.md`, `CODEX.md`, `README.md`, `GRAPHIFY.md`.
+- Cross-refs em `think`, `review` e `task_analysis.mdc` distinguindo `validate` vs `think` vs `review`.
+
+### Migration
+
+```bash
+npm install -g rbin-task-flow@1.24
+cd your-project
+rbin-task-flow update
+```
+
+Uso: `task-flow: validate` · `@task-flow-validate` · `/task-flow-validate`
+
 ## [1.23.1] - 2026-06-05
 
 **Patch release — Graphify `--graphify` usa Claude Code CLI por padrão.**

@@ -1,0 +1,99 @@
+---
+description: Deep-validates task-flow tasks against the codebase, fixes false done status, and appends missing gaps to tasks.input.txt. Use for task-flow validate, validate all, validar tasks, or verificar lacunas.
+alwaysApply: false
+---
+
+# task-flow: validate
+
+**Prefer:** `@task-flow-validate` · After changes: status is updated automatically; new lines trigger sync.
+
+**Not the same as:**
+- `task-flow: review` — only checks `done` subtasks; asks before status revert; does not add tasks.
+- `task-flow: think` — suggests tasks; **asks** before writing `tasks.input.txt`.
+
+## When to run
+
+User says `task-flow: validate`, `task-flow: validate X`, `task-flow: validate all`, `validar tasks`, `verificar lacunas`, `validate implementation gaps`, etc.
+
+Default scope when no ID: **`all`**.
+
+## Depth
+
+Use **thorough** reasoning: read each subtask `instructions`, `.task-flow/contexts/` when cited, verify files/tests/docs in the codebase — not a shallow grep. Optional: `graphify query "<module>"` per task area when `graphify-out/graph.json` exists.
+
+## Process
+
+### 1. Load
+
+- `.task-flow/tasks.input.txt` (lines `- ` only)
+- `.task-flow/.internal/tasks.json`, `status.json`
+- List `.task-flow/contexts/`
+
+### 2. Verify (scope: task X, X,Y, or all)
+
+For each task/subtask in scope:
+
+| Status | Check |
+|--------|--------|
+| `done` | Implementation exists and matches requirements (files, tests, docs per instructions) |
+| `pending` / `in_progress` | Whether code already partially or fully implements the subtask (status drift) |
+
+Record:
+
+- **Verified done** — correctly marked
+- **False done** — marked `done` but missing or incomplete
+- **Drift** — implemented in code but still `pending`
+- **Confirmed pending** — not implemented yet (expected)
+
+### 3. Lacunas (gaps)
+
+Find work not covered by current tasks:
+
+- Requirements from `done`/`pending` subtasks still missing in codebase
+- TODO/FIXME, missing tests, half-finished features, docs, wiring not listed in `tasks.input.txt`
+- Do **not** duplicate lines already in `tasks.input.txt` (match by meaning / `originalRequest`)
+
+### 4. Apply fixes (no ask — user invoked validate)
+
+1. **Status:** set false `done` → `pending` in `status.json`; optional drift `pending` → keep or note in report (do not auto-mark `done` without user run)
+2. **Input:** append new lacunas as `- Description` lines to `tasks.input.txt` (append only; never remove or edit existing lines)
+3. **Sync:** follow [task-flow-sync.mdc](mdc:.cursor/rules/task-flow-sync.mdc) — diff input, regen subtasks for new tasks, rebuild `tasks.status.md` Summary
+4. **Never** edit `.internal/` by hand except through sync-aligned updates to `status.json` for false-done fixes before sync
+
+### 5. Report
+
+```markdown
+## Task Flow Validate
+
+### Verified done
+- 1.2 Title — evidence (file paths)
+
+### False done → reverted to pending
+- 2.1 Title — what is missing
+
+### Lacunas added to tasks.input.txt
+- New line added: "- …"
+- (none)
+
+### Sync
+- N new task(s), M subtasks regenerated
+
+### Next
+- `task-flow: run next X` for pending work
+```
+
+## Natural language
+
+- `task-flow: validate` / `validate all`
+- `task-flow: validate 1` / `validate 2,3`
+- `validar tasks do task-flow`
+- `verificar lacunas e adicionar no task-flow`
+
+## Integration
+
+- Sync: [task-flow-sync.mdc](mdc:.cursor/rules/task-flow-sync.mdc)
+- Review (lighter): [task_review.mdc](mdc:.cursor/rules/task_review.mdc)
+- Think (suggest only): [task_analysis.mdc](mdc:.cursor/rules/task_analysis.mdc)
+- Git: [rbin-git-policy.mdc](mdc:.cursor/rules/rbin-git-policy.mdc)
+
+**Principle:** Validate = truth check + fill gaps. Done means done; missing work becomes new tasks automatically.

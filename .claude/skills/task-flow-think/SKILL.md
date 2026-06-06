@@ -14,4 +14,6 @@ disable-model-invocation: true
 
 Optional: `graphify query` on large repos before suggesting.
 
+For deep verify + auto-add lacunas (no ask): `@task-flow-validate` (`task-flow: validate`).
+
 Reference: `.cursor/rules/task_analysis.mdc` · Sync after confirm: `@task-flow-sync`

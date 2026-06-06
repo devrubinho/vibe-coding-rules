@@ -7,6 +7,8 @@ alwaysApply: false
 
 **Not sync.** For `task-flow: sync` use [task-flow-sync.mdc](mdc:.cursor/rules/task-flow-sync.mdc) or `@task-flow-sync`.
 
+**Not validate.** For deep verify + auto-add lacunas use [task_validate.mdc](mdc:.cursor/rules/task_validate.mdc) or `@task-flow-validate`.
+
 **Prefer:** `@task-flow-think` · After user adds lines: `@task-flow-sync`
 
 ## When to run

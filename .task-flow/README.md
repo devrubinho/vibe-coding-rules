@@ -27,6 +27,7 @@
 | `task-flow: run X,Y` | Executes multiple tasks (e.g., `task-flow: run 10,11`) |
 | `task-flow: run all` | Executes all tasks |
 | `task-flow: review X` | Reviews specific task(s) (e.g., `task-flow: review 1` or `task-flow: review 10,11` or `task-flow: review all`) |
+| `task-flow: validate` | Deep-validates tasks vs codebase, reverts false done, appends gaps to `tasks.input.txt`, syncs (default: all) |
 | `task-flow: refactor X` | Refactors specific task(s) (e.g., `task-flow: refactor 1` or `task-flow: refactor 10,11` or `task-flow: refactor all`) |
 | `task-flow: estimate X` | Estimates time for task X (e.g., `task-flow: estimate 1` or `task-flow: estimate 10,11`) |
 | `task-flow: report X` | Generates implementation report for task X (e.g., `task-flow: report 1` or `task-flow: report 10,11`) |
@@ -100,6 +101,16 @@ Reviews specific task(s) marked as "done" to verify they are actually completed.
 - `task-flow: review 1` → Reviews task 1
 - `task-flow: review 10,11` → Reviews tasks 10 and 11
 - `task-flow: review all` → Reviews all tasks
+
+### `task-flow: validate`
+Deep validation: checks all subtasks (done and pending) against the codebase, reverts falsely marked `done`, discovers lacunas (missing tests, TODOs, incomplete work), **appends** them to `tasks.input.txt`, and runs sync. Unlike `think` (asks before add) or `review` (done only, asks before revert).
+
+**Examples:**
+- `task-flow: validate` → Validates all tasks
+- `task-flow: validate 1` → Validates task 1 only
+- `task-flow: validate 2,3` → Validates tasks 2 and 3
+
+**Invoke:** `@task-flow-validate` (Cursor) · `/task-flow-validate` (Claude)
 
 ### `task-flow: refactor X`
 Refactors code from specific task(s). Removes explanatory comments, improves code without changing functionality.

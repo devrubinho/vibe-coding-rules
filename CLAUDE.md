@@ -21,6 +21,7 @@
 | Audit repo | `/task-flow-audit` |
 | Audit diff only | `/task-flow-improve-changes` |
 | Verify done | `/task-flow-review` |
+| Validate + fill gaps | `/task-flow-validate` |
 | Refactor task code | `/task-flow-refactor` |
 | Estimate hours | `/task-flow-estimate` |
 | Implementation report | `/task-flow-report` |

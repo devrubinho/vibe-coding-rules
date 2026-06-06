@@ -81,6 +81,7 @@ alwaysApply: false
 
 - **Integration:**
   - Works with [task-flow-cursor.mdc](mdc:.cursor/rules/task-flow-cursor.mdc) / `@task-flow-review`
+  - For verify + auto-add lacunas + sync: [task_validate.mdc](mdc:.cursor/rules/task_validate.mdc) / `@task-flow-validate`
   - Respects [rbin-git-policy.mdc](mdc:.cursor/rules/rbin-git-policy.mdc) — never commit automatically
 
 - **Principle:**

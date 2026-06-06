@@ -33,7 +33,7 @@
 <a id="português"></a>
 # 🇧🇷 Português
 
-> **v1.23.1** — Graphify `--graphify` usa `claude-cli` por padrão (sem API key extra). De **1.23.0**: `npm install -g rbin-task-flow@1.23.1` e `rbin-task-flow update`. [CHANGELOG](CHANGELOG.md) · [Publicação](RELEASE-1.23.1.md).
+> **v1.24.0** — Novo `task-flow: validate` (auditoria profunda + lacunas automáticas). De **1.23.x**: `npm install -g rbin-task-flow@1.24` e `rbin-task-flow update`. [CHANGELOG](CHANGELOG.md) · [Publicação](RELEASE-1.24.0.md).
 
 ## O Que É Este Projeto?
 
@@ -93,13 +93,13 @@ Após inicializar, use estes comandos na IA (Cursor/Claude/Codex) para gerenciar
 
 **Graphify (opcional):** `rbin-task-flow init --graphify` configura coexistência e roda `graphify extract . --backend claude-cli` (CLI via `rbin-install-dev`; usa assinatura Claude Code).
 
-**Claude Code / Cursor skills (v1.20+):** `init` copia 14 skills para `.claude/skills/` e `.cursor/skills/` — use `/task-flow-sync`, `/task-flow-run`, etc.
+**Claude Code / Cursor skills (v1.20+):** `init` copia 15 skills para `.claude/skills/` e `.cursor/skills/` — use `/task-flow-sync`, `/task-flow-run`, `/task-flow-validate`, etc.
 
 **Codex (v1.21+):** `AGENTS.md` com sync/run embutidos, `.task-flow/CODEX.md` sob demanda, `.codex/config.toml` (64 KiB).
 
 **Cursor (v1.23+):** `task-flow-cursor.mdc` + `rbin-git-policy.mdc` (2 always-on) + skills — ver `.task-flow/CURSOR.md`.
 
-**Perfil minimal:** `init --profile minimal` instala só as 2 regras always-on e as 14 skills; workflows via `@task-flow-*` (sem `task_work`, `coding_standards` glob, etc.). `standard` (padrão) copia todas as regras `.cursor/rules/`.
+**Perfil minimal:** `init --profile minimal` instala só as 2 regras always-on e as 15 skills; workflows via `@task-flow-*` (sem `task_work`, `coding_standards` glob, etc.). `standard` (padrão) copia todas as regras `.cursor/rules/`.
 
 **Compartilhar com o time:** `init --share-ai-config` não ignora `.cursor/skills/` nem `.cursor/rules/` no `.gitignore` (só `.cursor/settings.json` e overrides locais). Padrão: `.cursor/` inteiro ignorado — menos ruído no repo, config local por dev.
 
@@ -116,6 +116,7 @@ Após inicializar, use estes comandos na IA (Cursor/Claude/Codex) para gerenciar
 | `task-flow: run X,Y` | **Completa** múltiplas tarefas | Executa tarefas separadas por vírgula (ex: `task-flow: run 10,11`) |
 | `task-flow: run all` | **Completa** todas as tarefas | Executa todas as tarefas pendentes |
 | `task-flow: review X` | **Garante** qualidade do trabalho | Verifica tarefas específicas (ex: `task-flow: review 1` ou `task-flow: review 10,11` ou `task-flow: review all`) |
+| `task-flow: validate` | **Valida** implementação e **preenche lacunas** | Auditoria profunda: reverifica done/pending, corrige status falso, adiciona lacunas em `tasks.input.txt` e faz sync |
 | `task-flow: refactor X` | **Melhora** código sem quebrar | Refatora tarefas específicas (ex: `task-flow: refactor 1` ou `task-flow: refactor 10,11` ou `task-flow: refactor all`) |
 | `task-flow: estimate X` | **Estima** tempo para gestão | Calcula estimativa de tempo (ex: `task-flow: estimate 1` ou `task-flow: estimate 10,11`) |
 | `task-flow: report X` | **Documenta** implementação | Gera relatório detalhado (ex: `task-flow: report 1` ou `task-flow: report 10,11`) |
@@ -418,7 +419,7 @@ Para problemas ou perguntas:
 <a id="english"></a>
 # 🇬🇧 English
 
-> **v1.23.1** — Graphify `--graphify` defaults to `claude-cli` (no separate API key). From **1.23.0**: `npm install -g rbin-task-flow@1.23.1` then `rbin-task-flow update`. [CHANGELOG](CHANGELOG.md) · [Release guide](RELEASE-1.23.1.md).
+> **v1.24.0** — New `task-flow: validate` (deep audit + auto gap fill). From **1.23.x**: `npm install -g rbin-task-flow@1.24` then `rbin-task-flow update`. [CHANGELOG](CHANGELOG.md) · [Release guide](RELEASE-1.24.0.md).
 
 ## What Is This Project?
 
@@ -478,11 +479,11 @@ After initializing, use these commands in your AI (Cursor/Claude/Codex) to autom
 
 **Graphify (optional):** `rbin-task-flow init --graphify` — cooperative setup + runs `graphify extract . --backend claude-cli` (CLI from `rbin-install-dev`; uses Claude Code subscription).
 
-**Claude / Cursor skills (v1.20+):** installs 14 skills — use `/task-flow-sync`, `/task-flow-run`, etc.
+**Claude / Cursor skills (v1.20+):** installs 15 skills — use `/task-flow-sync`, `/task-flow-run`, `/task-flow-validate`, etc.
 
 **Codex (v1.21+):** optimized `AGENTS.md`, `.task-flow/CODEX.md`, `.codex/config.toml`.
 
-**Cursor (v1.23+):** 2 always-on rules + 14 skills — `@task-flow-sync`, `@task-flow-run`.
+**Cursor (v1.23+):** 2 always-on rules + 15 skills — `@task-flow-sync`, `@task-flow-run`, `@task-flow-validate`.
 
 **Minimal profile:** `init --profile minimal` copies only `task-flow-cursor.mdc` and `rbin-git-policy.mdc` plus skills; use `@task-flow-*` for workflows. `standard` (default) copies all rules under `.cursor/rules/`.
 
@@ -501,6 +502,7 @@ After initializing, use these commands in your AI (Cursor/Claude/Codex) to autom
 | `task-flow: run X,Y` | **Complete** multiple tasks | Executes comma-separated tasks (e.g., `task-flow: run 10,11`) |
 | `task-flow: run all` | **Complete** all tasks | Executes all pending tasks |
 | `task-flow: review X` | **Ensure** work quality | Verifies specific tasks (e.g., `task-flow: review 1` or `task-flow: review 10,11` or `task-flow: review all`) |
+| `task-flow: validate` | **Validate** implementation and **fill gaps** | Deep audit: recheck done/pending, fix false done, append gaps to `tasks.input.txt`, then sync |
 | `task-flow: refactor X` | **Improve** code without breaking | Refactors specific tasks (e.g., `task-flow: refactor 1` or `task-flow: refactor 10,11` or `task-flow: refactor all`) |
 | `task-flow: estimate X` | **Estimate** time for management | Calculates time estimate (e.g., `task-flow: estimate 1` or `task-flow: estimate 10,11`) |
 | `task-flow: report X` | **Document** implementation | Generates detailed report (e.g., `task-flow: report 1` or `task-flow: report 10,11`) |

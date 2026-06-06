@@ -163,6 +163,7 @@ Codex prefere `AGENTS.override.md` sobre `AGENTS.md` **no mesmo nível**.
 | `task-flow: improve changes` | `git diff --name-only HEAD` · checklist `coding_standards.mdc` nos paths alterados |
 | `task-flow: check` | `Rode lint:fix e build do package.json; corrija até passar` |
 | `task-flow: review 1` | `task_review.mdc — verifique se task 1 done está realmente implementada` |
+| `task-flow: validate` | `task_validate.mdc — valide todas as tasks, reverta false done, adicione lacunas em tasks.input.txt e sync` |
 | `task-flow: estimate 1` | `task_estimate.mdc para task 1` |
 | `task-flow: report 1` | `task_report.mdc — task 1 deve estar done` |
 | `task-flow: generate flow` | `task_generate_flow.mdc — preencher tasks.flow.md` |
