@@ -65,7 +65,7 @@ projeto/
 └── .cursor/rules/            # Lidos quando AGENTS.md / CODEX.md indicam
 ```
 
-**v1.21+:** `sync` e `run` vêm **resumidos no AGENTS.md** (~dentro do orçamento 32–64 KiB). Demais comandos → ler `.task-flow/CODEX.md` ou `.mdc` indicado.
+**v1.21+:** `sync` e `run` vêm **resumidos no AGENTS.md** (~dentro do orçamento 32–64 KiB). Demais comandos → ler `.task-flow/guides/CODEX.md` ou `.mdc` indicado.
 
 Verifique após init:
 
@@ -324,10 +324,10 @@ Codex **não** substitui `task-flow: sync` — isso é trabalho do agente lendo 
 ## 13. Checklist de maturidade Codex + Task Flow
 
 - [x] `AGENTS.md` otimizado após `init` (sync/run embutidos + tabela)
-- [x] `.task-flow/CODEX.md` para workflows sob demanda
+- [x] `.task-flow/guides/CODEX.md` para workflows sob demanda
 - [x] `.codex/config.toml` com `project_doc_max_bytes = 65536`
 - [ ] Tamanho `AGENTS.md` < ~28 KiB se não usar config.toml
-- [ ] Prompts citam `AGENTS.md` + `.task-flow/CODEX.md` para `run`
+- [ ] Prompts citam `AGENTS.md` + `.task-flow/guides/CODEX.md` para `run`
 - [ ] `improve changes` + `check` antes de PR
 - [ ] `AGENTS.md` em subpastas de monorepo se necessário
 
@@ -351,10 +351,10 @@ pnpm lint:fix && pnpm build && pnpm test
 Nunca executar git write. Sugerir Conventional Commits + Task/Subtask ID.
 
 ## Coding standards
-Ao implementar código, seguir o checklist em `.cursor/rules/coding_standards.mdc`; exemplos completos em `.task-flow/docs/coding-standards-full.md` (só seções necessárias).
+Ao implementar código, seguir o checklist em `.cursor/rules/coding_standards.mdc`; exemplos completos em `.task-flow/guides/coding-standards-full.md` (só seções necessárias).
 
 ## Mais detalhe
-- Task Flow por plataforma: `.task-flow/platforms/codex.md`
+- Task Flow por plataforma: `.task-flow/guides/platforms/codex.md`
 - Comandos: `.task-flow/README.md`
 ```
 

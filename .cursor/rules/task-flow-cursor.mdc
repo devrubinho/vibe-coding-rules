@@ -14,6 +14,7 @@ alwaysApply: true
 | `.task-flow/.internal/tasks.json` | Definitions |
 | `.task-flow/.internal/status.json` | Status source of truth |
 | `.task-flow/contexts/` | Specs / mockups |
+| `.task-flow/guides/` | Platform guides, Graphify, standards, reports |
 
 ## Prefer skills (`.cursor/skills/`)
 
@@ -43,10 +44,10 @@ Never write git — user runs all commits. Policy: [rbin-git-policy.mdc](mdc:.cu
 
 ## Graphify (optional)
 
-On `run` / `think`, if `graphify-out/` exists: `graphify query` before repo-wide grep. Rule: `graphify-task-flow`. Guide: `.task-flow/GRAPHIFY.md`.
+On `run` / `think`, if `graphify-out/` exists: `graphify query` before repo-wide grep. Rule: `graphify-task-flow`. Guide: `.task-flow/guides/GRAPHIFY.md`.
 
 ## More detail
 
-- Workflows: `.task-flow/CURSOR.md`
-- Full guide: `.task-flow/platforms/cursor.md`
-- Codex parity: `.task-flow/CODEX.md`
+- Workflows: `.task-flow/guides/CURSOR.md`
+- Full guide: `.task-flow/guides/platforms/cursor.md`
+- Codex parity: `.task-flow/guides/CODEX.md`

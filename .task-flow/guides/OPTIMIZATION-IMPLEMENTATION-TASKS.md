@@ -92,7 +92,7 @@ Task 10–13 (P2) ───────────► após P0 completo
 
 **Instruções:**
 1. Criar `.task-flow/docs/` se não existir.
-2. Copiar corpo atual de `.cursor/rules/coding_standards.mdc` (sem frontmatter) para `.task-flow/docs/coding-standards-full.md`.
+2. Copiar corpo atual de `.cursor/rules/coding_standards.mdc` (sem frontmatter) para `.task-flow/guides/coding-standards-full.md`.
 3. Adicionar cabeçalho no full doc: “Carregar sob demanda — audit profundo, dúvidas de arquitetura; não colar no chat inteiro.”
 
 **Critério de aceite:** `coding-standards-full.md` ≥ linhas do antigo corpo; nenhuma seção crítica perdida.
@@ -105,7 +105,7 @@ Task 10–13 (P2) ───────────► após P0 completo
 
 **Instruções:**
 1. Manter frontmatter: `alwaysApply: false`, `globs: src/**,app/**`, `description` clara.
-2. Corpo **80–120 linhas**: estrutura `app/features/shared`; app thin; page orchestrator; service+use-case; RHF+zod; `cn()`; sem `any`; sem raw button/input; naming suffixes (tabela compacta); link `mdc:.task-flow/docs/coding-standards-full.md` para detalhes.
+2. Corpo **80–120 linhas**: estrutura `app/features/shared`; app thin; page orchestrator; service+use-case; RHF+zod; `cn()`; sem `any`; sem raw button/input; naming suffixes (tabela compacta); link `mdc:.task-flow/guides/coding-standards-full.md` para detalhes.
 3. Remover exemplos de código longos do `.mdc` (ficam no full doc).
 
 **Critério de aceite:** `wc -l .cursor/rules/coding_standards.mdc` ≤ 130; `wc -c` ≤ 6 KB.
@@ -163,7 +163,7 @@ Task 10–13 (P2) ───────────► após P0 completo
 
 **Instruções:**
 1. `.claude/skills/rbin-coding-standards/SKILL.md`: `disable-model-invocation: true`.
-2. Steps: (1) aplicar checklist em `coding_standards.mdc`; (2) só se ambíguo, ler `.task-flow/docs/coding-standards-full.md` seções relevantes — **não** colar arquivo inteiro no chat.
+2. Steps: (1) aplicar checklist em `coding_standards.mdc`; (2) só se ambíguo, ler `.task-flow/guides/coding-standards-full.md` seções relevantes — **não** colar arquivo inteiro no chat.
 3. `reference.md`: paths atualizados para checklist + full doc.
 
 **Critério de aceite:** skill não referencia “ler coding_standards.mdc inteiro” como passo 1.
@@ -215,7 +215,7 @@ Task 10–13 (P2) ───────────► após P0 completo
 **Instruções:**
 1. `task-flow-audit`, `task-flow-improve-changes`, `task-flow-sync` SKILL.md: paths checklist + full.
 2. `AGENTS.md` tabela Commands: audit/implement → checklist; full path explícito opcional.
-3. `.task-flow/CODEX.md`: mesma distinção.
+3. `.task-flow/guides/CODEX.md`: mesma distinção.
 
 **Critério de aceite:** AGENTS.md não manda “ler coding_standards.mdc inteiro” sem qualificador.
 
@@ -362,4 +362,4 @@ Após sync, o gerador de subtasks pode expandir cada linha usando as **Instruç�
 
 ---
 
-*Referência: [OPTIMIZATION-PLAN.md](OPTIMIZATION-PLAN.md) · Índice: [README.md](README.md)*
+*Referência: [OPTIMIZATION-PLAN.md](OPTIMIZATION-PLAN.md) · Índice: [README.md](../README.md)*

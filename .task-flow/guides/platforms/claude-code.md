@@ -344,7 +344,7 @@ Durante **`task-flow: run`**, use `/graphify` ou `graphify query` para achar mó
 
 - [Claude Code — Skills](https://code.claude.com/docs/en/skills)
 - [Agent Skills open standard](https://agentskills.io/) (interoperável com Cursor)
-- Comandos Task Flow: [../README.md](../README.md)
+- Comandos Task Flow: [../../README.md](../../README.md)
 - Regras completas: `../../.cursor/rules/`
 
 ---

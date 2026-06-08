@@ -120,7 +120,7 @@ Rule: `.cursor/rules/task_estimate.mdc`
 
 ## task-flow: report X
 
-Verify task done; write `.task-flow/docs/task-X-implementation.md`.
+Verify task done; write `.task-flow/guides/reports/task-X-implementation.md`.
 
 Rule: `.cursor/rules/task_report.mdc`
 
@@ -136,13 +136,13 @@ Rule: `.cursor/rules/task_generate_flow.mdc`
 
 ## Implementing code (any subtask)
 
-Follow the checklist in `.cursor/rules/coding_standards.mdc`. For examples/Nest: read sections of `.task-flow/docs/coding-standards-full.md` only.
+Follow the checklist in `.cursor/rules/coding_standards.mdc`. For examples/Nest: read sections of `.task-flow/guides/coding-standards-full.md` only.
 
 ---
 
 ## Graphify (optional)
 
-Only during `run` / `think` when `graphify-out/` exists. See `.task-flow/GRAPHIFY.md`. Does not replace status updates.
+Only during `run` / `think` when `graphify-out/` exists. See `.task-flow/guides/GRAPHIFY.md`. Does not replace status updates.
 
 ---
 

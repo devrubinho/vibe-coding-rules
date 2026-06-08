@@ -34,8 +34,8 @@ Natural language `task-flow: …` works the same. Details: [.task-flow/README.md
 ## Anti-patterns (save context)
 
 - Prefer **`/task-flow-run`** (or `@task-flow-run`) for executing subtasks — avoid `@task_work` plus duplicate `.cursor/rules/task_work.mdc` in the same turn.
-- Do **not** load `.task-flow/docs/coding-standards-full.md` unless the user asks for depth; use `/rbin-coding-standards` checklist or `coding_standards.mdc` for normal implementation.
-- Cursor users: see [.task-flow/CURSOR.md](.task-flow/CURSOR.md) for always-on vs skills (`@task-flow-*`).
+- Do **not** load `.task-flow/guides/coding-standards-full.md` unless the user asks for depth; use `/rbin-coding-standards` checklist or `coding_standards.mdc` for normal implementation.
+- Cursor users: see [.task-flow/guides/CURSOR.md](.task-flow/guides/CURSOR.md) for always-on vs skills (`@task-flow-*`).
 
 ## Git
 
@@ -43,7 +43,7 @@ Natural language `task-flow: …` works the same. Details: [.task-flow/README.md
 
 ## Graphify (optional)
 
-During `/task-flow-run`, if `graphify-out/` exists, use `graphify query` before broad search. See [.task-flow/GRAPHIFY.md](.task-flow/GRAPHIFY.md).
+During `/task-flow-run`, if `graphify-out/` exists, use `graphify query` before broad search. See [.task-flow/guides/GRAPHIFY.md](.task-flow/guides/GRAPHIFY.md).
 
 ## Cursor rules (reference)
 
@@ -51,9 +51,9 @@ Full procedures also live in `.cursor/rules/` (shared with Cursor). Claude Code 
 
 ## Other platforms
 
-- Index: [.task-flow/AI-PLATFORMS.md](.task-flow/AI-PLATFORMS.md)
-- Claude: [.task-flow/platforms/claude-code.md](.task-flow/platforms/claude-code.md)
-- Codex: [AGENTS.md](AGENTS.md) · [.task-flow/CODEX.md](.task-flow/CODEX.md)
+- Index: [.task-flow/guides/AI-PLATFORMS.md](.task-flow/guides/AI-PLATFORMS.md)
+- Claude: [.task-flow/guides/platforms/claude-code.md](.task-flow/guides/platforms/claude-code.md)
+- Codex: [AGENTS.md](AGENTS.md) · [.task-flow/guides/CODEX.md](.task-flow/guides/CODEX.md)
 
 ## Models
 

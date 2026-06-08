@@ -10,7 +10,7 @@ Os comandos `task-flow: …` são **os mesmos** em Claude Code, Cursor e Codex. 
 |------------|------|------------------|----------------------|
 | **Claude Code** | [platforms/claude-code.md](platforms/claude-code.md) | `CLAUDE.md` + `.claude/skills/*/SKILL.md` | **Skills no `init`** — `/task-flow-run`, etc. |
 | **Cursor** | [platforms/cursor.md](platforms/cursor.md) | `task-flow-cursor.mdc` + `rbin-git-policy.mdc` + skills | **Otimizado v1.23** — 2 always-on + `@task-flow-*` |
-| **OpenAI Codex** | [platforms/codex.md](platforms/codex.md) | `AGENTS.md` + `.task-flow/CODEX.md` + `.codex/config.toml` | **Otimizado v1.21** — sync/run no AGENTS.md |
+| **OpenAI Codex** | [platforms/codex.md](platforms/codex.md) | `AGENTS.md` + `.task-flow/guides/CODEX.md` + `.codex/config.toml` | **Otimizado v1.21** — sync/run no AGENTS.md |
 
 ---
 
@@ -37,7 +37,7 @@ Os comandos `task-flow: …` são **os mesmos** em Claude Code, Cursor e Codex. 
 5. `task-flow: check`
 6. **Você** faz `git commit` (a IA só sugere)
 
-Detalhes dos comandos: [README.md](README.md).
+Detalhes dos comandos: [README.md](../README.md).
 
 ---
 
@@ -49,9 +49,9 @@ Detalhes dos comandos: [README.md](README.md).
 | `.cursor/rules/` | leitura manual | ✅ auto | leitura manual |
 | `CLAUDE.md` | ✅ | — | — |
 | `AGENTS.md` | — | — | ✅ |
-| `.task-flow/CODEX.md` | — | — | ✅ |
-| `.task-flow/CURSOR.md` | — | ✅ | — |
-| `.task-flow/docs/coding-standards-full.md` | on demand | on demand (sections only) | on demand |
+| `.task-flow/guides/CODEX.md` | — | — | ✅ |
+| `.task-flow/guides/CURSOR.md` | — | ✅ | — |
+| `.task-flow/guides/coding-standards-full.md` | on demand | on demand (sections only) | on demand |
 | [OPTIMIZATION-PLAN.md](OPTIMIZATION-PLAN.md) | — | token roadmap | — |
 | `.codex/config.toml` | — | — | ✅ (opcional, preservado no update) |
 | `task-flow-cursor.mdc` | — | ✅ always-on | — |

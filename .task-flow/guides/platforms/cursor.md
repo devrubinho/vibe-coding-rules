@@ -89,7 +89,7 @@ Confirme no projeto: `rg 'alwaysApply: true' .cursor/rules` → deve listar **ap
 | `cursor_rules.mdc` | formato `.mdc` | **Glob** `.cursor/rules/**` |
 | `self_improve.mdc` | evoluir regras | Manual `@self_improve` |
 
-**Doc (não é regra):** `.task-flow/docs/coding-standards-full.md` — seções sob demanda; nunca colar inteiro no chat.
+**Doc (não é regra):** `.task-flow/guides/coding-standards-full.md` — seções sob demanda; nunca colar inteiro no chat.
 
 ### Otimização P0 — implementada
 
@@ -325,7 +325,7 @@ Com Graphify instalado (`rbin-install-dev`), o Task Flow traz **`graphify-task-f
 
 - [Cursor — Rules](https://cursor.com/docs/context/rules)
 - [Agent Skills standard](https://agentskills.io/)
-- Comandos: [../README.md](../README.md)
+- Comandos: [../../README.md](../../README.md)
 - Claude (skills espelhadas): [claude-code.md](claude-code.md)
 
 ---

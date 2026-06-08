@@ -69,7 +69,7 @@ task-flow: run next 2 — se graphify-out existir, graphify query "<módulo da s
 ## Claude Code
 
 - Use **`/graphify`** ou `graphify query` **durante** `task-flow: run`, não no lugar de atualizar status.
-- Se já rodou `graphify claude install` no passado: o hook PreToolUse pode ajudar; evite duplicar parágrafos longos no `CLAUDE.md` — priorize [.task-flow/platforms/claude-code.md](platforms/claude-code.md).
+- Se já rodou `graphify claude install` no passado: o hook PreToolUse pode ajudar; evite duplicar parágrafos longos no `CLAUDE.md` — priorize [platforms/claude-code.md](platforms/claude-code.md).
 
 ## Cursor
 
@@ -79,7 +79,7 @@ task-flow: run next 2 — se graphify-out existir, graphify query "<módulo da s
 ## Codex
 
 - Graphify não entra no `AGENTS.md` automaticamente (limite 32 KiB).
-- No prompt: cite `.task-flow/GRAPHIFY.md` + `graphify query` ao executar `run`.
+- No prompt: cite `.task-flow/guides/GRAPHIFY.md` + `graphify query` ao executar `run`.
 
 ---
 
@@ -109,5 +109,5 @@ task-flow: run next 2 — se graphify-out existir, graphify query "<módulo da s
 ## Referências
 
 - [AI-PLATFORMS.md](AI-PLATFORMS.md) — índice Claude / Cursor / Codex
-- [README.md](README.md) — comandos Task Flow
+- [README.md](../README.md) — comandos Task Flow
 - Graphify CLI: `graphify --help`

@@ -5,7 +5,7 @@
 | Doc | Path | When |
 |-----|------|------|
 | **Checklist** (default) | `.cursor/rules/coding_standards.mdc` | Every implementation; glob on `src/**`, `app/**` in Cursor |
-| **Full reference** (sections only) | `.task-flow/docs/coding-standards-full.md` | Nest/Prisma detail, long examples, ESLint table, DataHandler, providers |
+| **Full reference** (sections only) | `.task-flow/guides/coding-standards-full.md` | Nest/Prisma detail, long examples, ESLint table, DataHandler, providers |
 
 ## Checklist essentials
 

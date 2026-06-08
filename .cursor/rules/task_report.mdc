@@ -12,7 +12,7 @@ alwaysApply: false
     - **READ**: `.task-flow/.internal/status.json` to verify task is completed
     - **ANALYZE**: Codebase changes related to the task (git history, file changes)
     - **GENERATE**: Markdown report documenting what was implemented
-    - **SAVE**: Report to `.task-flow/docs/task-X-implementation.md`
+    - **SAVE**: Report to `.task-flow/guides/reports/task-X-implementation.md`
 
 - **Report Generation Rules:**
   1. **Verify Completion**: Task must be marked as "done" in status.json (all subtasks completed)
@@ -23,9 +23,9 @@ alwaysApply: false
      - Code changes summary
      - Testing information (if applicable)
      - Notes and considerations
-  3. **File Location**: `.task-flow/docs/task-X-implementation.md`
+  3. **File Location**: `.task-flow/guides/reports/task-X-implementation.md`
   4. **File Naming**: `task-{taskId}-implementation.md` (e.g., `task-1-implementation.md`)
-  5. **Directory Creation**: Create `.task-flow/docs/` if it doesn't exist
+  5. **Directory Creation**: Create `.task-flow/guides/reports/` if it doesn't exist
 
 - **Report Template:**
   ```markdown
@@ -93,7 +93,7 @@ alwaysApply: false
   2. Verify task 1 is completed
   3. Analyze codebase for changes related to task 1
   4. Generate markdown report
-  5. Save to .task-flow/docs/task-1-implementation.md
+  5. Save to .task-flow/guides/reports/task-1-implementation.md
   6. Show confirmation message
   ```
 
@@ -105,7 +105,7 @@ alwaysApply: false
 - **Integration:**
   - Works with [task-flow-cursor.mdc](mdc:.cursor/rules/task-flow-cursor.mdc) / `@task-flow-report`
   - Uses task data from `.task-flow/.internal/tasks.json` and `.task-flow/.internal/status.json`
-  - Reports are stored in `.task-flow/docs/` directory
+  - Reports are stored in `.task-flow/guides/reports/` directory
   - Can reference git history for implementation details
 
 - **Principle:**

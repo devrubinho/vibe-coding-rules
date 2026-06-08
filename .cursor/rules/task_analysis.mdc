@@ -35,7 +35,7 @@ User says `task-flow: think`, `suggest tasks`, `check for new tasks`, `analyze c
 
 ## Optional roadmap
 
-For package improvements see [.task-flow/OPTIMIZATION-PLAN.md](mdc:.task-flow/OPTIMIZATION-PLAN.md) — not part of think unless user asks.
+For package improvements see [.task-flow/guides/OPTIMIZATION-PLAN.md](mdc:.task-flow/guides/OPTIMIZATION-PLAN.md) — not part of think unless user asks.
 
 ## Integration
 

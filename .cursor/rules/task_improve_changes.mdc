@@ -7,7 +7,7 @@ alwaysApply: false
 
 When the user runs `task-flow: improve changes`:
 
-1. **Audit current changes only**: Do the **same as** [task-flow: audit](mdc:.cursor/rules/task_audit.mdc) (score against the [coding_standards.mdc](mdc:.cursor/rules/coding_standards.mdc) checklist; [full doc](mdc:.task-flow/docs/coding-standards-full.md) only if needed), but **restricted to files that were changed and not yet committed**.
+1. **Audit current changes only**: Do the **same as** [task-flow: audit](mdc:.cursor/rules/task_audit.mdc) (score against the [coding_standards.mdc](mdc:.cursor/rules/coding_standards.mdc) checklist; [full doc](mdc:.task-flow/guides/coding-standards-full.md) only if needed), but **restricted to files that were changed and not yet committed**.
 2. **Do not run project checks here**: Lint fix and build now belong to [task-flow: check](mdc:.cursor/rules/task_check.mdc).
 
 ---

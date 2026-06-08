@@ -70,7 +70,7 @@ Estimativa ~4 caracteres/token.
 
 ### 4.2 `coding_standards.mdc` — ✅ resolvido (P0.2)
 
-- **Checklist** (~100 linhas, glob `src/**`) + **full** em `.task-flow/docs/coding-standards-full.md` sob demanda.
+- **Checklist** (~100 linhas, glob `src/**`) + **full** em `.task-flow/guides/coding-standards-full.md` sob demanda.
 - Skill `rbin-coding-standards`: `disable-model-invocation: true`; lê seções do full doc só se ambíguo.
 
 ### 4.3 Duplicação skill + regra no `run` — parcial (P0.3 ✅)
@@ -128,7 +128,7 @@ Estimativa ~4 caracteres/token.
 | # | Ação | Arquivos / notas | Status |
 |---|------|------------------|--------|
 | P0.1 | Fundir `git_control` + `commit_practices` em uma regra always (~70–90 linhas) | `.cursor/rules/rbin-git-policy.mdc` ou nome equivalente; remover always duplicado | [x] |
-| P0.2 | Dividir standards: **checklist** (glob) + **full** (sob demanda) | `coding_standards.mdc` enxuto; `.task-flow/docs/coding-standards-full.md` com conteúdo atual | [x] |
+| P0.2 | Dividir standards: **checklist** (glob) + **full** (sob demanda) | `coding_standards.mdc` enxuto; `.task-flow/guides/coding-standards-full.md` com conteúdo atual | [x] |
 | P0.3 | Enxugar `task_work.mdc` → pointer para `@task-flow-run` / `workflow.md` | ~40 linhas máx. | [x] |
 | P0.4 | Enxugar `task_execution.mdc` → pointer para `task-flow-cursor` + skills | Evitar índice duplicado de `CLAUDE.md` | [x] |
 | P0.5 | `rbin-coding-standards`: `disable-model-invocation: true` | `.claude/skills/` + cópia `.cursor/skills/` | [x] |
@@ -163,7 +163,7 @@ Estimativa ~4 caracteres/token.
 
 ```text
 .cursor/rules/coding_standards.mdc     # ~80–120 linhas: checklist + links
-.task-flow/docs/coding-standards-full.md   # conteúdo atual (exemplos, Nest, RHF…)
+.task-flow/guides/coding-standards-full.md   # conteúdo atual (exemplos, Nest, RHF…)
 .claude/skills/rbin-coding-standards/
   SKILL.md          # aponta checklist + “read full doc if ambiguous”
   reference.md      # já existe; alinhar paths

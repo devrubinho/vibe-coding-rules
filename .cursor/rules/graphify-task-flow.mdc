@@ -12,7 +12,7 @@ alwaysApply: false
   - **`task-flow: think`:** Optional `graphify query` for gap analysis on large repos.
   - **`task-flow: review X`:** Optional `graphify affected "<symbol>"` to verify impact surface.
   - **`task-flow: validate`:** Optional `graphify query` per task area before verifying implementation; then append lacunas + sync per `task_validate.mdc`.
-  - **`task-flow: audit`:** Graphify is structural only; scoring uses [coding_standards.mdc](mdc:.cursor/rules/coding_standards.mdc) checklist. Deep dive: sections of [coding-standards-full.md](mdc:.task-flow/docs/coding-standards-full.md) only if user asks for depth.
+  - **`task-flow: audit`:** Graphify is structural only; scoring uses [coding_standards.mdc](mdc:.cursor/rules/coding_standards.mdc) checklist. Deep dive: sections of [coding-standards-full.md](mdc:.task-flow/guides/coding-standards-full.md) only if user asks for depth.
 
 - **When NOT to use Graphify:**
   - `task-flow: sync`, `status`, `estimate`, `report`, `generate flow` — only `.task-flow/` files.
@@ -26,7 +26,7 @@ alwaysApply: false
 - **CLI (project root):**
   - Build graph: `graphify extract . --backend claude-cli` or `rbin-task-flow init --graphify` (re-run after large refactors).
   - Query: `graphify query "question"` · `graphify affected "node"`.
-  - Guide: [.task-flow/GRAPHIFY.md](mdc:.task-flow/GRAPHIFY.md)
+  - Guide: [.task-flow/guides/GRAPHIFY.md](mdc:.task-flow/guides/GRAPHIFY.md)
 
 - **Principle:**
   > **Task Flow decides what to do; Graphify helps find where in the code — only during implementation and exploration commands.**

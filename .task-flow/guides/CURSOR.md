@@ -43,7 +43,7 @@ Verify: `rg 'alwaysApply: true' .cursor/rules` → only the two files above.
 | **Glob** | `task-flow-sync`, `task_generation` (`.task-flow/**`), `coding_standards` (`src/**`, `app/**`), `code_comments` | Matching paths in chat |
 | **Manual** | `@cursor_rules`, `@self_improve`, `@task_report`, legacy `git_control` | You `@`-mention only (no `description` auto-match) |
 
-**Coding standards:** checklist in `coding_standards.mdc` (glob). Full reference: `.task-flow/docs/coding-standards-full.md` — **sections only**, never whole file.
+**Coding standards:** checklist in `coding_standards.mdc` (glob). Full reference: `.task-flow/guides/coding-standards-full.md` — **sections only**, never whole file.
 
 If a command fails to trigger, use **`@task-flow-*`** explicitly.
 
@@ -90,6 +90,6 @@ Only during `run` / `think` when `graphify-out/` exists. Does not replace Task F
 ## References
 
 - [platforms/cursor.md](platforms/cursor.md) — full guide
-- [README.md](README.md) — all commands
+- [README.md](../README.md) — all commands
 - [AI-PLATFORMS.md](AI-PLATFORMS.md) — install matrix
 - [Cursor Rules docs](https://cursor.com/docs/context/rules)

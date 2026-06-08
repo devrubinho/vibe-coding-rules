@@ -31,7 +31,7 @@ npm pack --dry-run
 ```bash
 git add package.json CHANGELOG.md RELEASE-1.23.1.md README.md \
   lib/graphify.js lib/utils.js bin/cli.js install.sh \
-  .task-flow/GRAPHIFY.md .task-flow/AI-PLATFORMS.md .task-flow/platforms/cursor.md \
+  .task-flow/guides/GRAPHIFY.md .task-flow/guides/AI-PLATFORMS.md .task-flow/platforms/cursor.md \
   .cursor/rules/graphify-task-flow.mdc
 
 git commit -m "chore(release): v1.23.1 — Graphify --graphify uses claude-cli backend"

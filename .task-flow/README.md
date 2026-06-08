@@ -1,19 +1,37 @@
 # RBIN Task Flow - Quick Commands
 
+## Layout
+
+```text
+.task-flow/
+├── README.md              ← você está aqui
+├── tasks.input.txt        ← defina tasks (`- descrição`)
+├── tasks.status.md        ← progresso (auto; não editar)
+├── tasks.flow.md          ← deps/horas (task-flow: generate flow)
+├── contexts/              ← specs, mockups
+├── .internal/             ← tasks.json, status.json (sistema)
+└── guides/                ← documentação e configs
+    ├── AI-PLATFORMS.md
+    ├── GRAPHIFY.md
+    ├── CODEX.md · CURSOR.md
+    ├── coding-standards-full.md
+    ├── platforms/         ← Claude, Cursor, Codex
+    └── reports/           ← task-X-implementation.md
+```
+
 **Optimize by AI platform:**
 
 | Platform | Guide |
 |----------|--------|
-| Index | [AI-PLATFORMS.md](AI-PLATFORMS.md) |
-| Claude Code | [platforms/claude-code.md](platforms/claude-code.md) |
-| Cursor | [platforms/cursor.md](platforms/cursor.md) |
-| Codex | [platforms/codex.md](platforms/codex.md) |
-| Graphify + Task Flow | [GRAPHIFY.md](GRAPHIFY.md) |
-| Codex | [CODEX.md](CODEX.md) · [platforms/codex.md](platforms/codex.md) |
-| Cursor | [CURSOR.md](CURSOR.md) · [platforms/cursor.md](platforms/cursor.md) |
-| Otimização (tokens / roadmap) | [OPTIMIZATION-PLAN.md](OPTIMIZATION-PLAN.md) |
-| Subtarefas para implementar otimização | [OPTIMIZATION-IMPLEMENTATION-TASKS.md](OPTIMIZATION-IMPLEMENTATION-TASKS.md) |
-| Coding standards (full, on demand) | [docs/coding-standards-full.md](docs/coding-standards-full.md) |
+| Index | [guides/AI-PLATFORMS.md](guides/AI-PLATFORMS.md) |
+| Claude Code | [guides/platforms/claude-code.md](guides/platforms/claude-code.md) |
+| Cursor | [guides/platforms/cursor.md](guides/platforms/cursor.md) |
+| Codex | [guides/platforms/codex.md](guides/platforms/codex.md) |
+| Graphify + Task Flow | [guides/GRAPHIFY.md](guides/GRAPHIFY.md) |
+| Codex workflows | [guides/CODEX.md](guides/CODEX.md) |
+| Cursor quick ref | [guides/CURSOR.md](guides/CURSOR.md) |
+| Otimização (tokens) | [guides/OPTIMIZATION-PLAN.md](guides/OPTIMIZATION-PLAN.md) |
+| Coding standards (full) | [guides/coding-standards-full.md](guides/coding-standards-full.md) |
 
 ## 🚀 Quick Commands
 
@@ -21,13 +39,13 @@
 |---------|-------------|
 | `task-flow: sync` | Complete synchronization: adds new, removes deleted, updates modified, preserves status |
 | `task-flow: think` | Analyzes code and suggests new tasks |
+| `task-flow: validate` | Deep audit vs codebase; revert false done; append gaps to `tasks.input.txt`; sync |
 | `task-flow: status` | Shows current task status |
 | `task-flow: run next X` | Works on next X subtasks (e.g., `task-flow: run next 4`) |
 | `task-flow: run X` | Executes all pending subtasks of task X (e.g., `task-flow: run 1`) |
 | `task-flow: run X,Y` | Executes multiple tasks (e.g., `task-flow: run 10,11`) |
 | `task-flow: run all` | Executes all tasks |
 | `task-flow: review X` | Reviews specific task(s) (e.g., `task-flow: review 1` or `task-flow: review 10,11` or `task-flow: review all`) |
-| `task-flow: validate` | Deep-validates tasks vs codebase, reverts false done, appends gaps to `tasks.input.txt`, syncs (default: all) |
 | `task-flow: refactor X` | Refactors specific task(s) (e.g., `task-flow: refactor 1` or `task-flow: refactor 10,11` or `task-flow: refactor all`) |
 | `task-flow: estimate X` | Estimates time for task X (e.g., `task-flow: estimate 1` or `task-flow: estimate 10,11`) |
 | `task-flow: report X` | Generates implementation report for task X (e.g., `task-flow: report 1` or `task-flow: report 10,11`) |
@@ -54,11 +72,14 @@ Complete synchronization between `tasks.input.txt` and the system:
 ### `task-flow: think`
 Analyzes code and suggests new tasks. Asks before adding to `tasks.input.txt`.
 
+### `task-flow: validate`
+Deep validation: checks subtasks against the codebase, reverts false `done`, appends lacunas to `tasks.input.txt`, and syncs. Invoke: `@task-flow-validate` / `/task-flow-validate`.
+
 ### `task-flow: status`
 Shows current status of tasks and subtasks from the `tasks.status.md` file.
 
 ### `task-flow: audit`
-Audits the **entire codebase** against the **checklist** in [coding_standards.mdc](.cursor/rules/coding_standards.mdc). Deep reference: [docs/coding-standards-full.md](docs/coding-standards-full.md) (sections only, on demand). Non-destructive: reports gaps and suggests incremental improvements; the user chooses what to adopt. See [task_audit.mdc](.cursor/rules/task_audit.mdc) for the full flow.
+Audits the **entire codebase** against the **checklist** in [coding_standards.mdc](../.cursor/rules/coding_standards.mdc). Deep reference: [guides/coding-standards-full.md](guides/coding-standards-full.md) (sections only, on demand). Non-destructive: reports gaps and suggests incremental improvements; the user chooses what to adopt. See [task_audit.mdc](../.cursor/rules/task_audit.mdc) for the full flow.
 
 ### `task-flow: check`
 Runs **lint fix** and **build** for the project. Check `package.json` for a lint-with-fix script (e.g. `lint:fix`, `lint -- --fix`) and a build script; run lint fix first, fix any warnings or errors, then run build and fix until it passes. Use before committing or before `task-flow: improve changes` to ensure the project is clean.
@@ -102,16 +123,6 @@ Reviews specific task(s) marked as "done" to verify they are actually completed.
 - `task-flow: review 10,11` → Reviews tasks 10 and 11
 - `task-flow: review all` → Reviews all tasks
 
-### `task-flow: validate`
-Deep validation: checks all subtasks (done and pending) against the codebase, reverts falsely marked `done`, discovers lacunas (missing tests, TODOs, incomplete work), **appends** them to `tasks.input.txt`, and runs sync. Unlike `think` (asks before add) or `review` (done only, asks before revert).
-
-**Examples:**
-- `task-flow: validate` → Validates all tasks
-- `task-flow: validate 1` → Validates task 1 only
-- `task-flow: validate 2,3` → Validates tasks 2 and 3
-
-**Invoke:** `@task-flow-validate` (Cursor) · `/task-flow-validate` (Claude)
-
 ### `task-flow: refactor X`
 Refactors code from specific task(s). Removes explanatory comments, improves code without changing functionality.
 
@@ -139,25 +150,8 @@ Populates `tasks.flow.md` with: (1) task dependencies (for parallelization), (2)
 ### `task-flow: report X` (simplified syntax)
 Generates a detailed implementation report for completed task(s) in Markdown format.
 
-**Report includes:**
-- Task overview and completion status
-- List of completed subtasks
-- Files created and modified (detected from git history)
-- Code change summaries with analysis
-- Task creation and completion dates
-
-**Report location:** `.task-flow/docs/task-X-implementation.md`
+**Output:** `.task-flow/guides/reports/task-X-implementation.md`
 
 **Examples:**
-- `task-flow: report 1` → Generates report for task 1
-- `task-flow: report 10,11` → Generates reports for tasks 10 and 11
-- `task-flow: report all` → Generates reports for all tasks
-
----
-
-## Files
-
-- `.task-flow/tasks.input.txt` - Edit tasks here (format: `- Task description`)
-- `.task-flow/tasks.status.md` - ⚠️ **DO NOT EDIT** - Automatically updated by AI
-- `.task-flow/tasks.flow.md` - Dependencies, estimated hours, and model recommendations (populated by `task-flow: generate flow`)
-- `.task-flow/.internal/` - ⚠️ **IGNORE** - Internal system files (no need to read or edit)
+- `task-flow: report 1` → Report for task 1
+- `task-flow: report 10,11` → Reports for tasks 10 and 11

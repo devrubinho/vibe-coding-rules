@@ -30,7 +30,7 @@ Task IDs stay sequential (1, 2, 3…) matching `tasks.input.txt` order.
 - `originalRequest`: exact input line; `createdAt`: ISO 8601 for new tasks
 - 3–8 subtasks: title, description, instructions (3–5 steps)
 - Contexts: keyword match or `task-flow-screen file.ext` → `.task-flow/contexts/file.ext`
-- Subtask instructions: **checklist** in [coding_standards.mdc](mdc:.cursor/rules/coding_standards.mdc) only — not [coding-standards-full.md](mdc:.task-flow/docs/coding-standards-full.md)
+- Subtask instructions: **checklist** in [coding_standards.mdc](mdc:.cursor/rules/coding_standards.mdc) only — not [coding-standards-full.md](mdc:.task-flow/guides/coding-standards-full.md)
 - More templates: [task_generation.mdc](mdc:.cursor/rules/task_generation.mdc)
 
 **Sync rules:** no codebase exploration; no questions; do not fill `tasks.flow.md` (only `generate flow`).

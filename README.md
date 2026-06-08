@@ -33,7 +33,7 @@
 <a id="português"></a>
 # 🇧🇷 Português
 
-> **v1.24.0** — Novo `task-flow: validate` (auditoria profunda + lacunas automáticas). De **1.23.x**: `npm install -g rbin-task-flow@1.24` e `rbin-task-flow update`. [CHANGELOG](CHANGELOG.md) · [Publicação](RELEASE-1.24.0.md).
+> **v1.25.0** — `.task-flow/` enxuto: tasks na raiz, docs em `guides/`. De **1.24.x**: `npm install -g rbin-task-flow@1.25` e `rbin-task-flow update`. [CHANGELOG](CHANGELOG.md) · [Publicação](RELEASE-1.25.0.md).
 
 ## O Que É Este Projeto?
 
@@ -89,15 +89,15 @@ rbin-task-flow report <ids>  # Gera relatório (ex: "1" ou "1,2" ou "all")
 
 Após inicializar, use estes comandos na IA (Cursor/Claude/Codex) para gerenciar tarefas automaticamente.
 
-**Otimizar por plataforma:** [.task-flow/AI-PLATFORMS.md](.task-flow/AI-PLATFORMS.md) · [Claude](.task-flow/platforms/claude-code.md) · [Cursor](.task-flow/platforms/cursor.md) · [Codex](.task-flow/platforms/codex.md) · [Graphify](.task-flow/GRAPHIFY.md)
+**Otimizar por plataforma:** [.task-flow/guides/AI-PLATFORMS.md](.task-flow/guides/AI-PLATFORMS.md) · [Claude](.task-flow/guides/platforms/claude-code.md) · [Cursor](.task-flow/guides/platforms/cursor.md) · [Codex](.task-flow/guides/platforms/codex.md) · [Graphify](.task-flow/guides/GRAPHIFY.md)
 
 **Graphify (opcional):** `rbin-task-flow init --graphify` configura coexistência e roda `graphify extract . --backend claude-cli` (CLI via `rbin-install-dev`; usa assinatura Claude Code).
 
 **Claude Code / Cursor skills (v1.20+):** `init` copia 15 skills para `.claude/skills/` e `.cursor/skills/` — use `/task-flow-sync`, `/task-flow-run`, `/task-flow-validate`, etc.
 
-**Codex (v1.21+):** `AGENTS.md` com sync/run embutidos, `.task-flow/CODEX.md` sob demanda, `.codex/config.toml` (64 KiB).
+**Codex (v1.21+):** `AGENTS.md` com sync/run embutidos, `.task-flow/guides/CODEX.md` sob demanda, `.codex/config.toml` (64 KiB).
 
-**Cursor (v1.23+):** `task-flow-cursor.mdc` + `rbin-git-policy.mdc` (2 always-on) + skills — ver `.task-flow/CURSOR.md`.
+**Cursor (v1.23+):** `task-flow-cursor.mdc` + `rbin-git-policy.mdc` (2 always-on) + skills — ver `.task-flow/guides/CURSOR.md`.
 
 **Perfil minimal:** `init --profile minimal` instala só as 2 regras always-on e as 15 skills; workflows via `@task-flow-*` (sem `task_work`, `coding_standards` glob, etc.). `standard` (padrão) copia todas as regras `.cursor/rules/`.
 
@@ -419,7 +419,7 @@ Para problemas ou perguntas:
 <a id="english"></a>
 # 🇬🇧 English
 
-> **v1.24.0** — New `task-flow: validate` (deep audit + auto gap fill). From **1.23.x**: `npm install -g rbin-task-flow@1.24` then `rbin-task-flow update`. [CHANGELOG](CHANGELOG.md) · [Release guide](RELEASE-1.24.0.md).
+> **v1.25.0** — Slim `.task-flow/`: tasks at root, docs in `guides/`. From **1.24.x**: `npm install -g rbin-task-flow@1.25` then `rbin-task-flow update`. [CHANGELOG](CHANGELOG.md) · [Release guide](RELEASE-1.25.0.md).
 
 ## What Is This Project?
 
@@ -475,13 +475,13 @@ rbin-task-flow report <ids>   # Generate report (e.g., "1" or "1,2" or "all")
 
 After initializing, use these commands in your AI (Cursor/Claude/Codex) to automatically manage tasks.
 
-**Per-platform optimization:** [index](.task-flow/AI-PLATFORMS.md) · [Claude](.task-flow/platforms/claude-code.md) · [Cursor](.task-flow/platforms/cursor.md) · [Codex](.task-flow/platforms/codex.md) · [Graphify](.task-flow/GRAPHIFY.md)
+**Per-platform optimization:** [index](.task-flow/guides/AI-PLATFORMS.md) · [Claude](.task-flow/guides/platforms/claude-code.md) · [Cursor](.task-flow/guides/platforms/cursor.md) · [Codex](.task-flow/guides/platforms/codex.md) · [Graphify](.task-flow/guides/GRAPHIFY.md)
 
 **Graphify (optional):** `rbin-task-flow init --graphify` — cooperative setup + runs `graphify extract . --backend claude-cli` (CLI from `rbin-install-dev`; uses Claude Code subscription).
 
 **Claude / Cursor skills (v1.20+):** installs 15 skills — use `/task-flow-sync`, `/task-flow-run`, `/task-flow-validate`, etc.
 
-**Codex (v1.21+):** optimized `AGENTS.md`, `.task-flow/CODEX.md`, `.codex/config.toml`.
+**Codex (v1.21+):** optimized `AGENTS.md`, `.task-flow/guides/CODEX.md`, `.codex/config.toml`.
 
 **Cursor (v1.23+):** 2 always-on rules + 15 skills — `@task-flow-sync`, `@task-flow-run`, `@task-flow-validate`.
 

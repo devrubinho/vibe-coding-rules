@@ -188,25 +188,16 @@ install_to_project() {
     [ -f "$SCRIPT_DIR/.task-flow/README.md" ] &&
       cp "$SCRIPT_DIR/.task-flow/README.md" "$target/.task-flow/README.md" &&
       echo -e "${GREEN}✅ Task Flow README${NC}"
-    [ -f "$SCRIPT_DIR/.task-flow/GRAPHIFY.md" ] &&
-      cp "$SCRIPT_DIR/.task-flow/GRAPHIFY.md" "$target/.task-flow/GRAPHIFY.md" &&
-      echo -e "${GREEN}✅ Graphify + Task Flow guide${NC}"
-    [ -f "$SCRIPT_DIR/.task-flow/CODEX.md" ] &&
-      cp "$SCRIPT_DIR/.task-flow/CODEX.md" "$target/.task-flow/CODEX.md" &&
-      echo -e "${GREEN}✅ Codex workflows (CODEX.md)${NC}"
-    [ -f "$SCRIPT_DIR/.task-flow/CURSOR.md" ] &&
-      cp "$SCRIPT_DIR/.task-flow/CURSOR.md" "$target/.task-flow/CURSOR.md" &&
-      echo -e "${GREEN}✅ Cursor guide (CURSOR.md)${NC}"
-    if [ -d "$SCRIPT_DIR/.task-flow/docs" ]; then
-      mkdir -p "$target/.task-flow/docs"
-      cp -r "$SCRIPT_DIR/.task-flow/docs/"* "$target/.task-flow/docs/" 2>/dev/null || true
-      echo -e "${GREEN}✅ Task Flow docs (coding-standards-full.md)${NC}"
+    if [ -d "$SCRIPT_DIR/.task-flow/guides" ]; then
+      mkdir -p "$target/.task-flow/guides"
+      cp -r "$SCRIPT_DIR/.task-flow/guides/"* "$target/.task-flow/guides/" 2>/dev/null || true
+      echo -e "${GREEN}✅ Task Flow guides (.task-flow/guides/)${NC}"
     fi
-    [ -f "$SCRIPT_DIR/.task-flow/AI-PLATFORMS.md" ] &&
-      cp "$SCRIPT_DIR/.task-flow/AI-PLATFORMS.md" "$target/.task-flow/AI-PLATFORMS.md"
-    [ -d "$SCRIPT_DIR/.task-flow/platforms" ] &&
-      mkdir -p "$target/.task-flow/platforms" &&
-      cp -r "$SCRIPT_DIR/.task-flow/platforms/"* "$target/.task-flow/platforms/" 2>/dev/null || true
+    for legacy in GRAPHIFY.md CODEX.md CURSOR.md AI-PLATFORMS.md OPTIMIZATION-PLAN.md OPTIMIZATION-IMPLEMENTATION-TASKS.md; do
+      [ -f "$target/.task-flow/$legacy" ] && rm -f "$target/.task-flow/$legacy"
+    done
+    [ -d "$target/.task-flow/docs" ] && rm -rf "$target/.task-flow/docs"
+    [ -d "$target/.task-flow/platforms" ] && rm -rf "$target/.task-flow/platforms"
     mkdir -p "$target/.task-flow/contexts" &&
       echo -e "${GREEN}✅ Contexts directory (.task-flow/contexts/)${NC}"
   fi
@@ -252,9 +243,9 @@ install_to_project() {
   echo -e "${BLUE}Next steps:${NC}"
   echo -e "   ${YELLOW}cd $target${NC}"
   echo -e "   ${CYAN}Cursor: @task-flow-sync, @task-flow-run  |  Claude: /task-flow-sync${NC}"
-  echo -e "   ${CYAN}Codex: AGENTS.md + task-flow: sync / run (see .task-flow/CODEX.md)${NC}"
+  echo -e "   ${CYAN}Codex: AGENTS.md + task-flow: sync / run (see .task-flow/guides/CODEX.md)${NC}"
   echo -e "   ${CYAN}See .task-flow/README.md for all commands${NC}"
-  echo -e "   ${CYAN}Graphify: rbin-task-flow init --graphify  (see .task-flow/GRAPHIFY.md)${NC}\n"
+  echo -e "   ${CYAN}Graphify: rbin-task-flow init --graphify  (see .task-flow/guides/GRAPHIFY.md)${NC}\n"
 }
 
 main() {

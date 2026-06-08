@@ -2,7 +2,7 @@
 
 **Task flow** always means **RBIN Task Flow**. Codex does not load `.cursor/rules/*.mdc` automatically — use this file plus **read on demand** files below.
 
-**Full Codex guide:** `.task-flow/platforms/codex.md` · **Workflows (read when executing a command):** `.task-flow/CODEX.md`
+**Full Codex guide:** `.task-flow/guides/platforms/codex.md` · **Workflows (read when executing a command):** `.task-flow/guides/CODEX.md`
 
 ## Paths
 
@@ -28,20 +28,20 @@ No explanatory comments. Complex topics → `dev-logs/*.md`. Allowed: `// ──
 
 | Command | Read first |
 |---------|------------|
-| `task-flow: sync` | Section **Sync** below; details `.task-flow/CODEX.md` |
-| `task-flow: run …` | Section **Run** below; details `.task-flow/CODEX.md` |
+| `task-flow: sync` | Section **Sync** below; details `.task-flow/guides/CODEX.md` |
+| `task-flow: run …` | Section **Run** below; details `.task-flow/guides/CODEX.md` |
 | `task-flow: status` | `.task-flow/tasks.status.md` |
-| `task-flow: think` | `.task-flow/CODEX.md` · optional codebase scan |
+| `task-flow: think` | `.task-flow/guides/CODEX.md` · optional codebase scan |
 | `task-flow: check` | `.cursor/rules/task_check.mdc` · `package.json` |
 | `task-flow: improve changes` | `git diff --name-only HEAD` · `.cursor/rules/task_improve_changes.mdc` |
-| `task-flow: audit` | `.cursor/rules/task_audit.mdc` · checklist `coding_standards.mdc` (full: `.task-flow/docs/coding-standards-full.md` if needed) |
-| `task-flow: review X` | `.task-flow/CODEX.md` |
+| `task-flow: audit` | `.cursor/rules/task_audit.mdc` · checklist `coding_standards.mdc` (full: `.task-flow/guides/coding-standards-full.md` if needed) |
+| `task-flow: review X` | `.task-flow/guides/CODEX.md` |
 | `task-flow: validate` | `.cursor/rules/task_validate.mdc` · then sync |
 | `task-flow: refactor X` | `.cursor/rules/task_refactor.mdc` |
-| `task-flow: estimate X` | `.task-flow/CODEX.md` |
-| `task-flow: report X` | `.task-flow/CODEX.md` |
+| `task-flow: estimate X` | `.task-flow/guides/CODEX.md` |
+| `task-flow: report X` | `.task-flow/guides/CODEX.md` |
 | `task-flow: generate flow` | `.cursor/rules/task_generate_flow.mdc` |
-| Implementing code | Checklist `.cursor/rules/coding_standards.mdc` · depth: `.task-flow/docs/coding-standards-full.md` (sections only) |
+| Implementing code | Checklist `.cursor/rules/coding_standards.mdc` · depth: `.task-flow/guides/coding-standards-full.md` (sections only) |
 
 ## Sync (embedded)
 
@@ -71,7 +71,7 @@ Leia AGENTS.md. Execute task-flow: sync.
 ```
 
 ```
-Leia AGENTS.md e .task-flow/CODEX.md (Run). task-flow: run next 3.
+Leia AGENTS.md e .task-flow/guides/CODEX.md (Run). task-flow: run next 3.
 ```
 
 ```
@@ -80,4 +80,4 @@ task-flow: improve changes — git diff --name-only HEAD, audite só esses arqui
 
 ## Other platforms
 
-Claude: `CLAUDE.md` + `.claude/skills/`. Cursor: `.cursor/rules/`. Index: `.task-flow/AI-PLATFORMS.md`.
+Claude: `CLAUDE.md` + `.claude/skills/`. Cursor: `.cursor/rules/`. Index: `.task-flow/guides/AI-PLATFORMS.md`.

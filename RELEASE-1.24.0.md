@@ -36,7 +36,7 @@ git add package.json CHANGELOG.md RELEASE-1.24.0.md README.md \
   .cursor/rules/task_validate.mdc .cursor/rules/task-flow-cursor.mdc \
   .cursor/rules/task_analysis.mdc .cursor/rules/task_execution.mdc \
   .cursor/rules/task_review.mdc .cursor/rules/graphify-task-flow.mdc \
-  .task-flow/CODEX.md .task-flow/CURSOR.md .task-flow/GRAPHIFY.md \
+  .task-flow/guides/CODEX.md .task-flow/guides/CURSOR.md .task-flow/guides/GRAPHIFY.md \
   .task-flow/README.md .task-flow/platforms/codex.md \
   AGENTS.md CLAUDE.md
 

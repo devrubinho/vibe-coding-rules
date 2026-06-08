@@ -7,7 +7,7 @@ disable-model-invocation: true
 # Task Flow — Audit
 
 1. Scan project structure and `package.json`.
-2. Score categories vs `.cursor/rules/coding_standards.mdc` checklist (Full / Partial / Missing). Use `.task-flow/docs/coding-standards-full.md` only for deep dives — not the whole file.
+2. Score categories vs `.cursor/rules/coding_standards.mdc` checklist (Full / Partial / Missing). Use `.task-flow/guides/coding-standards-full.md` only for deep dives — not the whole file.
 3. Present table and incremental improvement options.
 4. **Ask** user what to adopt; never impose refactors.
 5. Generate task lines for selected items only if user confirms.

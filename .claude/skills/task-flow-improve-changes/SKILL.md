@@ -8,7 +8,7 @@ disable-model-invocation: true
 
 1. Run `git diff --name-only HEAD` (read-only git).
 2. If empty, stop — no uncommitted changes.
-3. Audit **only** those paths using the same checklist as audit (`.cursor/rules/coding_standards.mdc`). Full reference: `.task-flow/docs/coding-standards-full.md` — relevant sections only if a category needs depth.
+3. Audit **only** those paths using the same checklist as audit (`.cursor/rules/coding_standards.mdc`). Full reference: `.task-flow/guides/coding-standards-full.md` — relevant sections only if a category needs depth.
 4. Present findings; ask what to fix.
 5. Does **not** run lint/build — use `/task-flow-check` separately.
 

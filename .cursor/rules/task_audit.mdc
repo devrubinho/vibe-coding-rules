@@ -5,7 +5,7 @@ alwaysApply: false
 
 # task-flow: audit
 
-When the user runs `task-flow: audit`, perform a non-destructive analysis against the **checklist** in [coding_standards.mdc](mdc:.cursor/rules/coding_standards.mdc). For deep architecture or examples, read only relevant sections of [coding-standards-full.md](mdc:.task-flow/docs/coding-standards-full.md) — do not load the entire file unless the user asks for depth.
+When the user runs `task-flow: audit`, perform a non-destructive analysis against the **checklist** in [coding_standards.mdc](mdc:.cursor/rules/coding_standards.mdc). For deep architecture or examples, read only relevant sections of [coding-standards-full.md](mdc:.task-flow/guides/coding-standards-full.md) — do not load the entire file unless the user asks for depth.
 
 ---
 
@@ -36,7 +36,7 @@ Scan the codebase to understand:
 
 ### Step 2 — Score each category
 
-Score using the **checklist** in [coding_standards.mdc](mdc:.cursor/rules/coding_standards.mdc). For a category that needs examples (Nest gateways, DataHandler, long patterns), read **one section** of [coding-standards-full.md](mdc:.task-flow/docs/coding-standards-full.md) — not the whole file unless the user requests depth.
+Score using the **checklist** in [coding_standards.mdc](mdc:.cursor/rules/coding_standards.mdc). For a category that needs examples (Nest gateways, DataHandler, long patterns), read **one section** of [coding-standards-full.md](mdc:.task-flow/guides/coding-standards-full.md) — not the whole file unless the user requests depth.
 
 For each category below, rate adherence: **Full / Partial / Missing**
 

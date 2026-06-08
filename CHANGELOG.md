@@ -2,6 +2,26 @@
 
 ## [Unreleased]
 
+## [1.25.0] - 2026-06-06
+
+**Minor release — `.task-flow/` enxuto na raiz; documentação em `guides/`.**
+
+### Changed
+
+- **Layout `.task-flow/`** — raiz: `tasks.input.txt`, `tasks.status.md`, `tasks.flow.md`, `README.md`, `contexts/`; resto em `.task-flow/guides/` (`platforms/`, `reports/`, `coding-standards-full.md`, Graphify, Codex, Cursor, etc.).
+- **`rbin-task-flow update`** — migra projetos legados: remove `docs/`, `platforms/` e `.md` soltos na raiz; move reports para `guides/reports/`.
+- **Paths** — rules, skills, `AGENTS.md`, `CLAUDE.md`, `lib/report.js` e install apontam para `.task-flow/guides/…`.
+
+### Migration
+
+```bash
+npm install -g rbin-task-flow@1.25
+cd your-project
+rbin-task-flow update
+```
+
+Atualize prompts customizados: `.task-flow/GRAPHIFY.md` → `.task-flow/guides/GRAPHIFY.md` (idem `CODEX.md`, `platforms/`, `docs/`).
+
 ## [1.24.0] - 2026-06-05
 
 **Minor release — comando `task-flow: validate` (verificação profunda + lacunas automáticas).**
@@ -54,7 +74,7 @@ Requisitos para `--graphify`: CLI `graphify` no PATH + `claude` autenticado (Cla
 
 - **Always-on rules reduced to 2:** `task-flow-cursor.mdc`, `rbin-git-policy.mdc` (replaces separate always-on `git_control.mdc` + `commit_practices.mdc`).
 - **`git_control.mdc` / `commit_practices.mdc`** — legacy stubs (`alwaysApply: false`); use `rbin-git-policy.mdc` + `@rbin-git`.
-- **`coding_standards.mdc`** — compact checklist (~100 lines, glob `src/**` / `app/**` only); full reference in `.task-flow/docs/coding-standards-full.md` (by section on demand).
+- **`coding_standards.mdc`** — compact checklist (~100 lines, glob `src/**` / `app/**` only); full reference in `.task-flow/guides/coding-standards-full.md` (by section on demand).
 - **`task_work.mdc` / `task_execution.mdc`** — short fallbacks; prefer `@task-flow-run` and `task-flow-cursor.mdc` + skills.
 
 ### Added
@@ -65,7 +85,7 @@ Requisitos para `--graphify`: CLI `graphify` no PATH + `claude` autenticado (Cla
 - **CLI `--profile minimal|standard`** — minimal = 2 always-on rules + skills; `.task-flow/install-meta.json`.
 - **CLI `--share-ai-config`** — optional gitignore to commit `.cursor/skills/` and `.cursor/rules/`.
 - **`npm run measure:rules`** — always-on size regression (default fail if > 5 KB).
-- **`.task-flow/OPTIMIZATION-PLAN.md`** · **`.task-flow/OPTIMIZATION-IMPLEMENTATION-TASKS.md`**.
+- **`.task-flow/guides/OPTIMIZATION-PLAN.md`** · **`.task-flow/guides/OPTIMIZATION-IMPLEMENTATION-TASKS.md`**.
 
 ### Changed
 
@@ -93,7 +113,7 @@ Template repo: `npm run measure:rules` (always-on ≤ 5 KB).
 
 ### Added
 
-- **Cursor optimization** — `task-flow-cursor.mdc` (always-on bootstrap); `.task-flow/CURSOR.md`; `lib/cursor.js` on install.
+- **Cursor optimization** — `task-flow-cursor.mdc` (always-on bootstrap); `.task-flow/guides/CURSOR.md`; `lib/cursor.js` on install.
 
 ### Changed
 
@@ -104,7 +124,7 @@ Template repo: `npm run measure:rules` (always-on ≤ 5 KB).
 
 ### Added
 
-- **Codex optimization** — `AGENTS.md` with embedded sync/run workflows; `.task-flow/CODEX.md`; `.codex/config.toml`; `lib/codex.js`.
+- **Codex optimization** — `AGENTS.md` with embedded sync/run workflows; `.task-flow/guides/CODEX.md`; `.codex/config.toml`; `lib/codex.js`.
 
 ### Changed
 

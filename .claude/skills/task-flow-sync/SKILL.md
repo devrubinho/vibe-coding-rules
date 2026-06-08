@@ -12,7 +12,7 @@ paths: [".task-flow/**"]
 1. Read `.task-flow/tasks.input.txt` (only lines starting with `- `).
 2. Read `.task-flow/.internal/tasks.json` and `status.json` if they exist.
 3. Compare by `originalRequest`: new, removed, modified, unchanged tasks.
-4. **New:** generate subtasks (3–8 each), add pending status, update `tasks.status.md`. Subtask instructions: follow **checklist** in `.cursor/rules/coding_standards.mdc` only — not `.task-flow/docs/coding-standards-full.md`.
+4. **New:** generate subtasks (3–8 each), add pending status, update `tasks.status.md`. Subtask instructions: follow **checklist** in `.cursor/rules/coding_standards.mdc` only — not `.task-flow/guides/coding-standards-full.md`.
 5. **Removed:** delete from all three stores.
 6. **Modified:** update title/description, regenerate subtasks, **preserve** done/pending status where possible.
 7. **Unchanged:** leave task data and status as-is.
