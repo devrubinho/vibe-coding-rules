@@ -84,6 +84,18 @@ src/
 
 ---
 
+## Vercel — `.env` (when project deploys on Vercel)
+
+Follow **Vercel — environment variables** in [coding-standards-full.md](mdc:.task-flow/guides/coding-standards-full.md) (§0–§8):
+
+- **3 mirrored files:** `.env.example` (committed, empty values), `.env.local` (dev), `.env.production` (synced to Vercel).
+- Same keys, **alphabetical order**, one var per line — no section comments breaking alignment.
+- `.gitignore`: `.env`, `.env.*`, `!.env.example`.
+- Scripts: `scripts/env-files-check.sh`, `scripts/vercel-env-sync.sh` (full content in full doc §5–§6).
+- Audit orphan vars before aligning; classify `NEXT_PUBLIC_*`/flags as plaintext, rest as secret on Vercel.
+
+---
+
 ## Audit / sync
 
 - **`task-flow: audit`:** score against this checklist; open [coding-standards-full.md](mdc:.task-flow/guides/coding-standards-full.md) only for deep dives or user-requested depth.
@@ -97,4 +109,5 @@ src/
 |------|-----|
 | Implementing code | `@rbin-coding-standards` |
 | Full examples / Nest / gateways | Sections of `coding-standards-full.md` |
+| Vercel `.env` setup | `coding-standards-full.md` § Vercel |
 | Audit all categories | `@task-flow-audit` |

@@ -8,6 +8,151 @@ These rules define how code MUST be written when implementing tasks. Always foll
 
 ---
 
+## Vercel — environment variables
+
+**When the project deploys on Vercel** (Next.js, etc.), follow this section for `.env` files.
+
+### Instruções para a IA (executar nesta ordem)
+
+1. **Antes de tudo — auditar variáveis sem uso** [§0]: para cada variável dos `.env*`, verifique se ela é realmente referenciada no código/configuração. **Liste as órfãs e confirme com o usuário antes de remover** — não apague sozinha (algumas são usadas só em runtime/CI/infra). Só depois de limpar é que se alinham os 3 arquivos.
+2. Crie `scripts/env-files-check.sh` e `scripts/vercel-env-sync.sh` com **exatamente** o conteúdo das seções [§5] e [§6]. Marque ambos como executáveis (`chmod +x`).
+3. Garanta os **3 arquivos de ambiente** seguindo a convenção [§1]: mesma sequência de chaves nos 3, **ordem alfabética**, uma variável por linha, sem comentários de seção no meio. Crie `.env.example` (commitado, valores vazios). **Nunca** coloque valores reais no `.env.example`.
+4. Ajuste o `.gitignore` conforme [§2].
+5. Ajuste a `PLAINTEXT_REGEX` do `vercel-env-sync.sh` ao stack do projeto [§3].
+6. Rode `./scripts/env-files-check.sh` e mostre a saída. Não rode o sync da Vercel sem credenciais do usuário — explique os comandos de [§4].
+7. Confirme os **critérios de aceite** [§7].
+
+### §0 — Auditoria (variáveis sem uso)
+
+Para cada chave dos `.env*`, procure referências: `process.env.NOME`, `import.meta.env.NOME`, `env("NOME")`, configs/CI (`vercel.json`, `*.yml`, `Dockerfile`).
+
+```bash
+for k in $(grep -hE '^[A-Za-z_][A-Za-z0-9_]*=' .env.example .env.local .env.production 2>/dev/null \
+            | sed -E 's/=.*//' | sort -u); do
+  n=$(grep -rIn --exclude-dir=node_modules --exclude-dir=.git --exclude='.env*' \
+        -e "$k" . 2>/dev/null | wc -l | tr -d ' ')
+  printf '%-32s %s ref(s)\n' "$k" "$n"
+done
+```
+
+**Trate `0 ref` como candidata, não certeza.** Confirme com o usuário antes de remover.
+
+### §1 — Convenção dos 3 arquivos
+
+| Arquivo | Commitado? | Papel | Valores |
+|---|---|---|---|
+| `.env.example` | ✅ sim | Lista canônica (doc) | vazios/placeholder |
+| `.env.local` | ❌ não | Desenvolvimento local | reais de dev |
+| `.env.production` | ❌ não | **Sincronizado com a Vercel** | reais de produção |
+
+Mesma sequência de chaves, **ordem alfabética**. Sem comentários de seção no meio.
+
+### §2 — `.gitignore`
+
+```gitignore
+.env
+.env.*
+!.env.example
+```
+
+### §3 — Classificação secret × plaintext (Vercel)
+
+| Classe | Exemplos | Tipo |
+|---|---|---|
+| `NEXT_PUBLIC_*` | `NEXT_PUBLIC_API_URL` | **plaintext** |
+| Flags / URLs públicas | `*_ENABLED`, `*_PUBLIC_URL`, `NODE_ENV` | **plaintext** |
+| Todo o resto | `*_API_KEY`, `*_SECRET`, `*_TOKEN` | **secret** (`--sensitive`) |
+
+### §4 — Comandos
+
+```bash
+npm i -g vercel && vercel login && vercel link
+./scripts/env-files-check.sh
+DRY_RUN=1 ./scripts/vercel-env-sync.sh
+./scripts/vercel-env-sync.sh
+vercel env pull .env.vercel.check --environment=production
+```
+
+### §5 — `scripts/env-files-check.sh`
+
+```bash
+#!/usr/bin/env bash
+set -euo pipefail
+if [ "$#" -gt 0 ]; then FILES=("$@"); else FILES=(".env.example" ".env.local" ".env.production"); fi
+keys_of() { grep -E '^[A-Za-z_][A-Za-z0-9_]*=' "$1" | sed -E 's/=.*//'; }
+fail=0; ref=""; ref_file=""
+for f in "${FILES[@]}"; do
+  if [ ! -f "$f" ]; then echo "❌ faltando: $f"; fail=1; continue; fi
+  keys="$(keys_of "$f")"
+  sorted="$(printf '%s\n' "$keys" | LC_ALL=C sort)"
+  if [ "$keys" != "$sorted" ]; then
+    echo "❌ $f não está em ordem alfabética."
+    diff <(printf '%s\n' "$keys") <(printf '%s\n' "$sorted") | head -6
+    fail=1
+  fi
+  count="$(printf '%s\n' "$keys" | grep -c . || true)"
+  echo "• $f — $count variáveis"
+  if [ -z "$ref" ]; then ref="$sorted"; ref_file="$f"
+  elif [ "$sorted" != "$ref" ]; then
+    echo "❌ $f difere de $ref_file:"
+    diff <(printf '%s\n' "$ref") <(printf '%s\n' "$sorted") || true
+    fail=1
+  fi
+done
+if [ "$fail" -eq 0 ]; then echo "✅ Arquivos alinhados, mesma sequência e em ordem alfabética."
+else echo "→ Corrija as divergências acima."; fi
+exit "$fail"
+```
+
+### §6 — `scripts/vercel-env-sync.sh`
+
+```bash
+#!/usr/bin/env bash
+set -euo pipefail
+ENV_FILE="${1:-.env.production}"
+TARGET="${2:-production}"
+DRY_RUN="${DRY_RUN:-0}"
+PLAINTEXT_REGEX="${PLAINTEXT_REGEX:-^(NEXT_PUBLIC_|NODE_ENV$|.*_ENABLED$|.*_URL_STRATEGY$|.*_PUBLIC_URL$|.*_REGION$)}"
+command -v vercel >/dev/null 2>&1 || { echo "❌ vercel CLI não encontrado. Instale: npm i -g vercel"; exit 1; }
+[ -f "$ENV_FILE" ] || { echo "❌ arquivo não encontrado: $ENV_FILE"; exit 1; }
+[ -d ".vercel" ] || echo "⚠️  projeto não vinculado — rode 'vercel link' antes (continuando…)"
+secret_count=0; plain_count=0
+while IFS= read -r line <&3 || [ -n "$line" ]; do
+  case "$line" in ''|\#*) continue ;; esac
+  case "$line" in *=*) ;; *) continue ;; esac
+  key="${line%%=*}"; val="${line#*=}"
+  key="$(printf '%s' "$key" | tr -d '[:space:]')"
+  val="${val%\"}"; val="${val#\"}"; val="${val%\'}"; val="${val#\'}"
+  [ -z "$key" ] && continue
+  if [ -z "$val" ]; then echo "⏭️  $key (valor vazio — pulado)"; continue; fi
+  if printf '%s' "$key" | grep -Eq "$PLAINTEXT_REGEX"; then
+    flag=""; kind="plaintext"; plain_count=$((plain_count+1))
+  else
+    flag="--sensitive"; kind="secret  "; secret_count=$((secret_count+1))
+  fi
+  echo "→ [$kind] $key  ($TARGET)"
+  [ "$DRY_RUN" = "1" ] && continue
+  vercel env rm "$key" "$TARGET" -y </dev/null >/dev/null 2>&1 || true
+  printf '%s' "$val" | vercel env add "$key" "$TARGET" $flag >/dev/null
+done 3< "$ENV_FILE"
+echo "✅ $secret_count secret(s), $plain_count plaintext em '$TARGET'."
+[ "$DRY_RUN" = "1" ] && echo "(DRY_RUN — nada foi enviado)"
+```
+
+### §7 — Critérios de aceite
+
+- Auditoria [§0] feita; órfãs removidas após confirmação do usuário.
+- Scripts executáveis; 3 arquivos com mesma sequência alfabética.
+- `./scripts/env-files-check.sh` retorna exit 0.
+- `.gitignore` ignora `.env*` exceto `.env.example`.
+- Nenhum valor real no `.env.example` nem no git.
+
+### §8 — Limitações
+
+Valores multilinha (PEM/JSON) → base64 numa linha ou cadastro manual na Vercel. `NEXT_PUBLIC_*` no target do **build**.
+
+---
+
 ## Project Structure
 
 All projects use TypeScript and follow this structure:

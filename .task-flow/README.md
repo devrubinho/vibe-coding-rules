@@ -14,7 +14,7 @@
     ├── AI-PLATFORMS.md
     ├── GRAPHIFY.md
     ├── CODEX.md · CURSOR.md
-    ├── coding-standards-full.md
+    ├── coding-standards-full.md  ← inclui padrão .env Vercel (§ Vercel)
     ├── platforms/         ← Claude, Cursor, Codex
     └── reports/           ← task-X-implementation.md
 ```
@@ -31,7 +31,7 @@
 | Codex workflows | [guides/CODEX.md](guides/CODEX.md) |
 | Cursor quick ref | [guides/CURSOR.md](guides/CURSOR.md) |
 | Otimização (tokens) | [guides/OPTIMIZATION-PLAN.md](guides/OPTIMIZATION-PLAN.md) |
-| Coding standards (full) | [guides/coding-standards-full.md](guides/coding-standards-full.md) |
+| Coding standards (full) | [guides/coding-standards-full.md](guides/coding-standards-full.md) (Vercel `.env` no topo) |
 
 ## 🚀 Quick Commands
 

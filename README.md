@@ -33,7 +33,7 @@
 <a id="português"></a>
 # 🇧🇷 Português
 
-> **v1.25.0** — `.task-flow/` enxuto: tasks na raiz, docs em `guides/`. De **1.24.x**: `npm install -g rbin-task-flow@1.25` e `rbin-task-flow update`. [CHANGELOG](CHANGELOG.md) · [Publicação](RELEASE-1.25.0.md).
+> **v1.25.1** — Padrão `.env` Vercel nos coding standards. De **1.25.0**: `npm install -g rbin-task-flow@1.25.1` e `rbin-task-flow update`. [CHANGELOG](CHANGELOG.md) · [Publicação](RELEASE-1.25.1.md).
 
 ## O Que É Este Projeto?
 
@@ -419,7 +419,7 @@ Para problemas ou perguntas:
 <a id="english"></a>
 # 🇬🇧 English
 
-> **v1.25.0** — Slim `.task-flow/`: tasks at root, docs in `guides/`. From **1.24.x**: `npm install -g rbin-task-flow@1.25` then `rbin-task-flow update`. [CHANGELOG](CHANGELOG.md) · [Release guide](RELEASE-1.25.0.md).
+> **v1.25.1** — Vercel `.env` pattern in coding standards. From **1.25.0**: `npm install -g rbin-task-flow@1.25.1` then `rbin-task-flow update`. [CHANGELOG](CHANGELOG.md) · [Release guide](RELEASE-1.25.1.md).
 
 ## What Is This Project?
 

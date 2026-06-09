@@ -2,6 +2,24 @@
 
 ## [Unreleased]
 
+## [1.25.1] - 2026-06-06
+
+**Patch release — padrão `.env` para projetos Vercel nos coding standards.**
+
+### Added
+
+- **Vercel — environment variables** em `coding-standards-full.md` (§0–§8): 3 arquivos espelhados (`.env.example`, `.env.local`, `.env.production`), scripts `env-files-check.sh` e `vercel-env-sync.sh`, critérios de aceite.
+- Checklist `coding_standards.mdc` e `@rbin-coding-standards` referenciam a seção Vercel.
+
+### Migration
+
+```bash
+npm install -g rbin-task-flow@1.25.1
+cd your-project && rbin-task-flow update
+```
+
+Projetos Vercel: peça à IA seguir **Vercel — environment variables** em `.task-flow/guides/coding-standards-full.md`.
+
 ## [1.25.0] - 2026-06-06
 
 **Minor release — `.task-flow/` enxuto na raiz; documentação em `guides/`.**

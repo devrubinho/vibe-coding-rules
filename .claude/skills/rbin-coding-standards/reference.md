@@ -6,6 +6,7 @@
 |-----|------|------|
 | **Checklist** (default) | `.cursor/rules/coding_standards.mdc` | Every implementation; glob on `src/**`, `app/**` in Cursor |
 | **Full reference** (sections only) | `.task-flow/guides/coding-standards-full.md` | Nest/Prisma detail, long examples, ESLint table, DataHandler, providers |
+| **Vercel `.env`** | `coding-standards-full.md` § Vercel | Projects on Vercel — 3 mirrored env files + sync scripts |
 
 ## Checklist essentials
 
@@ -40,3 +41,4 @@
 | Context / Auth Hook | Auth provider pattern |
 | Testing | E2E placement |
 | Critical Rules | Final verification |
+| Vercel — environment variables | `.env` setup on Vercel deploys → open this section in full doc |
