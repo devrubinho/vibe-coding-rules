@@ -15,7 +15,7 @@ paths: ["src/**", "app/**"]
 2. Implement using checklist rules: `app/` thin, `features/`, `shared/`, service+use-case, RHF+zod+`Controller`, `cn()`, no `any`, no raw base UI.
 3. **Vercel projects:** env files per **Vercel — environment variables** in `coding-standards-full.md` (§0–§8).
 4. **Only if ambiguous** (Nest gateways, DataHandler, route groups, naming edge case): open **one or two sections** of `.task-flow/guides/coding-standards-full.md` — never paste or load the whole file.
-5. If `graphify-out/graph.json` exists, `graphify query` before choosing file paths for new code.
+5. If `.task-flow/guides/graphify-out/graph.json` exists, `graphify query` before choosing file paths for new code.
 6. No explanatory code comments; use `dev-logs/` for non-obvious design notes.
 
 ## Token discipline

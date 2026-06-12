@@ -1,21 +1,20 @@
 ---
-description: Use Graphify knowledge graph only when executing RBIN Task Flow commands that need codebase navigation (task-flow run, think, review, audit). Prefer graphify query over blind grep when graphify-out exists. Never override task-flow status updates or git rules.
+description: Use Graphify knowledge graph only when executing RBIN Task Flow commands that need codebase navigation (task-flow run, validate, audit). Prefer graphify query over blind grep when .task-flow/guides/graphify-out exists. Never override task-flow status updates or git rules.
 alwaysApply: false
 ---
 
 - **Graphify + RBIN Task Flow (coexistence):**
-  - **Graphify** maps repo structure (`graphify-out/graph.json`, `GRAPH_REPORT.md`). **Task Flow** owns tasks (`.task-flow/`), status, and commands `task-flow: …`.
+  - **Graphify** maps repo structure (`.task-flow/guides/graphify-out/graph.json`, `GRAPH_REPORT.md`). **Task Flow** owns tasks (`.task-flow/`), status, and commands `task-flow: …`.
   - **Do not compete:** Task Flow rules (`task_work`, `task-flow-sync`, `rbin-git-policy`, etc.) always win for workflow, git, and status files.
 
 - **When to use Graphify:**
-  - **`task-flow: run` / `run next X`:** Before implementing a subtask in a non-trivial codebase, if `graphify-out/graph.json` exists, use `graphify query "<feature or module from subtask>"` or read `graphify-out/GRAPH_REPORT.md` god nodes — then implement. If no graph exists, proceed with normal search or suggest `graphify extract . --backend claude-cli` (or `rbin-task-flow init --graphify`).
-  - **`task-flow: think`:** Optional `graphify query` for gap analysis on large repos.
-  - **`task-flow: review X`:** Optional `graphify affected "<symbol>"` to verify impact surface.
+  - **`task-flow: run` / `run next X`:** Before implementing a subtask, if `.task-flow/guides/graphify-out/graph.json` exists, use `graphify query "<feature or module from subtask>" --graph .task-flow/guides/graphify-out/graph.json` or read `GRAPH_REPORT.md` god nodes — then implement. If no graph exists, suggest `graphify extract . --backend claude-cli --out .task-flow/guides` (or `rbin-task-flow init --graphify`).
+  - **`task-flow: validate`:** Optional `graphify query` / `graphify affected` per task area when verifying implementation.
   - **`task-flow: validate`:** Optional `graphify query` per task area before verifying implementation; then append lacunas + sync per `task_validate.mdc`.
   - **`task-flow: audit`:** Graphify is structural only; scoring uses [coding_standards.mdc](mdc:.cursor/rules/coding_standards.mdc) checklist. Deep dive: sections of [coding-standards-full.md](mdc:.task-flow/guides/coding-standards-full.md) only if user asks for depth.
 
 - **When NOT to use Graphify:**
-  - `task-flow: sync`, `status`, `estimate`, `report`, `generate flow` — only `.task-flow/` files.
+  - `task-flow: sync`, `status`, `estimate`, `report` — only `.task-flow/` files.
   - Updating `status.json` / `tasks.status.md` — never defer to Graphify.
   - Git write operations — [rbin-git-policy.mdc](mdc:.cursor/rules/rbin-git-policy.mdc) only suggests commits.
 
@@ -24,8 +23,8 @@ alwaysApply: false
   - RBIN Task Flow init sets upstream `graphify.mdc` to `alwaysApply: false` to save context.
 
 - **CLI (project root):**
-  - Build graph: `graphify extract . --backend claude-cli` or `rbin-task-flow init --graphify` (re-run after large refactors).
-  - Query: `graphify query "question"` · `graphify affected "node"`.
+  - Build graph: `graphify extract . --backend claude-cli --out .task-flow/guides` or `rbin-task-flow init --graphify` (re-run after large refactors).
+  - Query: `graphify query "question" --graph .task-flow/guides/graphify-out/graph.json` · `graphify affected "node" --graph .task-flow/guides/graphify-out/graph.json`.
   - Guide: [.task-flow/guides/GRAPHIFY.md](mdc:.task-flow/guides/GRAPHIFY.md)
 
 - **Principle:**

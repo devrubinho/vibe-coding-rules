@@ -29,7 +29,7 @@ projeto/
 ├── CLAUDE.md                 # Índice enxuto + tabela de skills
 ├── .claude/
 │   ├── settings.json
-│   └── skills/               # 14 skills (task-flow-*, rbin-*)
+│   └── skills/               # 10 skills (task-flow-*, rbin-*)
 ├── .cursor/
 │   ├── rules/                # Referência + Cursor alwaysApply
 │   └── skills/               # Espelho das mesmas skills
@@ -53,9 +53,7 @@ CLAUDE.md                          # ≤ 150 linhas: índice + invariantes
     ├── task-flow-run/
     │   ├── SKILL.md
     │   └── workflow.md
-    ├── task-flow-check/
     ├── task-flow-audit/
-    ├── task-flow-improve-changes/
     └── rbin-git/
 .task-flow/                        # tasks, status, contexts (inalterado)
 ```
@@ -89,7 +87,7 @@ task-flow-run/
 |-------|-------------------|
 | `description` | **Obrigatório para descoberta.** Terceira pessoa, WHAT + WHEN, termos `task-flow`, `run next`, `sync`, `RBIN`. Limite ~1536 caracteres na listagem. |
 | `name` | Opcional; comando `/` vem do **nome da pasta** (`task-flow-run` → `/task-flow-run`). |
-| `disable-model-invocation: true` | Workflows com efeito colateral: `run`, `sync`, `check`, deploy. Você dispara; Claude não “decide” sozinho. |
+| `disable-model-invocation: true` | Workflows com efeito colateral: `run`, `sync`, deploy. Você dispara; Claude não “decide” sozinho. |
 | `user-invocable: false` | Conhecimento de fundo (ex.: legado) — raro no Task Flow. |
 | `allowed-tools` | Restringir ferramentas em skills sensíveis (ex.: só `Read`, `Grep` para audit read-only). |
 | `paths` | Ex.: `[".task-flow/**"]` — auto-carregar skill ao editar arquivos de task. |
@@ -122,7 +120,7 @@ Inclua estado real **antes** das instruções:
 1. ...
 ```
 
-O prefixo `` !`comando` `` executa o comando e substitui a linha pelo output. Ideal para `run`, `review` e `improve changes` (diff).
+O prefixo `` !`comando` `` executa o comando e substitui a linha pelo output. Ideal para `run` e `validate`.
 
 ### 4.5 Descoberta e monorepos
 
@@ -142,18 +140,13 @@ Para Task Flow em equipe: prefira **skills de projeto** versionadas (ajuste o `.
 
 | Comando usuário | Skill sugerida | `/` | Regra fonte |
 |-----------------|----------------|-----|-------------|
+| `task-flow: from contexts` | `task-flow-from-contexts` | `/task-flow-from-contexts` | `task_from_contexts.mdc` |
 | `task-flow: sync` | `task-flow-sync` | `/task-flow-sync` | `task-flow-sync.mdc` · `task_generation.mdc` (subtasks) |
 | `task-flow: run next X` / `run X` | `task-flow-run` | `/task-flow-run` | `workflow.md` · stub `task_work.mdc` |
 | `task-flow: status` | `task-flow-status` | `/task-flow-status` | `task_status.mdc` |
-| `task-flow: think` | `task-flow-think` | `/task-flow-think` | `task_analysis.mdc` |
 | `task-flow: audit` | `task-flow-audit` | `/task-flow-audit` | `task_audit.mdc` |
-| `task-flow: improve changes` | `task-flow-improve-changes` | `/task-flow-improve-changes` | `task_improve_changes.mdc` |
-| `task-flow: check` | `task-flow-check` | `/task-flow-check` | `task_check.mdc` |
-| `task-flow: review X` | `task-flow-review` | `/task-flow-review` | `task_review.mdc` |
-| `task-flow: refactor X` | `task-flow-refactor` | `/task-flow-refactor` | `task_refactor.mdc` |
-| `task-flow: estimate X` | `task-flow-estimate` | `/task-flow-estimate` | `task_estimate.mdc` |
+| `task-flow: estimate X` / `X,Y` / `all` | `task-flow-estimate` | `/task-flow-estimate` | `task_estimate.mdc` |
 | `task-flow: report X` | `task-flow-report` | `/task-flow-report` | `task_report.mdc` |
-| `task-flow: generate flow` | `task-flow-generate-flow` | `/task-flow-generate-flow` | `task_generate_flow.mdc` |
 | Implementar código | `rbin-coding-standards` | `/rbin-coding-standards` | checklist `coding_standards.mdc` + `docs/coding-standards-full.md` on demand |
 | Após concluir subtarefa | `rbin-git` | `/rbin-git` | `rbin-git-policy.mdc` (always) |
 
@@ -205,23 +198,21 @@ Copie o corpo longo de `.cursor/rules/task_work.mdc` para `workflow.md`.
 2. /task-flow-sync   (ou: task-flow: sync)
 3. /task-flow-status
 4. /task-flow-run run next 3
-5. /task-flow-check
-6. Você: git add && git commit  (mensagem sugerida pela IA)
+5. Você: git add && git commit  (mensagem sugerida pela IA)
 ```
 
 ### 7.2 Antes do PR
 
 ```text
-/task-flow-improve-changes
-/task-flow-check
-/task-flow-review 1,2
+/task-flow-validate
 ```
 
 ### 7.3 Planejamento / cobrança
 
 ```text
-/task-flow-generate-flow
 /task-flow-estimate 3
+/task-flow-estimate 1,2,3
+/task-flow-estimate all
 ```
 
 ### 7.4 Múltiplos agentes no mesmo repo
@@ -239,11 +230,11 @@ Skills nativas úteis **junto** com Task Flow ([docs](https://code.claude.com/do
 |-------|-------------------|
 | `/code-review` | Após `task-flow: run`, antes do commit |
 | `/debug` | Subtarefa travada em bug |
-| `/verify` | Validar app rodando (além de `task-flow: check`) |
+| `/verify` | Validar app rodando em runtime |
 | `/run` | Subir app para testar UI de subtarefa |
 | `/run-skill-generator` | Uma vez por repo — grava receita de build em `.claude/skills/run-*/` |
 
-`task-flow: check` cobre lint/build; `/verify` cobre comportamento em runtime quando testes não bastam.
+`/verify` cobre comportamento em runtime quando testes não bastam.
 
 ---
 
@@ -268,7 +259,6 @@ Stack: …
 | Sync | `/task-flow-sync` |
 | Executar | `/task-flow-run` |
 | Status | `/task-flow-status` |
-| Lint/build | `/task-flow-check` |
 | Padrões de código | `/rbin-coding-standards` |
 
 Comandos naturais `task-flow: …` também valem.
@@ -325,8 +315,8 @@ Ou use `AGENTS.override.md` / settings locais fora do git e commite `.claude/ski
 ## 13. Checklist de maturidade Claude + Task Flow
 
 - [x] `CLAUDE.md` enxuto com índice de skills
-- [x] Skills instaladas via `rbin-task-flow init` (14 skills)
-- [x] `paths: [".task-flow/**"]` em `task-flow-run`, `sync`, `estimate`, `report`, `generate-flow`
+- [x] Skills instaladas via `rbin-task-flow init` (10 skills)
+- [x] `paths: [".task-flow/**"]` em `task-flow-run`, `sync`, `estimate`, `report`
 - [x] Injeção `` !`head tasks.status.md` `` em `task-flow-run`
 - [ ] `.claude/skills/` versionado no git (ajustar `.gitignore` se o time quiser)
 - [ ] `.task-flow/contexts/` populado para tasks de UI

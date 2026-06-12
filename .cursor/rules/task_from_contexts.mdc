@@ -1,0 +1,93 @@
+---
+description: Drafts tasks in tasks.input.txt from files in .task-flow/contexts/. Use for task-flow from contexts, import contexts, gerar tasks dos contexts.
+alwaysApply: false
+---
+
+# task-flow: from contexts
+
+**Prefer:** `@task-flow-from-contexts` · **Next step:** `task-flow: sync` (user runs separately).
+
+## When to run
+
+User says `task-flow: from contexts`, `from contexts`, `import contexts`, `gerar tasks dos contexts`, `criar tasks a partir dos contexts`, etc.
+
+**Optional scope:** `task-flow: from contexts file.png` or `file1.png,file2.md` — only those files under `.task-flow/contexts/`.
+
+Default scope: **all context files** not yet represented in `tasks.input.txt`.
+
+## What it does
+
+Reads specs/mockups in `.task-flow/contexts/` and **appends** new `- Task description` lines to `.task-flow/tasks.input.txt`. Does **not** run sync, edit `.internal/`, or remove existing task lines.
+
+## Process
+
+### 1. Discover contexts
+
+- List `.task-flow/contexts/` (top level; include subfolders if present).
+- **Skip:** dotfiles, `README*`, and files that only document how `contexts/` works (e.g. `example.png.txt` unless user scoped it).
+- Supported: images (`.png`, `.jpg`, `.webp`, `.gif`), text (`.md`, `.txt`), data (`.json`, `.yaml`, `.yml`), PDF when the environment can read them.
+
+### 2. Read existing tasks
+
+- Parse `.task-flow/tasks.input.txt` — lines starting with `- `.
+- A context file is **already covered** if `tasks.input.txt` contains `task-flow-screen <filename>` or an equivalent reference to that basename.
+
+### 3. Analyze each new context file
+
+- **Text / markdown / JSON / YAML:** read and infer the deliverable (screen, API, feature, doc, fix).
+- **Images:** inspect visually (mockup, wireframe, diagram) and infer UI/feature scope.
+- **PDF:** extract requirements when readable; otherwise note limitation in the report.
+- Group related files into **one task** only when clearly one deliverable (e.g. `login.png` + `login-spec.md`); otherwise **one task per file**.
+
+### 4. Draft task lines
+
+Format (same as manual tasks):
+
+```text
+- Short actionable description task-flow-screen filename.ext
+```
+
+Rules:
+
+- One line per task; start with `- `; natural language; imperative tone.
+- Always append `task-flow-screen <exact-basename>` when the task comes from a file in `contexts/` (sync uses this in subtask instructions).
+- Do **not** duplicate meaning or `task-flow-screen` refs already in `tasks.input.txt`.
+- Do **not** edit or delete existing lines.
+
+### 5. Write
+
+- Append new lines under the `## Tasks:` section (or at end of task list if that heading is missing).
+- Preserve comments, headings, and blank lines elsewhere in the file.
+
+### 6. Report
+
+```markdown
+## From contexts
+
+### Added to tasks.input.txt
+- `- … task-flow-screen foo.png`
+- (none — all contexts already had tasks)
+
+### Skipped
+- `example.png.txt` — folder documentation
+- `bar.png` — already referenced in tasks.input.txt
+
+### Next
+Run `task-flow: sync` to generate subtasks.
+```
+
+## Variants
+
+| Intent | Example |
+|--------|---------|
+| All new contexts | `task-flow: from contexts` |
+| Specific file(s) | `task-flow: from contexts login-mockup.png` |
+| Multiple files | `task-flow: from contexts a.png,b.md` |
+
+## Integration
+
+- Sync after: [task-flow-sync.mdc](mdc:.cursor/rules/task-flow-sync.mdc) / `@task-flow-sync`
+- Context linking in subtasks: [task_generation.mdc](mdc:.cursor/rules/task_generation.mdc)
+- Git: [rbin-git-policy.mdc](mdc:.cursor/rules/rbin-git-policy.mdc) — suggest commit after user syncs if they want
+
+**Principle:** Contexts hold the spec; this command turns them into task lines; sync turns lines into subtasks.

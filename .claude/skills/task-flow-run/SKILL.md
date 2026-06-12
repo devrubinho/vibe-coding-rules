@@ -18,7 +18,7 @@ paths: [".task-flow/**"]
 3. Parse intent: `run next X` (default X=1) | `run X` | `run X,Y` | `run all`.
 4. **`run X` / `run X,Y`:** If any task before X has pending subtasks, **stop** and list blocking tasks.
 5. For each subtask: follow `instructions`; read `.task-flow/contexts/` files when referenced.
-6. If `graphify-out/graph.json` exists, prefer `graphify query "<module from subtask>"` before broad grep (summarized output only — see GRAPHIFY.md).
+6. If `.task-flow/guides/graphify-out/graph.json` exists, prefer `graphify query "<module from subtask>" --graph .task-flow/guides/graphify-out/graph.json` before broad grep (summarized output only — see GRAPHIFY.md).
 7. After each subtask: update `status.json` and `tasks.status.md` (regenerate 📊 Summary).
 8. When parent task complete: mark task `done` in both files.
 9. Invoke `/rbin-git` logic to **suggest** commit only — never `git add`/`commit`/`push`.

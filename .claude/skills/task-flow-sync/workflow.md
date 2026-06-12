@@ -50,7 +50,7 @@ All subtasks `pending`; task `pending`.
 
 - Preserve status on modified tasks when subtasks still match.
 - New subtasks after regen → `pending`; removed subtasks → drop from status.
-- Never explore codebase during pure sync unless user asked `think` in same message.
+- Never explore codebase during pure sync unless user explicitly asks for codebase analysis in the same message.
 
 ## After sync
 

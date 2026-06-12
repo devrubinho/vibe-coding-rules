@@ -18,7 +18,6 @@ paths: [".task-flow/**"]
 7. **Unchanged:** leave task data and status as-is.
 8. Align `status.json` with `tasks.status.md` (`status.json` is source of truth).
 9. Regenerate 📊 Summary in `tasks.status.md`.
-10. Do **not** populate `tasks.flow.md` (only `task-flow: generate flow`).
 
 ## Contexts
 

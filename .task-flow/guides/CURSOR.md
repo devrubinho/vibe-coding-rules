@@ -21,11 +21,10 @@ Verify: `rg 'alwaysApply: true' .cursor/rules` → only the two files above.
 
 | Say in Agent / Chat | Best invoke |
 |---------------------|-------------|
+| `task-flow: from contexts` | `@task-flow-from-contexts` |
 | `task-flow: sync` | `@task-flow-sync` |
 | `task-flow: run next 4` | `@task-flow-run` |
 | `task-flow: status` | `@task-flow-status` |
-| `task-flow: check` | `@task-flow-check` |
-| `task-flow: improve changes` | `@task-flow-improve-changes` |
 | `task-flow: validate` | `@task-flow-validate` |
 | Implement feature code | `@rbin-coding-standards` (explicit; checklist glob on `src/**`) |
 
@@ -39,7 +38,7 @@ Verify: `rg 'alwaysApply: true' .cursor/rules` → only the two files above.
 |-------|----------|-------------|
 | **Always** | `task-flow-cursor`, `rbin-git-policy` | Every chat (~0,9k tokens) |
 | **Skills** | `@task-flow-run`, `@task-flow-sync`, … | You invoke (recommended for run/sync/audit) |
-| **Intelligent** | `task_work`, `task_audit`, `task_analysis`, … | Agent matches `description` |
+| **Intelligent** | `task_work`, `task_audit`, `task_validate`, … | Agent matches `description` |
 | **Glob** | `task-flow-sync`, `task_generation` (`.task-flow/**`), `coding_standards` (`src/**`, `app/**`), `code_comments` | Matching paths in chat |
 | **Manual** | `@cursor_rules`, `@self_improve`, `@task_report`, legacy `git_control` | You `@`-mention only (no `description` auto-match) |
 
@@ -54,7 +53,7 @@ If a command fails to trigger, use **`@task-flow-*`** explicitly.
 | Surface | Best for |
 |---------|----------|
 | **Agent** (Composer) | `@task-flow-run`, multi-file implementation |
-| **Chat** | `sync`, `status`, `think`, `estimate` |
+| **Chat** | `sync`, `status`, `estimate` |
 | **@ files** | `@tasks.input.txt`, `@.task-flow/contexts/mockup.png` |
 
 ---
@@ -70,7 +69,7 @@ After each subtask:
 
 ## Graphify
 
-Only during `run` / `think` when `graphify-out/` exists. Does not replace Task Flow status. See [GRAPHIFY.md](GRAPHIFY.md).
+Only during `run` / `validate` when `.task-flow/guides/graphify-out/` exists. Does not replace Task Flow status. See [GRAPHIFY.md](GRAPHIFY.md).
 
 ---
 

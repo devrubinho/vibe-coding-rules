@@ -12,18 +12,13 @@ alwaysApply: false
 | Command | Invoke |
 |---------|--------|
 | `task-flow: sync` | `@task-flow-sync` |
+| `task-flow: from contexts` | `@task-flow-from-contexts` |
 | `task-flow: run next X`, `run N` | `@task-flow-run` |
 | `task-flow: status` | `@task-flow-status` |
-| `task-flow: think` | `@task-flow-think` |
-| `task-flow: check` | `@task-flow-check` |
 | `task-flow: audit` | `@task-flow-audit` |
-| `task-flow: improve changes` | `@task-flow-improve-changes` |
-| `task-flow: review X` | `@task-flow-review` |
 | `task-flow: validate` | `@task-flow-validate` |
-| `task-flow: refactor X` | `@task-flow-refactor` |
-| `task-flow: estimate X` | `@task-flow-estimate` |
+| `task-flow: estimate X` / `X,Y` / `all` | `@task-flow-estimate` |
 | `task-flow: report X` | `@task-flow-report` |
-| `task-flow: generate flow` | `@task-flow-generate-flow` |
 | Implement code | `@rbin-coding-standards` |
 | Suggest commit | `@rbin-git` |
 

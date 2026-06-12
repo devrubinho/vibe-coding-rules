@@ -119,8 +119,6 @@ src/AGENTS.md                      # Opcional: só para subtree (monorepo)
 | `task-flow: sync` | `.cursor/rules/task-flow-sync.mdc` |
 | `task-flow: run next X` / `run N` | `.claude/skills/task-flow-run/workflow.md` (fallback: `task_work.mdc`) |
 | `task-flow: status` | `.task-flow/tasks.status.md` |
-| `task-flow: improve changes` | `.cursor/rules/task_improve_changes.mdc` + `git diff --name-only HEAD` |
-| `task-flow: check` | `.cursor/rules/task_check.mdc` + `package.json` scripts |
 | `task-flow: audit` | `.cursor/rules/task_audit.mdc` + checklist `coding_standards.mdc` (full doc seções se necessário) |
 
 Após cada subtarefa: atualizar `status.json` e `tasks.status.md` (resumo no topo).
@@ -155,18 +153,16 @@ Codex prefere `AGENTS.override.md` sobre `AGENTS.md` **no mesmo nível**.
 
 | Comando | Prompt mínimo eficaz |
 |---------|---------------------|
+| `task-flow: from contexts` | `task_from_contexts.mdc — leia contexts/, append tasks em tasks.input.txt` |
 | `task-flow: sync` | `Leia AGENTS.md e task-flow-sync.mdc. Execute task-flow: sync em tasks.input.txt.` |
 | `task-flow: run next 3` | `Siga task-flow-run workflow.md. task-flow: run next 3. Atualize status.json e tasks.status.md.` |
 | `task-flow: run 2` | Idem + respeitar dependências tasks 1..X-1 |
 | `task-flow: status` | `Mostre o conteúdo de .task-flow/tasks.status.md` |
-| `task-flow: think` | `task-flow: think — sugira tasks; pergunte antes de gravar em tasks.input.txt` |
-| `task-flow: improve changes` | `git diff --name-only HEAD` · checklist `coding_standards.mdc` nos paths alterados |
-| `task-flow: check` | `Rode lint:fix e build do package.json; corrija até passar` |
-| `task-flow: review 1` | `task_review.mdc — verifique se task 1 done está realmente implementada` |
 | `task-flow: validate` | `task_validate.mdc — valide todas as tasks, reverta false done, adicione lacunas em tasks.input.txt e sync` |
 | `task-flow: estimate 1` | `task_estimate.mdc para task 1` |
+| `task-flow: estimate 1,2` | `task_estimate.mdc para tasks 1 e 2` |
+| `task-flow: estimate all` | `task_estimate.mdc para todas as tasks` |
 | `task-flow: report 1` | `task_report.mdc — task 1 deve estar done` |
-| `task-flow: generate flow` | `task_generate_flow.mdc — preencher tasks.flow.md` |
 
 **Padrão universal:**
 
@@ -193,10 +189,6 @@ Leia AGENTS.md. task-flow: sync.
 task-flow: run next 2 — leia .claude/skills/task-flow-run/workflow.md e .task-flow/.internal/tasks.json.
 ```
 
-```text
-task-flow: check
-```
-
 Você executa git manualmente.
 
 ### 6.2 Codex em subpasta (monorepo)
@@ -213,11 +205,7 @@ Codex mescla: `AGENTS.md` (raiz) + `packages/frontend/AGENTS.md` se existir.
 ### 6.3 Antes do PR
 
 ```text
-task-flow: improve changes
-```
-
-```text
-task-flow: review 2,3
+task-flow: validate
 ```
 
 ### 6.4 Sem project doc (debug)
@@ -290,8 +278,7 @@ Config mais específica (perto do CWD) **sobrescreve** a da raiz.
 | Ferramenta | Papel |
 |------------|-------|
 | `rbin-task-flow init` | Instala `AGENTS.md` + `.task-flow/` + `.cursor/rules/` |
-| `rbin-task-flow audit` | Lista unstaged (útil antes de `improve changes`) |
-| Codex | Executa lógica descrita nas regras |
+| Codex | Executa lógica descrita nas regras (`task-flow: audit`, `task-flow: run`, etc.) |
 
 Codex **não** substitui `task-flow: sync` — isso é trabalho do agente lendo as regras.
 
@@ -303,7 +290,7 @@ Codex **não** substitui `task-flow: sync` — isso é trabalho do agente lendo 
 |-------|---------|
 | AGENTS.md com 40 KiB de standards | Truncamento silencioso |
 | Assumir que Codex “sabe” task-flow | Sem `.mdc` no prompt, comportamento genérico |
-| `task-flow: audit` em todo commit pequeno | Use `improve changes` |
+| `task-flow: audit` em todo commit pequeno | Use `task-flow: validate` ou escopo manual nos paths alterados |
 | Duplicar git rules em 3 arquivos sem necessidade | Desperdício do orçamento 32 KiB |
 | `CODEX_DISABLE_PROJECT_DOC=1` esquecido no env | AGENTS.md ignorado |
 
@@ -316,7 +303,7 @@ Codex **não** substitui `task-flow: sync` — isso é trabalho do agente lendo 
 | Ignora “nunca commit” | AGENTS truncado ou não carregado | `Summarize current instructions`; reduzir AGENTS |
 | Não atualiza status | Procedimento não no prompt | Citir `task-flow-run/workflow.md` ou resumo embutido |
 | Comportamento diferente na subpasta | AGENTS local sobrescreve | Revisar `packages/*/AGENTS.md` |
-| Muito contexto em standards | audit puxou arquivo inteiro | Escopo `improve changes` + paths |
+| Muito contexto em standards | audit puxou arquivo inteiro | Limite paths no prompt ou use checklist só nos arquivos alterados |
 | Conflito global vs repo | `~/.codex/AGENTS.md` | Simplificar global; detalhe no repo |
 
 ---
@@ -328,7 +315,7 @@ Codex **não** substitui `task-flow: sync` — isso é trabalho do agente lendo 
 - [x] `.codex/config.toml` com `project_doc_max_bytes = 65536`
 - [ ] Tamanho `AGENTS.md` < ~28 KiB se não usar config.toml
 - [ ] Prompts citam `AGENTS.md` + `.task-flow/guides/CODEX.md` para `run`
-- [ ] `improve changes` + `check` antes de PR
+- [ ] `task-flow: validate` antes de PR quando relevante
 - [ ] `AGENTS.md` em subpastas de monorepo se necessário
 
 ---
@@ -362,7 +349,7 @@ Ao implementar código, seguir o checklist em `.cursor/rules/coding_standards.md
 
 ## 15. Graphify (opcional)
 
-Não adicionamos Graphify ao `AGENTS.md` (limite 32 KiB). Em **`task-flow: run`**, peça no prompt: `graphify query "…"` se `graphify-out/` existir. Ver [GRAPHIFY.md](../GRAPHIFY.md).
+Não adicionamos Graphify ao `AGENTS.md` (limite 32 KiB). Em **`task-flow: run`**, peça no prompt: `graphify query "…"` se `.task-flow/guides/graphify-out/` existir. Ver [GRAPHIFY.md](../GRAPHIFY.md).
 
 ---
 

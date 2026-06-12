@@ -174,17 +174,13 @@ install_to_project() {
   if [ -d "$SCRIPT_DIR/.task-flow" ]; then
     mkdir -p "$target/.task-flow"
     echo -e "${GREEN}✅ Task Flow directory${NC}"
-    echo -e "${CYAN}   ℹ️  Note: .internal/ is protected, and on init tasks.input.txt, tasks.status.md, and tasks.flow.md are preserved if they already exist${NC}"
+    echo -e "${CYAN}   ℹ️  Note: .internal/ is protected, and on init tasks.input.txt and tasks.status.md are preserved if they already exist${NC}"
     [ ! -f "$target/.task-flow/tasks.input.txt" ] &&
       [ -f "$SCRIPT_DIR/.task-flow/tasks.input.txt" ] &&
       cp "$SCRIPT_DIR/.task-flow/tasks.input.txt" "$target/.task-flow/tasks.input.txt"
     [ ! -f "$target/.task-flow/tasks.status.md" ] &&
       [ -f "$SCRIPT_DIR/.task-flow/tasks.status.md" ] &&
       cp "$SCRIPT_DIR/.task-flow/tasks.status.md" "$target/.task-flow/tasks.status.md"
-    [ ! -f "$target/.task-flow/tasks.flow.md" ] && {
-      printf '# Task Flow — Dependencies, Hours & Model Recommendations\n\n<!-- Populated by task-flow: generate flow. Do not edit manually. -->\n<!-- Horas: uso para cobrança ao cliente -->\n' > "$target/.task-flow/tasks.flow.md"
-      echo -e "${GREEN}✅ Task Flow tasks.flow.md (empty - run task-flow: generate flow to populate)${NC}"
-    }
     [ -f "$SCRIPT_DIR/.task-flow/README.md" ] &&
       cp "$SCRIPT_DIR/.task-flow/README.md" "$target/.task-flow/README.md" &&
       echo -e "${GREEN}✅ Task Flow README${NC}"
@@ -229,7 +225,6 @@ install_to_project() {
     echo ".claude/"
     echo ".cursor/"
     echo ".task-flow/"
-    echo "graphify-out/"
     echo "CLAUDE.md"
     echo "AGENTS.md"
   } >> "$target/.gitignore"

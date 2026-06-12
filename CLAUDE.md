@@ -14,18 +14,13 @@
 | Action | Skill |
 |--------|--------|
 | Sync input → system | `/task-flow-sync` |
+| Draft tasks from `contexts/` | `/task-flow-from-contexts` |
 | Run subtasks | `/task-flow-run` |
 | Status | `/task-flow-status` |
-| Suggest new tasks | `/task-flow-think` |
-| Lint + build | `/task-flow-check` |
 | Audit repo | `/task-flow-audit` |
-| Audit diff only | `/task-flow-improve-changes` |
-| Verify done | `/task-flow-review` |
 | Validate + fill gaps | `/task-flow-validate` |
-| Refactor task code | `/task-flow-refactor` |
-| Estimate hours | `/task-flow-estimate` |
+| Estimate hours (`X`, `X,Y`, `all`) | `/task-flow-estimate` |
 | Implementation report | `/task-flow-report` |
-| tasks.flow.md | `/task-flow-generate-flow` |
 | Implement code | `/rbin-coding-standards` (invoke explicitly; checklist first, full doc sections only if needed) |
 | Commit suggestion | `/rbin-git` |
 
@@ -43,7 +38,7 @@ Natural language `task-flow: …` works the same. Details: [.task-flow/README.md
 
 ## Graphify (optional)
 
-During `/task-flow-run`, if `graphify-out/` exists, use `graphify query` before broad search. See [.task-flow/guides/GRAPHIFY.md](.task-flow/guides/GRAPHIFY.md).
+During `/task-flow-run`, if `.task-flow/guides/graphify-out/` exists, use `graphify query` with `--graph .task-flow/guides/graphify-out/graph.json` before broad search. See [.task-flow/guides/GRAPHIFY.md](.task-flow/guides/GRAPHIFY.md).
 
 ## Cursor rules (reference)
 

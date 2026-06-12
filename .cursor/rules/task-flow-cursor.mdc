@@ -21,18 +21,13 @@ alwaysApply: true
 | User intent | Invoke |
 |-------------|--------|
 | `task-flow: sync` | `@task-flow-sync` or [task-flow-sync.mdc](mdc:.cursor/rules/task-flow-sync.mdc) |
+| `task-flow: from contexts` | `@task-flow-from-contexts` |
 | `task-flow: run next X`, `run N` | `@task-flow-run` |
 | `task-flow: status` | `@task-flow-status` |
-| `task-flow: think` | `@task-flow-think` |
-| `task-flow: check` | `@task-flow-check` |
 | `task-flow: audit` | `@task-flow-audit` |
-| `task-flow: improve changes` | `@task-flow-improve-changes` |
-| `task-flow: review X` | `@task-flow-review` |
 | `task-flow: validate` | `@task-flow-validate` |
-| `task-flow: refactor X` | `@task-flow-refactor` |
-| `task-flow: estimate X` | `@task-flow-estimate` |
+| `task-flow: estimate X` / `X,Y` / `all` | `@task-flow-estimate` |
 | `task-flow: report X` | `@task-flow-report` |
-| `task-flow: generate flow` | `@task-flow-generate-flow` |
 | Implementing code | `@rbin-coding-standards` |
 | Suggest commit | `@rbin-git` |
 
@@ -44,7 +39,7 @@ Never write git — user runs all commits. Policy: [rbin-git-policy.mdc](mdc:.cu
 
 ## Graphify (optional)
 
-On `run` / `think`, if `graphify-out/` exists: `graphify query` before repo-wide grep. Rule: `graphify-task-flow`. Guide: `.task-flow/guides/GRAPHIFY.md`.
+On `run` / `validate`, if `.task-flow/guides/graphify-out/` exists: `graphify query` before repo-wide grep. Rule: `graphify-task-flow`. Guide: `.task-flow/guides/GRAPHIFY.md`.
 
 ## More detail
 

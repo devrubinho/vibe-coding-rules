@@ -14,13 +14,13 @@ description: Full task-flow sync — reconciles tasks.input.txt with tasks.json,
 globs: .task-flow/**
 alwaysApply: false
 ---`,
+  'task_from_contexts.mdc': `---
+description: Drafts tasks in tasks.input.txt from .task-flow/contexts/ files. Use for task-flow from contexts or import contexts.
+alwaysApply: false
+---`,
   'task_generation.mdc': `---
 description: Subtask generation templates for new tasks. For sync use task-flow-sync.mdc or @task-flow-sync.
 globs: .task-flow/**
-alwaysApply: false
----`,
-  'task_analysis.mdc': `---
-description: task-flow think — suggest new tasks for tasks.input.txt. Not for sync (use task-flow-sync.mdc).
 alwaysApply: false
 ---`,
   'task_execution.mdc': `---
@@ -36,32 +36,12 @@ alwaysApply: false
 description: Audits full codebase against coding standards for task-flow audit. Non-destructive; user chooses improvements.
 alwaysApply: false
 ---`,
-  'task_improve_changes.mdc': `---
-description: Audits uncommitted files only for task-flow improve changes. Use git diff against HEAD scope.
-alwaysApply: false
----`,
-  'task_check.mdc': `---
-description: Runs lint fix and build for task-flow check until project passes.
-alwaysApply: false
----`,
-  'task_review.mdc': `---
-description: Verifies completed task-flow tasks are actually implemented. Use for task-flow review X or review all.
-alwaysApply: false
----`,
-  'task_refactor.mdc': `---
-description: Refactors task-flow task code without behavior change. Use for task-flow refactor X.
-alwaysApply: false
----`,
   'task_estimate.mdc': `---
 description: Estimates hours for task-flow estimate X. Average developer pace, no AI acceleration.
 alwaysApply: false
 ---`,
   'task_report.mdc': `---
 description: Generates task-flow implementation report for completed task X. Use for task-flow report.
-alwaysApply: false
----`,
-  'task_generate_flow.mdc': `---
-description: Populates tasks.flow.md with dependencies and hours for task-flow generate flow.
 alwaysApply: false
 ---`,
   'coding_standards.mdc': `---

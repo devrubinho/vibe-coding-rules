@@ -13,9 +13,19 @@ Codex loads **AGENTS.md** at session start (32 KiB default cap). This file holds
 3. New tasks: generate 3–8 subtasks, `createdAt` ISO, contexts from `.task-flow/contexts/`.
 4. Write/update `tasks.json`, `status.json`, `tasks.status.md` with Summary.
 5. Preserve status on modified tasks when subtasks still align.
-6. Do not populate `tasks.flow.md`.
 
-Sync: `.cursor/rules/task-flow-sync.mdc` · Think: `.cursor/rules/task_analysis.mdc`
+Sync: `.cursor/rules/task-flow-sync.mdc`
+
+---
+
+## task-flow: from contexts
+
+1. List `.task-flow/contexts/` (or specific `file.png`, `a.md,b.png`).
+2. Read each file; skip already linked via `task-flow-screen` in `tasks.input.txt`.
+3. Append `- Description task-flow-screen filename.ext` under `## Tasks:`.
+4. Report added/skipped; suggest `task-flow: sync` — do not sync here.
+
+Rule: `.cursor/rules/task_from_contexts.mdc`
 
 ---
 
@@ -37,26 +47,6 @@ Display `.task-flow/tasks.status.md`. If missing, run sync first.
 
 ---
 
-## task-flow: think
-
-1. Read `tasks.input.txt`.
-2. Scan repo for TODOs, gaps, tests, incomplete features.
-3. Propose new `- task` lines.
-4. **Ask** before appending to `tasks.input.txt`.
-5. If confirmed, append and suggest `task-flow: sync`.
-
----
-
-## task-flow: check
-
-1. `package.json` scripts: lint fix variant, then `build`.
-2. Fix until pass.
-3. Does not edit task files.
-
-Rule: `.cursor/rules/task_check.mdc`
-
----
-
 ## task-flow: audit
 
 1. Score project vs the checklist in `.cursor/rules/coding_standards.mdc` (not the full doc unless user wants depth).
@@ -64,27 +54,6 @@ Rule: `.cursor/rules/task_check.mdc`
 3. Never impose wholesale refactors.
 
 Rule: `.cursor/rules/task_audit.mdc`
-
----
-
-## task-flow: improve changes
-
-1. `git diff --name-only HEAD` (read-only).
-2. If empty, stop.
-3. Audit only those paths vs coding standards.
-4. Ask before edits.
-
-Rule: `.cursor/rules/task_improve_changes.mdc`
-
----
-
-## task-flow: review X
-
-1. Load done subtasks for task X from `status.json`.
-2. Verify implementation in codebase.
-3. Report false positives; ask to revert status if needed.
-
-Rule: `.cursor/rules/task_review.mdc`
 
 ---
 
@@ -98,21 +67,13 @@ Rule: `.cursor/rules/task_review.mdc`
 
 Rule: `.cursor/rules/task_validate.mdc`
 
-Unlike `think` (asks before add) or `review` (done only, asks before revert).
-
----
-
-## task-flow: refactor X
-
-Refactor task-related files: no behavior change, remove explanatory comments, keep section separators.
-
-Rule: `.cursor/rules/task_refactor.mdc`
-
 ---
 
 ## task-flow: estimate X
 
-Read `tasks.json`; one hour range; average developer, average pace, no AI acceleration.
+1. Parse: `estimate X` | `estimate X,Y` | `estimate all`.
+2. Read `tasks.json` for matching task ID(s).
+3. One hour range per task; average developer, average pace, no AI acceleration.
 
 Rule: `.cursor/rules/task_estimate.mdc`
 
@@ -126,14 +87,6 @@ Rule: `.cursor/rules/task_report.mdc`
 
 ---
 
-## task-flow: generate flow
-
-Populate `.task-flow/tasks.flow.md` with deps, hours, model hints (no Opus).
-
-Rule: `.cursor/rules/task_generate_flow.mdc`
-
----
-
 ## Implementing code (any subtask)
 
 Follow the checklist in `.cursor/rules/coding_standards.mdc`. For examples/Nest: read sections of `.task-flow/guides/coding-standards-full.md` only.
@@ -142,7 +95,7 @@ Follow the checklist in `.cursor/rules/coding_standards.mdc`. For examples/Nest:
 
 ## Graphify (optional)
 
-Only during `run` / `think` when `graphify-out/` exists. See `.task-flow/guides/GRAPHIFY.md`. Does not replace status updates.
+Only during `run` / `validate` when `.task-flow/guides/graphify-out/` exists. See `.task-flow/guides/GRAPHIFY.md`. Does not replace status updates.
 
 ---
 

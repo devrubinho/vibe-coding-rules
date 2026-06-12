@@ -2,6 +2,125 @@
 
 ## [Unreleased]
 
+## [1.26.0] - 2026-06-05
+
+**Minor release — `from contexts` + comandos enxutos (10 skills).**
+
+Pacote npm desde **1.25.1**: inclui também **1.25.2–1.25.5** (remoções de CLI/comandos IA, Graphify em `guides/`, `estimate` com `all`).
+
+### Added
+
+- **`task-flow: from contexts`** — lê `.task-flow/contexts/` (imagem, PDF, texto, JSON, etc.) e **append** de `- tasks` em `tasks.input.txt` com `task-flow-screen arquivo.ext`; depois rode `sync`.
+- Variantes: todos os contexts novos, ou `file.png`, ou `a.png,b.md`.
+- Skill `@task-flow-from-contexts` / regra `task_from_contexts.mdc`.
+
+### Removed (desde 1.25.1)
+
+- Comandos IA: `check`, `improve changes`, `generate flow`, `review`, `refactor`, `think` (skills + `.mdc`).
+- CLI: `rbin-task-flow check`, `rbin-task-flow audit` (`lib/check.js`, `lib/audit.js`).
+- Stub `tasks.flow.md` no install.
+
+### Changed
+
+- **10 skills** no `init` (era 15 em 1.24): `sync`, `from-contexts`, `run`, `status`, `validate`, `estimate`, `report`, `audit`, `rbin-coding-standards`, `rbin-git`.
+- **Graphify** → `.task-flow/guides/graphify-out/`; `update --graphify` migra `graphify-out/` legado da raiz.
+- **`task-flow: estimate`** — `X`, `X,Y`, `all` documentado (CLI já suportava).
+- Quick Commands em `.task-flow/README.md` com coluna **Variants** (`run`, `estimate`, `report`, `validate`).
+- Validação de implementação: **`task-flow: validate`** (substitui review/think para lacunas).
+
+### Migration
+
+```bash
+npm install -g rbin-task-flow@1.26.0
+cd your-project && rbin-task-flow update
+# opcional: rbin-task-flow update --graphify
+```
+
+Fluxo com contexts: arquivos em `.task-flow/contexts/` → `task-flow: from contexts` → `task-flow: sync` → `task-flow: run next X`.
+
+## [1.25.5] - 2026-06-05
+
+**Patch release — remove `think`.**
+
+### Removed
+
+- **`task-flow: think`** — skill `task-flow-think`, regra `task_analysis.mdc`, documentação.
+
+### Changed
+
+- Lacunas e novas tasks: edite `tasks.input.txt` manualmente ou use **`task-flow: validate`** (append automático).
+- **9 skills** no `init` (antes 10).
+
+### Migration
+
+```bash
+npm install -g rbin-task-flow@1.25.5
+cd your-project && rbin-task-flow update
+```
+
+## [1.25.4] - 2026-06-05
+
+**Patch release — remove `review` e `refactor`.**
+
+### Removed
+
+- **`task-flow: review X`** e **`task-flow: refactor X`** — skills, regras `.mdc` e documentação.
+
+### Changed
+
+- Validação de implementação: use **`task-flow: validate`** (`@task-flow-validate`).
+- **10 skills** no `init` (antes 12).
+
+### Migration
+
+```bash
+npm install -g rbin-task-flow@1.25.4
+cd your-project && rbin-task-flow update
+```
+
+## [1.25.3] - 2026-06-05
+
+**Patch release — remove `generate flow`; `estimate` com `X,Y` e `all`.**
+
+### Removed
+
+- **`task-flow: generate flow`** — skill, regra `task_generate_flow.mdc`, stub `tasks.flow.md` no install.
+- Keyword npm `generate-flow`.
+
+### Changed
+
+- **`task-flow: estimate`** — documentado e na skill: `estimate 1`, `estimate 1,2`, `estimate all` (CLI já suportava).
+- **12 skills** no `init` (antes 13).
+
+### Migration
+
+```bash
+npm install -g rbin-task-flow@1.25.3
+cd your-project && rbin-task-flow update
+```
+
+## [1.25.2] - 2026-06-05
+
+**Patch release — remove `check` e `improve changes`.**
+
+### Removed
+
+- **`task-flow: check`** e **`task-flow: improve changes`** — skills, regras `.mdc` e documentação.
+- **`rbin-task-flow check`** (CLI) e `lib/check.js`.
+
+### Changed
+
+- **Graphify + Task Flow** — saída em `.task-flow/guides/graphify-out/` (`graphify extract … --out .task-flow/guides`); migra `graphify-out/` legado da raiz no `update`; remove `graphify-out/` do template `.gitignore`.
+- **Removido** `rbin-task-flow audit` (CLI) — use `task-flow: audit` na IA (`@task-flow-audit`).
+- **13 skills** no `init` (antes 15).
+
+### Migration
+
+```bash
+npm install -g rbin-task-flow@1.25.2
+cd your-project && rbin-task-flow update
+```
+
 ## [1.25.1] - 2026-06-06
 
 **Patch release — padrão `.env` para projetos Vercel nos coding standards.**

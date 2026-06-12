@@ -7,10 +7,6 @@ alwaysApply: false
 
 **Prefer:** `@task-flow-validate` · After changes: status is updated automatically; new lines trigger sync.
 
-**Not the same as:**
-- `task-flow: review` — only checks `done` subtasks; asks before status revert; does not add tasks.
-- `task-flow: think` — suggests tasks; **asks** before writing `tasks.input.txt`.
-
 ## When to run
 
 User says `task-flow: validate`, `task-flow: validate X`, `task-flow: validate all`, `validar tasks`, `verificar lacunas`, `validate implementation gaps`, etc.
@@ -19,7 +15,7 @@ Default scope when no ID: **`all`**.
 
 ## Depth
 
-Use **thorough** reasoning: read each subtask `instructions`, `.task-flow/contexts/` when cited, verify files/tests/docs in the codebase — not a shallow grep. Optional: `graphify query "<module>"` per task area when `graphify-out/graph.json` exists.
+Use **thorough** reasoning: read each subtask `instructions`, `.task-flow/contexts/` when cited, verify files/tests/docs in the codebase — not a shallow grep. Optional: `graphify query "<module>"` per task area when `.task-flow/guides/graphify-out/graph.json` exists.
 
 ## Process
 
@@ -92,8 +88,6 @@ Find work not covered by current tasks:
 ## Integration
 
 - Sync: [task-flow-sync.mdc](mdc:.cursor/rules/task-flow-sync.mdc)
-- Review (lighter): [task_review.mdc](mdc:.cursor/rules/task_review.mdc)
-- Think (suggest only): [task_analysis.mdc](mdc:.cursor/rules/task_analysis.mdc)
 - Git: [rbin-git-policy.mdc](mdc:.cursor/rules/rbin-git-policy.mdc)
 
 **Principle:** Validate = truth check + fill gaps. Done means done; missing work becomes new tasks automatically.

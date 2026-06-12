@@ -6,7 +6,7 @@ disable-model-invocation: true
 
 # Task Flow — Validate
 
-Thorough implementation audit + automatic gap fill (unlike `review` or `think`).
+Thorough implementation audit + automatic gap fill in `tasks.input.txt`.
 
 1. Read `tasks.input.txt`, `tasks.json`, `status.json`, `contexts/` — scope `X`, `X,Y`, or `all` (default `all`).
 2. **Verify** each subtask in scope: `done` must match code; `pending` checked for drift.
@@ -17,6 +17,6 @@ Thorough implementation audit + automatic gap fill (unlike `review` or `think`).
    - Run sync workflow (`@task-flow-sync` / `task-flow-sync.mdc`)
 5. Report verified / reverted / added / next `run`.
 
-Optional: `graphify query` per task area if `graphify-out/graph.json` exists.
+Optional: `graphify query` per task area if `.task-flow/guides/graphify-out/graph.json` exists.
 
 Reference: `.cursor/rules/task_validate.mdc`

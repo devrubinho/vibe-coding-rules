@@ -77,10 +77,10 @@ rbin-task-flow init --share-ai-config  # Versiona .cursor/skills/ e .cursor/rule
 rbin-task-flow update        # Atualiza configurações (mantém profile em install-meta.json)
 rbin-task-flow update --profile standard  # Passa a copiar todas as regras .mdc
 rbin-task-flow reset         # Reinstala o Task Flow do zero
-rbin-task-flow reset --graphify  # Reset + graphify extract --backend claude-cli (CLI Graphify no PATH)
+rbin-task-flow update --graphify # Update + grafo em .task-flow/guides/graphify-out/
+rbin-task-flow reset --graphify  # Reset + graphify extract (CLI Graphify no PATH)
 rbin-task-flow version-check # Verifica atualizações de modelos
 rbin-task-flow info          # Mostra informações
-rbin-task-flow check         # Roda lint/fix e build quando existirem
 rbin-task-flow estimate <ids> # Estima tempo (ex: "1" ou "1,2" ou "all")
 rbin-task-flow report <ids>  # Gera relatório (ex: "1" ou "1,2" ou "all")
 ```
@@ -91,34 +91,30 @@ Após inicializar, use estes comandos na IA (Cursor/Claude/Codex) para gerenciar
 
 **Otimizar por plataforma:** [.task-flow/guides/AI-PLATFORMS.md](.task-flow/guides/AI-PLATFORMS.md) · [Claude](.task-flow/guides/platforms/claude-code.md) · [Cursor](.task-flow/guides/platforms/cursor.md) · [Codex](.task-flow/guides/platforms/codex.md) · [Graphify](.task-flow/guides/GRAPHIFY.md)
 
-**Graphify (opcional):** `rbin-task-flow init --graphify` configura coexistência e roda `graphify extract . --backend claude-cli` (CLI via `rbin-install-dev`; usa assinatura Claude Code).
+**Graphify (opcional):** grafo em `.task-flow/guides/graphify-out/`. Novo projeto: `rbin-task-flow init --graphify`. **Já tem Task Flow:** `npm install -g rbin-task-flow@latest` e `rbin-task-flow update --graphify` no projeto (migra `graphify-out/` da raiz + regera grafo). Detalhes: [.task-flow/README.md](.task-flow/README.md#graphify-opcional) · [GRAPHIFY.md](.task-flow/guides/GRAPHIFY.md).
 
-**Claude Code / Cursor skills (v1.20+):** `init` copia 15 skills para `.claude/skills/` e `.cursor/skills/` — use `/task-flow-sync`, `/task-flow-run`, `/task-flow-validate`, etc.
+**Claude Code / Cursor skills (v1.20+):** `init` copia 10 skills para `.claude/skills/` e `.cursor/skills/` — use `/task-flow-from-contexts`, `/task-flow-sync`, `/task-flow-run`, etc.
 
 **Codex (v1.21+):** `AGENTS.md` com sync/run embutidos, `.task-flow/guides/CODEX.md` sob demanda, `.codex/config.toml` (64 KiB).
 
 **Cursor (v1.23+):** `task-flow-cursor.mdc` + `rbin-git-policy.mdc` (2 always-on) + skills — ver `.task-flow/guides/CURSOR.md`.
 
-**Perfil minimal:** `init --profile minimal` instala só as 2 regras always-on e as 15 skills; workflows via `@task-flow-*` (sem `task_work`, `coding_standards` glob, etc.). `standard` (padrão) copia todas as regras `.cursor/rules/`.
+**Perfil minimal:** `init --profile minimal` instala só as 2 regras always-on e as 10 skills; workflows via `@task-flow-*` (sem `task_work`, `coding_standards` glob, etc.). `standard` (padrão) copia todas as regras `.cursor/rules/`.
 
 **Compartilhar com o time:** `init --share-ai-config` não ignora `.cursor/skills/` nem `.cursor/rules/` no `.gitignore` (só `.cursor/settings.json` e overrides locais). Padrão: `.cursor/` inteiro ignorado — menos ruído no repo, config local por dev.
 
 | Comando | Por Que Usar | Feature Principal |
 |---------|--------------|-------------------|
+| `task-flow: from contexts` | **Gera** tasks a partir de specs/mockups | Lê arquivos em `contexts/` (PDF, imagem, texto…) e adiciona linhas em `tasks.input.txt`; depois rode `sync` |
 | `task-flow: sync` | **Sincroniza** tarefas do arquivo texto com o sistema | Mantém tudo sincronizado automaticamente - adiciona novas, remove deletadas, preserva seu progresso |
-| `task-flow: think` | **Descobre** tarefas que você esqueceu | Analisa código e sugere tarefas que faltam (testes, refatoração, documentação) |
 | `task-flow: audit` | **Avalia** o quanto o código bate com os padrões de codificação | Analisa a codebase, dá um score por categoria e pergunta quais melhorias você quer adotar — sem impor nada |
-| `task-flow: check` | **Valida** lint e build antes de revisar ou commitar | Roda lint com fix quando disponível e depois build, corrigindo problemas do projeto atual |
-| `task-flow: improve changes` | **Audita** só o diff atual | Faz o mesmo audit de padrões, mas restrito aos arquivos alterados em relação ao `HEAD` |
 | `task-flow: status` | **Visualiza** o progresso rapidamente | Vê resumo com tasks completas, em andamento e quantas subtarefas faltam |
 | `task-flow: run next X` | **Automatiza** o trabalho nas próximas subtarefas | A IA trabalha nas próximas X subtarefas sequencialmente, você só acompanha |
 | `task-flow: run X` | **Completa** uma tarefa inteira de uma vez | Executa todas as subtarefas de uma tarefa específica (permite trabalho paralelo) |
 | `task-flow: run X,Y` | **Completa** múltiplas tarefas | Executa tarefas separadas por vírgula (ex: `task-flow: run 10,11`) |
 | `task-flow: run all` | **Completa** todas as tarefas | Executa todas as tarefas pendentes |
-| `task-flow: review X` | **Garante** qualidade do trabalho | Verifica tarefas específicas (ex: `task-flow: review 1` ou `task-flow: review 10,11` ou `task-flow: review all`) |
 | `task-flow: validate` | **Valida** implementação e **preenche lacunas** | Auditoria profunda: reverifica done/pending, corrige status falso, adiciona lacunas em `tasks.input.txt` e faz sync |
-| `task-flow: refactor X` | **Melhora** código sem quebrar | Refatora tarefas específicas (ex: `task-flow: refactor 1` ou `task-flow: refactor 10,11` ou `task-flow: refactor all`) |
-| `task-flow: estimate X` | **Estima** tempo para gestão | Calcula estimativa de tempo (ex: `task-flow: estimate 1` ou `task-flow: estimate 10,11`) |
+| `task-flow: estimate X` | **Estima** tempo para gestão | `estimate 1`, `estimate 10,11` ou `estimate all` |
 | `task-flow: report X` | **Documenta** implementação | Gera relatório detalhado (ex: `task-flow: report 1` ou `task-flow: report 10,11`) |
 
 **Fluxo típico:**
@@ -463,10 +459,10 @@ rbin-task-flow init --share-ai-config  # Commit .cursor/skills and rules with th
 rbin-task-flow update        # Update configs (keeps profile from .task-flow/install-meta.json)
 rbin-task-flow update --profile standard  # Install all .cursor/rules/*.mdc
 rbin-task-flow reset         # Reinstall Task Flow from scratch
-rbin-task-flow reset --graphify  # Reset + graphify extract --backend claude-cli (Graphify CLI on PATH)
+rbin-task-flow update --graphify # Update + graph at .task-flow/guides/graphify-out/
+rbin-task-flow reset --graphify  # Reset + graphify extract (Graphify CLI on PATH)
 rbin-task-flow version-check # Check for model updates
 rbin-task-flow info          # Show information
-rbin-task-flow check         # Run lint/fix and build when available
 rbin-task-flow estimate <ids> # Estimate time (e.g., "1" or "1,2" or "all")
 rbin-task-flow report <ids>   # Generate report (e.g., "1" or "1,2" or "all")
 ```
@@ -477,13 +473,13 @@ After initializing, use these commands in your AI (Cursor/Claude/Codex) to autom
 
 **Per-platform optimization:** [index](.task-flow/guides/AI-PLATFORMS.md) · [Claude](.task-flow/guides/platforms/claude-code.md) · [Cursor](.task-flow/guides/platforms/cursor.md) · [Codex](.task-flow/guides/platforms/codex.md) · [Graphify](.task-flow/guides/GRAPHIFY.md)
 
-**Graphify (optional):** `rbin-task-flow init --graphify` — cooperative setup + runs `graphify extract . --backend claude-cli` (CLI from `rbin-install-dev`; uses Claude Code subscription).
+**Graphify (optional):** graph at `.task-flow/guides/graphify-out/`. New project: `rbin-task-flow init --graphify`. **Existing project:** `npm install -g rbin-task-flow@latest` then `rbin-task-flow update --graphify` (migrates legacy root `graphify-out/` + re-extracts). See [.task-flow/README.md](.task-flow/README.md#graphify-opcional) · [GRAPHIFY.md](.task-flow/guides/GRAPHIFY.md).
 
-**Claude / Cursor skills (v1.20+):** installs 15 skills — use `/task-flow-sync`, `/task-flow-run`, `/task-flow-validate`, etc.
+**Claude / Cursor skills (v1.20+):** installs 10 skills — use `/task-flow-from-contexts`, `/task-flow-sync`, `/task-flow-run`, etc.
 
 **Codex (v1.21+):** optimized `AGENTS.md`, `.task-flow/guides/CODEX.md`, `.codex/config.toml`.
 
-**Cursor (v1.23+):** 2 always-on rules + 15 skills — `@task-flow-sync`, `@task-flow-run`, `@task-flow-validate`.
+**Cursor (v1.23+):** 2 always-on rules + 10 skills — `@task-flow-from-contexts`, `@task-flow-sync`, `@task-flow-run`.
 
 **Minimal profile:** `init --profile minimal` copies only `task-flow-cursor.mdc` and `rbin-git-policy.mdc` plus skills; use `@task-flow-*` for workflows. `standard` (default) copies all rules under `.cursor/rules/`.
 
@@ -491,20 +487,16 @@ After initializing, use these commands in your AI (Cursor/Claude/Codex) to autom
 
 | Command | Why Use It | Key Feature |
 |---------|------------|-------------|
+| `task-flow: from contexts` | **Draft** tasks from specs/mockups | Reads `contexts/` files (PDF, image, text…) and appends lines to `tasks.input.txt`; then run `sync` |
 | `task-flow: sync` | **Sync** tasks from text file with system | Keeps everything synchronized automatically - adds new, removes deleted, preserves your progress |
-| `task-flow: think` | **Discover** tasks you forgot | Analyzes code and suggests missing tasks (tests, refactoring, documentation) |
 | `task-flow: audit` | **Evaluate** how well your code matches coding standards | Scans the codebase, scores it by category and asks which improvements you want to adopt — never imposes changes |
-| `task-flow: check` | **Validate** lint and build before review or commit | Runs lint with autofix when available and then build, fixing current-project issues first |
-| `task-flow: improve changes` | **Audit** only the current diff | Runs the same standards audit, but restricted to files changed relative to `HEAD` |
 | `task-flow: status` | **Visualize** progress quickly | See summary with completed tasks, in progress, and remaining subtasks |
 | `task-flow: run next X` | **Automate** work on next subtasks | AI works on next X subtasks sequentially, you just follow along |
 | `task-flow: run X` | **Complete** an entire task at once | Executes all subtasks of a specific task (allows parallel work) |
 | `task-flow: run X,Y` | **Complete** multiple tasks | Executes comma-separated tasks (e.g., `task-flow: run 10,11`) |
 | `task-flow: run all` | **Complete** all tasks | Executes all pending tasks |
-| `task-flow: review X` | **Ensure** work quality | Verifies specific tasks (e.g., `task-flow: review 1` or `task-flow: review 10,11` or `task-flow: review all`) |
 | `task-flow: validate` | **Validate** implementation and **fill gaps** | Deep audit: recheck done/pending, fix false done, append gaps to `tasks.input.txt`, then sync |
-| `task-flow: refactor X` | **Improve** code without breaking | Refactors specific tasks (e.g., `task-flow: refactor 1` or `task-flow: refactor 10,11` or `task-flow: refactor all`) |
-| `task-flow: estimate X` | **Estimate** time for management | Calculates time estimate (e.g., `task-flow: estimate 1` or `task-flow: estimate 10,11`) |
+| `task-flow: estimate X` | **Estimate** time for management | `estimate 1`, `estimate 10,11`, or `estimate all` |
 | `task-flow: report X` | **Document** implementation | Generates detailed report (e.g., `task-flow: report 1` or `task-flow: report 10,11`) |
 
 **Typical workflow:**

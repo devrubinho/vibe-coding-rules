@@ -9,7 +9,7 @@ Graphify ([graphifyy](https://pypi.org/project/graphifyyy/)) cria um **grafo de 
 ## Token discipline
 
 - Use **summarized** `graphify query` output (symbols, paths, short lists) — not full graph dumps in chat.
-- **Do not paste** `graphify-out/GRAPH_REPORT.md` (or entire report files) into the model context unless the user **explicitly** `@`-mentions that file.
+- **Do not paste** `.task-flow/guides/graphify-out/GRAPH_REPORT.md` (or entire report files) into the model context unless the user **explicitly** `@`-mentions that file.
 - Prefer one targeted query per subtask over loading `graph.json` or large exports.
 - Task Flow status files (`.task-flow/`) always win over Graphify for workflow and git.
 
@@ -20,7 +20,7 @@ Graphify ([graphifyy](https://pypi.org/project/graphifyyy/)) cria um **grafo de 
 | | Task Flow | Graphify |
 |---|-----------|----------|
 | **Pergunta** | O que fazer agora? | Onde está X no código? |
-| **Dados** | `.task-flow/` | `graphify-out/` |
+| **Dados** | `.task-flow/` | `.task-flow/guides/graphify-out/` |
 | **Comandos** | `task-flow: sync`, `run`, `status`, … | `graphify extract`, `query`, `affected` |
 | **Regra Cursor** | Várias `.mdc` (workflow) | `graphify-task-flow.mdc` (**sob demanda**) |
 
@@ -29,9 +29,9 @@ Graphify ([graphifyy](https://pypi.org/project/graphifyyy/)) cria um **grafo de 
 ## O que o `rbin-task-flow init` já faz por você
 
 1. Copia **`.cursor/rules/graphify-task-flow.mdc`** — `alwaysApply: false` (não compete com `task_work`, etc.).
-2. Adiciona **`graphify-out/`** ao `.gitignore`.
+2. Grafo em **`.task-flow/guides/graphify-out/`** (já coberto pelo `.task-flow/` no `.gitignore`; remove entrada legada `graphify-out/` na raiz).
 3. Se existir **`.cursor/rules/graphify.mdc`** do `graphify cursor install` (upstream com `alwaysApply: true`), o instalador **desativa** `alwaysApply` para economizar contexto.
-4. Com **`--graphify`** em `init`, `update` ou **`reset`**, roda `graphify extract . --backend claude-cli` se o CLI estiver no PATH (usa assinatura Claude Code — sem API key separada).
+4. Com **`--graphify`** em `init`, `update` ou **`reset`**, roda `graphify extract . --backend claude-cli --out .task-flow/guides` se o CLI estiver no PATH (usa assinatura Claude Code — sem API key separada).
 
 **Não** rodamos `graphify claude install` / `graphify cursor install` automaticamente — o install upstream força `graphify.mdc` always-on e incham `CLAUDE.md` / `AGENTS.md`.
 
@@ -44,7 +44,6 @@ cd seu-projeto
 rbin-task-flow reset --graphify   # ou init/update --graphify; recria .task-flow + grafo
 task-flow: sync
 task-flow: run next 3             # IA usa grafo só ao implementar
-task-flow: check
 # você: git commit
 ```
 
@@ -52,16 +51,16 @@ task-flow: check
 
 | Comando Task Flow | Usar Graphify? |
 |-------------------|----------------|
-| `sync`, `status`, `estimate`, `report`, `generate flow` | Não |
-| `run next X`, `run N` | Sim, se `graphify-out/` existir |
-| `think`, `review`, `validate` | Opcional |
-| `audit`, `improve changes` | Opcional (estrutura); padrões = checklist `coding_standards.mdc` |
+| `sync`, `status`, `estimate`, `report` | Não |
+| `run next X`, `run N` | Sim, se `.task-flow/guides/graphify-out/` existir |
+| `validate` | Opcional |
+| `audit` | Opcional (estrutura); padrões = checklist `coding_standards.mdc` |
 | `check` | Não |
 
 **Prompt exemplo:**
 
 ```text
-task-flow: run next 2 — se graphify-out existir, graphify query "<módulo da subtarefa>" antes de editar arquivos.
+task-flow: run next 2 — se .task-flow/guides/graphify-out/ existir, graphify query "<módulo>" --graph .task-flow/guides/graphify-out/graph.json antes de editar.
 ```
 
 ---
@@ -87,9 +86,9 @@ task-flow: run next 2 — se graphify-out existir, graphify query "<módulo da s
 
 | Evento | Ação |
 |--------|------|
-| Primeiro setup | `rbin-task-flow init --graphify` ou `graphify extract . --backend claude-cli` |
+| Primeiro setup | `rbin-task-flow init --graphify` ou `graphify extract . --backend claude-cli --out .task-flow/guides` |
 | Reset completo (tasks + template + grafo) | `rbin-task-flow reset --graphify` |
-| Refactor grande após vários `run` | `graphify update .` ou `graphify extract . --backend claude-cli` |
+| Refactor grande após vários `run` | `graphify update .` ou `graphify extract . --backend claude-cli --out .task-flow/guides` |
 | `task-flow: update` | Reaplica `graphify-task-flow.mdc` e pode rebaixar `graphify.mdc` |
 
 ---
@@ -102,7 +101,7 @@ task-flow: run next 2 — se graphify-out existir, graphify query "<módulo da s
 | Contexto cheio no Cursor | Confirme `graphify.mdc` não está `alwaysApply: true` |
 | `graphify: command not found` | Rode `rbin-install-dev` (módulo Graphify) |
 | `no LLM API key found` ao rodar `graphify extract .` manual | Use `rbin-task-flow init --graphify` (roda `--backend claude-cli`) ou exporte uma API key / `--backend ollama` |
-| Grafo desatualizado | `graphify extract . --backend claude-cli` de novo |
+| Grafo desatualizado | `graphify extract . --backend claude-cli --out .task-flow/guides` de novo |
 
 ---
 

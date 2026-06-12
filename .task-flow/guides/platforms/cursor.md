@@ -8,13 +8,13 @@ Guia para extrair o máximo do **RBIN Task Flow** no [Cursor](https://cursor.com
 
 ## 1. Por que o Task Flow “nasce” bem no Cursor
 
-O instalador copia regras para `.cursor/rules/` e **14 skills** para `.cursor/skills/`. Desde **v1.23** (otimização P0 — ver [OPTIMIZATION-PLAN.md](../OPTIMIZATION-PLAN.md)):
+O instalador copia regras para `.cursor/rules/` e **10 skills** para `.cursor/skills/`. Desde **v1.23** (otimização P0 — ver [OPTIMIZATION-PLAN.md](../OPTIMIZATION-PLAN.md)):
 
 | Camada | O que carrega | Tokens (~) |
 |--------|----------------|------------|
 | **Always-on (2)** | `task-flow-cursor.mdc`, `rbin-git-policy.mdc` | ~0,9k / turno |
 | **Skills** | `@task-flow-run`, `@task-flow-sync`, … | sob demanda |
-| **Intelligent** | `task_work`, `task_audit`, `task_analysis` (think), … | quando o Agent casa `description` |
+| **Intelligent** | `task_work`, `task_audit`, `task_validate`, … | quando o Agent casa `description` |
 | **Glob** | `task-flow-sync`, `task_generation` (`.task-flow/**`), `coding_standards` (`src/**`, `app/**`) | arquivos no contexto |
 
 Isso significa:
@@ -44,7 +44,7 @@ Documentação: [Cursor Rules](https://cursor.com/docs/context/rules) · Referê
 |------|-------------|-------------------------|
 | **Always Apply** | `alwaysApply: true` | `task-flow-cursor`, `rbin-git-policy` only |
 | **Apply to Specific Files** | `globs: "**/.task-flow/**"` | Regras só ao editar tasks/status/contexts |
-| **Apply Intelligently** | `description` rica, `alwaysApply: false`, sem globs | `task_audit`, `task_refactor` — quando o assunto é auditoria/refactor |
+| **Apply Intelligently** | `description` rica, `alwaysApply: false`, sem globs | `task_audit`, `task_validate` — quando o assunto é auditoria/validação |
 | **Apply Manually** | sem description/globs, `alwaysApply: false` | Rascunhos, regras experimentais — `@nome-da-regra` |
 
 ### Matriz frontmatter (oficial Cursor)
@@ -70,18 +70,13 @@ Confirme no projeto: `rg 'alwaysApply: true' .cursor/rules` → deve listar **ap
 | `rbin-git-policy.mdc` | git write proibido + sugestão de commit | **Always** |
 | `task_work.mdc` | fallback curto de `run` | Intelligent — use `@task-flow-run` |
 | `task_execution.mdc` | índice stub → skills | Intelligent / `@` manual |
+| `task_from_contexts.mdc` | draft tasks de `contexts/` | Intelligent |
 | `task-flow-sync.mdc` | `sync` completo | **Glob** `.task-flow/**` · prefer `@task-flow-sync` |
 | `task_generation.mdc` | templates de subtarefas | **Glob** `.task-flow/**` |
-| `task_analysis.mdc` | `think` apenas | Intelligent |
 | `task_status.mdc` | `status` | **Glob** `.task-flow/**` |
 | `task_audit.mdc` | audit vs checklist standards | Intelligent |
-| `task_improve_changes.mdc` | audit só no diff | Intelligent |
-| `task_check.mdc` | lint + build | Intelligent |
-| `task_review.mdc` | verificar “done” | Intelligent |
-| `task_refactor.mdc` | refactor sem mudar comportamento | Intelligent |
 | `task_estimate.mdc` | estimativas | Intelligent / `@` |
 | `task_report.mdc` | relatórios | Intelligent / `@task-flow-report` |
-| `task_generate_flow.mdc` | `tasks.flow.md` | Intelligent / `@` |
 | `coding_standards.mdc` | checklist (~100 linhas) | **Glob** `src/**`, `app/**` |
 | `code_comments.mdc` | sem comentários explicativos | **Glob** `**/*.{ts,tsx,js,jsx}` |
 | `graphify-task-flow.mdc` | Graphify + Task Flow | Intelligent |
@@ -113,9 +108,9 @@ Cursor suporta o mesmo formato que Claude Code: `.cursor/skills/<nome>/SKILL.md`
 | Mesmo workflow em Claude + Cursor | Skills em **ambas** pastas | ✅ |
 | Referência enorme (coding standards) | checklist glob (~1k tokens) | `@rbin-coding-standards` + full doc por seção |
 
-O `rbin-task-flow init` copia **14 skills** para `.cursor/skills/` (mesmo conteúdo que `.claude/skills/`). No Agent, use `@task-flow-run`, `@task-flow-sync`, etc.
+O `rbin-task-flow init` copia **10 skills** para `.cursor/skills/` (mesmo conteúdo que `.claude/skills/`). No Agent, use `@task-flow-run`, `@task-flow-sync`, etc.
 
-Após `rbin-task-flow init` ou `update`, use `@task-flow-*` no Agent. Para sync: `@task-flow-sync` (não `task_generation` / `task_analysis` isolados).
+Após `rbin-task-flow init` ou `update`, use `@task-flow-*` no Agent. Para sync: `@task-flow-sync` (não `task_generation` isolado).
 
 ---
 
@@ -124,7 +119,7 @@ Após `rbin-task-flow init` ou `update`, use `@task-flow-*` no Agent. Para sync:
 | Superfície | Task Flow | Dica |
 |------------|-----------|------|
 | **Agent** (Ctrl+I / Composer) | Melhor para `run next X`, implementação multi-arquivo | Abra arquivos de `contexts/` no chat se UI |
-| **Chat** | `sync`, `think`, `status`, `estimate` | Peça explicitamente `task-flow: …` |
+| **Chat** | `sync`, `status`, `estimate` | Peça explicitamente `task-flow: …` |
 | **Cursor CLI** | Mesmas regras do projeto se `.cursor/rules` presente | Útil em CI local com agent |
 
 **MCP:** regras não substituem MCP (DB, APIs). Task Flow não conflita — subtarefas podem dizer “usar MCP X” em `tasks.json`.
@@ -156,25 +151,12 @@ task-flow: run next 4
 
 Ao terminar cada subtarefa, o Agent deve atualizar `status.json` + `tasks.status.md` (`@task-flow-run` / `task_work` stub).
 
-```text
-task-flow: check
-```
-
 Commit **manual** (regra `rbin-git-policy`).
 
 ### 6.3 Qualidade antes do merge
 
 ```text
-task-flow: improve changes
-task-flow: review 2
-```
-
-`improve changes` usa `git diff --name-only HEAD` — só arquivos alterados.
-
-### 6.4 Refactor pós-task
-
-```text
-task-flow: refactor 1
+task-flow: validate
 ```
 
 Remove comentários explicativos; mantém separadores `// ───`.
@@ -197,7 +179,6 @@ Coloque PNG/PDF/MD em `.task-flow/contexts/`. Nas subtarefas geradas, instruçõ
 | Execução clara | `task-flow: run next 3` |
 | Task específica | `task-flow: run 2` |
 | Sincronizar após editar input | `task-flow: sync` |
-| Auditoria focada | `task-flow: improve changes` (não `audit` no repo inteiro) |
 | Padrões ao codificar | `@rbin-coding-standards` ou arquivo em `src/` (checklist glob) |
 | Regra sob demanda | `@task-flow-audit` ou `@task_audit` + `task-flow: audit` |
 | Run explícito | `@task-flow-run` + `task-flow: run next 2` |
@@ -246,9 +227,9 @@ Cursor também pode ler `AGENTS.md` em alguns fluxos; no RBIN ele é focado em *
 |---------|-------------|
 | **@-mentions** | `@tasks.input.txt`, `@contexts/dashboard.png`, `@task-flow-run` |
 | **Notepads / Docs** | Links para `.task-flow/README.md` |
-| **Bugbot / PR** | `task-flow: review X` antes de merge |
+| **Bugbot / PR** | `task-flow: validate` antes de merge |
 | **Background Agent** | `run next 1` por job; cuidado com conflito de `status.json` |
-| **Plan mode** | `think` + `sync` para gerar tasks antes de `run` |
+| **Plan mode** | Edite `tasks.input.txt` + `sync` antes de `run` |
 
 ---
 
@@ -260,9 +241,8 @@ Cursor também pode ler `AGENTS.md` em alguns fluxos; no RBIN ele é focado em *
 | `rbin-task-flow update` | Atualiza rules; preserva `.internal/` |
 | `rbin-task-flow reset` | Recria `.task-flow` do zero |
 | `rbin-task-flow reset --graphify` | Reset + `graphify extract . --backend claude-cli` |
-| `rbin-task-flow audit` | Lista arquivos **unstaged** (não substitui `task-flow: improve changes`) |
 
-O Agent executa o workflow; o CLI prepara arquivos.
+O Agent executa o workflow (`task-flow: audit`, `task-flow: run`, etc.); o CLI prepara arquivos.
 
 ---
 
@@ -301,13 +281,12 @@ Para open source: documente no README — contribuidores podem usar `--share-ai-
 ## 13. Checklist de maturidade Cursor + Task Flow
 
 - [x] `task-flow-cursor.mdc` + `rbin-git-policy.mdc` (2 always-on, v1.23)
-- [x] 14 skills em `.cursor/skills/` após `init`
+- [x] 10 skills em `.cursor/skills/` após `init`
 - [x] Otimização P0 de tokens (ver §3)
 - [ ] `task-flow: sync` após cada edição em `tasks.input.txt`
 - [ ] `@task-flow-run` (não `@task_work`) para implementar
 - [ ] Contextos em `.task-flow/contexts/` para tasks de UI
-- [ ] `improve changes` antes de commit
-- [ ] `task-flow: check` antes de push
+- [ ] `task-flow: validate` antes de merge quando relevante
 - [ ] Time alinhado: git manual sempre
 
 ---
@@ -317,7 +296,7 @@ Para open source: documente no README — contribuidores podem usar `--share-ai-
 Com Graphify instalado (`rbin-install-dev`), o Task Flow traz **`graphify-task-flow.mdc`** (`alwaysApply: false`) em vez de depender do `graphify.mdc` always-on do `graphify cursor install`.
 
 - **`rbin-task-flow init`** rebaixa `graphify.mdc` upstream se existir.
-- Use Graphify só em **`task-flow: run`**, `think`, `review` — ver [GRAPHIFY.md](../GRAPHIFY.md).
+- Use Graphify só em **`task-flow: run`**, `validate` — ver [GRAPHIFY.md](../GRAPHIFY.md).
 
 ---
 

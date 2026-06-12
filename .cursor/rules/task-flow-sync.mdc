@@ -33,7 +33,7 @@ Task IDs stay sequential (1, 2, 3…) matching `tasks.input.txt` order.
 - Subtask instructions: **checklist** in [coding_standards.mdc](mdc:.cursor/rules/coding_standards.mdc) only — not [coding-standards-full.md](mdc:.task-flow/guides/coding-standards-full.md)
 - More templates: [task_generation.mdc](mdc:.cursor/rules/task_generation.mdc)
 
-**Sync rules:** no codebase exploration; no questions; do not fill `tasks.flow.md` (only `generate flow`).
+**Sync rules:** no codebase exploration; no questions.
 
 ## 4. Align status
 

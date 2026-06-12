@@ -29,18 +29,13 @@ No explanatory comments. Complex topics → `dev-logs/*.md`. Allowed: `// ──
 | Command | Read first |
 |---------|------------|
 | `task-flow: sync` | Section **Sync** below; details `.task-flow/guides/CODEX.md` |
+| `task-flow: from contexts` | `.cursor/rules/task_from_contexts.mdc` · then `sync` |
 | `task-flow: run …` | Section **Run** below; details `.task-flow/guides/CODEX.md` |
 | `task-flow: status` | `.task-flow/tasks.status.md` |
-| `task-flow: think` | `.task-flow/guides/CODEX.md` · optional codebase scan |
-| `task-flow: check` | `.cursor/rules/task_check.mdc` · `package.json` |
-| `task-flow: improve changes` | `git diff --name-only HEAD` · `.cursor/rules/task_improve_changes.mdc` |
 | `task-flow: audit` | `.cursor/rules/task_audit.mdc` · checklist `coding_standards.mdc` (full: `.task-flow/guides/coding-standards-full.md` if needed) |
-| `task-flow: review X` | `.task-flow/guides/CODEX.md` |
 | `task-flow: validate` | `.cursor/rules/task_validate.mdc` · then sync |
-| `task-flow: refactor X` | `.cursor/rules/task_refactor.mdc` |
-| `task-flow: estimate X` | `.task-flow/guides/CODEX.md` |
+| `task-flow: estimate X` / `X,Y` / `all` | `.cursor/rules/task_estimate.mdc` · `.task-flow/guides/CODEX.md` |
 | `task-flow: report X` | `.task-flow/guides/CODEX.md` |
-| `task-flow: generate flow` | `.cursor/rules/task_generate_flow.mdc` |
 | Implementing code | Checklist `.cursor/rules/coding_standards.mdc` · depth: `.task-flow/guides/coding-standards-full.md` (sections only) |
 
 ## Sync (embedded)
@@ -52,7 +47,6 @@ No explanatory comments. Complex topics → `dev-logs/*.md`. Allowed: `// ──
 5. **Modified:** regen subtasks, **preserve** done/pending where possible.
 6. List `.task-flow/contexts/`; match to tasks; honor `task-flow-screen file.ext`.
 7. `status.json` = truth; sync `tasks.status.md` checkboxes + 📊 Summary.
-8. Do not fill `tasks.flow.md` (only `generate flow`).
 
 ## Run (embedded)
 
@@ -60,7 +54,7 @@ No explanatory comments. Complex topics → `dev-logs/*.md`. Allowed: `// ──
 2. `run next X` (default X=1): next X **pending** subtasks in order 1.1, 1.2, …, 2.1…
 3. `run X` / `X,Y` / `all`: all pending for task(s); for `run X`, block if tasks `1..X-1` have any pending subtask.
 4. Per subtask: follow `instructions`; read `contexts/` if cited; implement + verify.
-5. If `graphify-out/graph.json` exists, prefer `graphify query` before repo-wide grep.
+5. If `.task-flow/guides/graphify-out/graph.json` exists, prefer `graphify query … --graph .task-flow/guides/graphify-out/graph.json` before repo-wide grep.
 6. Mark subtask `done` in `status.json`; update `tasks.status.md` Summary.
 7. Parent task `done` when all subtasks done. Suggest commit; never git write.
 
@@ -72,10 +66,6 @@ Leia AGENTS.md. Execute task-flow: sync.
 
 ```
 Leia AGENTS.md e .task-flow/guides/CODEX.md (Run). task-flow: run next 3.
-```
-
-```
-task-flow: improve changes — git diff --name-only HEAD, audite só esses arquivos.
 ```
 
 ## Other platforms

@@ -30,12 +30,11 @@ Os comandos `task-flow: …` são **os mesmos** em Claude Code, Cursor e Codex. 
 
 ## Fluxo comum (todas as plataformas)
 
-1. Editar `.task-flow/tasks.input.txt`
+1. Definir tasks: editar `tasks.input.txt` **ou** colocar specs em `contexts/` e rodar `task-flow: from contexts`
 2. `task-flow: sync`
 3. `task-flow: status`
 4. `task-flow: run next X` ou `task-flow: run N`
-5. `task-flow: check`
-6. **Você** faz `git commit` (a IA só sugere)
+5. **Você** faz `git commit` (a IA só sugere)
 
 Detalhes dos comandos: [README.md](../README.md).
 
@@ -56,7 +55,7 @@ Detalhes dos comandos: [README.md](../README.md).
 | `.codex/config.toml` | — | — | ✅ (opcional, preservado no update) |
 | `task-flow-cursor.mdc` | — | ✅ always-on | — |
 | `rbin-git-policy.mdc` | — | ✅ always-on | — |
-| `.claude/skills/` | ✅ (15 skills) | — | — |
+| `.claude/skills/` | ✅ (10 skills) | — | — |
 | `.cursor/skills/` | — | ✅ (espelho) | — |
 
 Por padrão, `.claude/`, `.cursor/`, `.task-flow/`, `CLAUDE.md` e `AGENTS.md` entram no **`.gitignore`** do projeto cliente. Para versionar skills/regras com o time, ajuste o ignore — veja a seção “Versionamento” em cada guia.
@@ -67,10 +66,10 @@ Por padrão, `.claude/`, `.cursor/`, `.task-flow/`, `CLAUDE.md` e `AGENTS.md` en
 
 Com o [Graphify](https://pypi.org/project/graphifyyy/) instalado (`rbin-install-dev`), o Task Flow inclui integração cooperativa:
 
-- Regra **`.cursor/rules/graphify-task-flow.mdc`** — só quando `task-flow: run`, `think`, `review`, etc. precisam navegar o código (`alwaysApply: false`).
-- **`graphify-out/`** no `.gitignore`.
+- Regra **`.cursor/rules/graphify-task-flow.mdc`** — só quando `task-flow: run`, `validate`, etc. precisam navegar o código (`alwaysApply: false`).
+- Grafo em **`.task-flow/guides/graphify-out/`** (dentro de `.task-flow/`, já gitignored).
 - Rebaixa **`graphify.mdc`** upstream para `alwaysApply: false` se existir.
-- **`rbin-task-flow init --graphify`** — roda `graphify extract . --backend claude-cli` após o init.
+- **`rbin-task-flow init --graphify`** — roda `graphify extract . --backend claude-cli --out .task-flow/guides` após o init.
 
 Guia completo: [GRAPHIFY.md](GRAPHIFY.md).
 

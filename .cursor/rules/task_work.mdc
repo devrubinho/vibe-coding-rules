@@ -23,7 +23,7 @@ Natural language (`work on next 3 subtasks`, `execute all subtasks of task 2`) =
 
 1. Read `status.json` first; load `tasks.json` by pending task ids only if **>50 subtasks** total (see `@task-flow-run` workflow).
 2. **`run X`:** If tasks `1..X-1` have any pending subtask, **stop** and list blockers; do not run X.
-3. Implement per `instructions`; read `.task-flow/contexts/` when referenced; optional `graphify query` if `graphify-out/` exists ([graphify-task-flow.mdc](mdc:.cursor/rules/graphify-task-flow.mdc)).
+3. Implement per `instructions`; read `.task-flow/contexts/` when referenced; optional `graphify query` if `.task-flow/guides/graphify-out/` exists ([graphify-task-flow.mdc](mdc:.cursor/rules/graphify-task-flow.mdc)).
 4. After each subtask: `status.json` → `done`; `tasks.status.md` → `- [x]` + regenerate 📊 Summary.
 5. Parent task all done → mark task `done` in both files.
 6. Suggest commit via [rbin-git-policy.mdc](mdc:.cursor/rules/rbin-git-policy.mdc) / `@rbin-git` — never write git.

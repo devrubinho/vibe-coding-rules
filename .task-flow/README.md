@@ -7,7 +7,6 @@
 ├── README.md              ← você está aqui
 ├── tasks.input.txt        ← defina tasks (`- descrição`)
 ├── tasks.status.md        ← progresso (auto; não editar)
-├── tasks.flow.md          ← deps/horas (task-flow: generate flow)
 ├── contexts/              ← specs, mockups
 ├── .internal/             ← tasks.json, status.json (sistema)
 └── guides/                ← documentação e configs
@@ -16,6 +15,7 @@
     ├── CODEX.md · CURSOR.md
     ├── coding-standards-full.md  ← inclui padrão .env Vercel (§ Vercel)
     ├── platforms/         ← Claude, Cursor, Codex
+    ├── graphify-out/      ← grafo Graphify (init --graphify)
     └── reports/           ← task-X-implementation.md
 ```
 
@@ -33,33 +33,77 @@
 | Otimização (tokens) | [guides/OPTIMIZATION-PLAN.md](guides/OPTIMIZATION-PLAN.md) |
 | Coding standards (full) | [guides/coding-standards-full.md](guides/coding-standards-full.md) (Vercel `.env` no topo) |
 
+## Graphify (opcional)
+
+Grafo em **`.task-flow/guides/graphify-out/`** (não na raiz do projeto).
+
+**Pré-requisito:** CLI `graphify` no PATH (`rbin-install-dev`) + `claude` autenticado (Claude Code).
+
+### Projeto novo
+
+```bash
+cd seu-projeto
+rbin-task-flow init --graphify
+```
+
+### Projeto que já usa Task Flow (atualizar pacote + migrar grafo)
+
+```bash
+npm install -g rbin-task-flow@latest
+cd seu-projeto
+rbin-task-flow update --graphify
+```
+
+O `update --graphify` reaplica rules/skills, move `graphify-out/` legado da raiz para `guides/graphify-out/` (se existir) e roda o extract.
+
+### Só regerar o grafo (sem reinstall do template)
+
+```bash
+cd seu-projeto
+graphify extract . --backend claude-cli --out .task-flow/guides
+```
+
+### Na IA (`task-flow: run`)
+
+```text
+task-flow: run next 2 — se .task-flow/guides/graphify-out/ existir,
+graphify query "<módulo>" --graph .task-flow/guides/graphify-out/graph.json antes de editar.
+```
+
+Guia completo: [guides/GRAPHIFY.md](guides/GRAPHIFY.md).
+
 ## 🚀 Quick Commands
 
-| Command | Description |
-|---------|-------------|
-| `task-flow: sync` | Complete synchronization: adds new, removes deleted, updates modified, preserves status |
-| `task-flow: think` | Analyzes code and suggests new tasks |
-| `task-flow: validate` | Deep audit vs codebase; revert false done; append gaps to `tasks.input.txt`; sync |
-| `task-flow: status` | Shows current task status |
-| `task-flow: run next X` | Works on next X subtasks (e.g., `task-flow: run next 4`) |
-| `task-flow: run X` | Executes all pending subtasks of task X (e.g., `task-flow: run 1`) |
-| `task-flow: run X,Y` | Executes multiple tasks (e.g., `task-flow: run 10,11`) |
-| `task-flow: run all` | Executes all tasks |
-| `task-flow: review X` | Reviews specific task(s) (e.g., `task-flow: review 1` or `task-flow: review 10,11` or `task-flow: review all`) |
-| `task-flow: refactor X` | Refactors specific task(s) (e.g., `task-flow: refactor 1` or `task-flow: refactor 10,11` or `task-flow: refactor all`) |
-| `task-flow: estimate X` | Estimates time for task X (e.g., `task-flow: estimate 1` or `task-flow: estimate 10,11`) |
-| `task-flow: report X` | Generates implementation report for task X (e.g., `task-flow: report 1` or `task-flow: report 10,11`) |
-| `task-flow: generate flow` | Populates tasks.flow.md with dependencies, estimated hours, and AI model recommendations |
-| `task-flow: audit` | Audits codebase against **coding standards checklist**; full doc on demand |
-| `task-flow: check` | Run lint fix (if available) and build; fix any warnings or errors until both pass |
-| `task-flow: improve changes` | Audit only uncommitted files vs **checklist** (same as audit, scoped to diff) |
-| `rbin-task-flow audit` | **(CLI)** Lists files with unstaged changes (not yet `git add`) |
+| Command | Variants | Description |
+|---------|----------|-------------|
+| `task-flow: from contexts` | `file.ext` · `a.png,b.md` | Draft `- tasks` in `tasks.input.txt` from files in `contexts/` (then run `sync`) |
+| `task-flow: sync` | — | Complete synchronization: adds new, removes deleted, updates modified, preserves status |
+| `task-flow: validate` | `all` (default) · `X` · `X,Y` | Deep audit vs codebase; revert false done; append gaps to `tasks.input.txt`; sync |
+| `task-flow: status` | — | Shows current task status |
+| `task-flow: run` | `next X` · `X` · `X,Y` · `all` | Execute pending subtasks: next N in order, one/many tasks, or everything |
+| `task-flow: estimate` | `X` · `X,Y` · `all` | Time estimate for average developer pace (hours + management buffer) |
+| `task-flow: report` | `X` · `X,Y` · `all` | Implementation report → `.task-flow/guides/reports/task-X-implementation.md` |
+| `task-flow: audit` | — | Audits codebase against **coding standards checklist**; full doc on demand |
 
 **See complete details below ↓**
 
 ---
 
 ## Detailed Commands
+
+### `task-flow: from contexts`
+Reads files in `.task-flow/contexts/` (images, PDF, text, JSON, etc.) and **appends** task lines to `tasks.input.txt`.
+
+**Flow:** add context files → `from contexts` → `sync` → `run`.
+
+**Variants:**
+- `task-flow: from contexts` — all context files not yet linked in `tasks.input.txt`
+- `task-flow: from contexts login-mockup.png` — one file
+- `task-flow: from contexts mockup.png,spec.md` — comma-separated list
+
+Each new line uses `task-flow-screen filename.ext` so sync/run attach the right context to subtasks.
+
+Invoke: `@task-flow-from-contexts` / `/task-flow-from-contexts`.
 
 ### `task-flow: sync`
 Complete synchronization between `tasks.input.txt` and the system:
@@ -69,9 +113,6 @@ Complete synchronization between `tasks.input.txt` and the system:
 - ✅ Preserves status (done/pending) of existing tasks
 - ✅ Synchronizes status between `status.json` and `tasks.status.md` (ensures they are always aligned)
 
-### `task-flow: think`
-Analyzes code and suggests new tasks. Asks before adding to `tasks.input.txt`.
-
 ### `task-flow: validate`
 Deep validation: checks subtasks against the codebase, reverts false `done`, appends lacunas to `tasks.input.txt`, and syncs. Invoke: `@task-flow-validate` / `/task-flow-validate`.
 
@@ -80,15 +121,6 @@ Shows current status of tasks and subtasks from the `tasks.status.md` file.
 
 ### `task-flow: audit`
 Audits the **entire codebase** against the **checklist** in [coding_standards.mdc](../.cursor/rules/coding_standards.mdc). Deep reference: [guides/coding-standards-full.md](guides/coding-standards-full.md) (sections only, on demand). Non-destructive: reports gaps and suggests incremental improvements; the user chooses what to adopt. See [task_audit.mdc](../.cursor/rules/task_audit.mdc) for the full flow.
-
-### `task-flow: check`
-Runs **lint fix** and **build** for the project. Check `package.json` for a lint-with-fix script (e.g. `lint:fix`, `lint -- --fix`) and a build script; run lint fix first, fix any warnings or errors, then run build and fix until it passes. Use before committing or before `task-flow: improve changes` to ensure the project is clean.
-
-### `task-flow: improve changes`
-Same as **task-flow: audit**, but **only for files that were changed and not yet committed** (unstaged + staged). The AI obtains the list via `git diff --name-only HEAD`, and scores those paths against the **checklist** in `coding_standards.mdc` (not the full standards doc unless depth is needed). Use before committing. Does **not** run lint or build — use `task-flow: check` for that.
-
-### `rbin-task-flow audit` (CLI only)
-Lists **unstaged** file paths (modified but not yet `git add`). Run in the project root: `rbin-task-flow audit`. Option: `-p, --path <path>`.
 
 ---
 
@@ -115,24 +147,10 @@ Executes all pending subtasks of a specific task. Implements and marks as "done"
 - `task-flow: run all` → All pending subtasks of all tasks
 - `task-flow: run 3` → Only executes if tasks 1 and 2 are complete
 
-### `task-flow: review X`
-Reviews specific task(s) marked as "done" to verify they are actually completed.
-
-**Examples:**
-- `task-flow: review 1` → Reviews task 1
-- `task-flow: review 10,11` → Reviews tasks 10 and 11
-- `task-flow: review all` → Reviews all tasks
-
-### `task-flow: refactor X`
-Refactors code from specific task(s). Removes explanatory comments, improves code without changing functionality.
-
-**Examples:**
-- `task-flow: refactor 1` → Refactors task 1
-- `task-flow: refactor 10,11` → Refactors tasks 10 and 11
-- `task-flow: refactor all` → Refactors all tasks
-
 ### `task-flow: estimate X` (simplified syntax)
 Estimates time required to complete task(s) based on the real complexity of the task, assuming an average developer working at an average pace without AI acceleration. Subtask count informs scope, but is not the sole criterion.
+
+**Syntax:** one ID (`1`), comma-separated IDs (`10,11`), or `all`.
 
 **Output includes:**
 - A single estimate range for the majority of developers
@@ -140,12 +158,11 @@ Estimates time required to complete task(s) based on the real complexity of the 
 - Recommendation for management with buffer
 
 **Examples:**
-- `task-flow: estimate 1` → Shows time estimate for task 1
-- `task-flow: estimate 10,11` → Shows time estimates for tasks 10 and 11
-- `task-flow: estimate all` → Shows time estimates for all tasks
+- `task-flow: estimate 1` → time estimate for task 1
+- `task-flow: estimate 10,11` → time estimates for tasks 10 and 11
+- `task-flow: estimate all` → time estimates for all tasks
 
-### `task-flow: generate flow`
-Populates `tasks.flow.md` with: (1) task dependencies (for parallelization), (2) estimated hours, and (3) AI model recommendations (GPT-5.x, Composer, Claude) with effort levels. Model ranking and effort must be defined by the AI from task context, not from a fixed order or only from subtask count. Run after `task-flow: sync` when you want to know which tasks can run in parallel and which model/effort to use.
+**CLI:** `rbin-task-flow estimate 1` · `rbin-task-flow estimate 1,2` · `rbin-task-flow estimate all`
 
 ### `task-flow: report X` (simplified syntax)
 Generates a detailed implementation report for completed task(s) in Markdown format.
