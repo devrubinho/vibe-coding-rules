@@ -31,6 +31,7 @@ No explanatory comments. Complex topics → `dev-logs/*.md`. Allowed: `// ──
 | `task-flow: sync` | Section **Sync** below; details `.task-flow/guides/CODEX.md` |
 | `task-flow: from contexts` | `.cursor/rules/task_from_contexts.mdc` · then `sync` |
 | `task-flow: run …` | Section **Run** below; details `.task-flow/guides/CODEX.md` |
+| `task-flow: split:N` | `.cursor/rules/task_split.mdc` · N obrigatório (`split:3`, `split:2 50-72`) |
 | `task-flow: status` | `.task-flow/tasks.status.md` |
 | `task-flow: audit` | `.cursor/rules/task_audit.mdc` · checklist `coding_standards.mdc` (full: `.task-flow/guides/coding-standards-full.md` if needed) |
 | `task-flow: validate` | `.cursor/rules/task_validate.mdc` · then sync |

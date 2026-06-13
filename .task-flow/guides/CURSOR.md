@@ -23,6 +23,7 @@ Verify: `rg 'alwaysApply: true' .cursor/rules` → only the two files above.
 |---------------------|-------------|
 | `task-flow: from contexts` | `@task-flow-from-contexts` |
 | `task-flow: sync` | `@task-flow-sync` |
+| `task-flow: split:N` | `@task-flow-split` |
 | `task-flow: run next 4` | `@task-flow-run` |
 | `task-flow: status` | `@task-flow-status` |
 | `task-flow: validate` | `@task-flow-validate` |

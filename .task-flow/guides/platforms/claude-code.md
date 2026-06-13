@@ -29,7 +29,7 @@ projeto/
 ├── CLAUDE.md                 # Índice enxuto + tabela de skills
 ├── .claude/
 │   ├── settings.json
-│   └── skills/               # 10 skills (task-flow-*, rbin-*)
+│   └── skills/               # 11 skills (task-flow-*, rbin-*)
 ├── .cursor/
 │   ├── rules/                # Referência + Cursor alwaysApply
 │   └── skills/               # Espelho das mesmas skills
@@ -144,6 +144,7 @@ Para Task Flow em equipe: prefira **skills de projeto** versionadas (ajuste o `.
 | `task-flow: from contexts` | `task-flow-from-contexts` | `/task-flow-from-contexts` | `task_from_contexts.mdc` |
 | `task-flow: sync` | `task-flow-sync` | `/task-flow-sync` | `task-flow-sync.mdc` · `task_generation.mdc` (subtasks) |
 | `task-flow: run next X` / `run X` | `task-flow-run` | `/task-flow-run` | `workflow.md` · stub `task_work.mdc` |
+| `task-flow: split:N` | `task-flow-split` | `/task-flow-split` | `task_split.mdc` |
 | `task-flow: status` | `task-flow-status` | `/task-flow-status` | `task_status.mdc` |
 | `task-flow: audit` | `task-flow-audit` | `/task-flow-audit` | `task_audit.mdc` |
 | `task-flow: estimate X` / `X,Y` / `all` | `task-flow-estimate` | `/task-flow-estimate` | `task_estimate.mdc` |
@@ -318,7 +319,7 @@ Ou use `AGENTS.override.md` / settings locais fora do git e commite `.claude/ski
 ## 13. Checklist de maturidade Claude + Task Flow
 
 - [x] `CLAUDE.md` enxuto com índice de skills
-- [x] Skills instaladas via `rbin-task-flow init` (10 skills)
+- [x] Skills instaladas via `rbin-task-flow init` (11 skills)
 - [x] `paths: [".task-flow/**"]` em `task-flow-run`, `sync`, `estimate`, `report`
 - [x] Injeção `` !`head tasks.status.md` `` em `task-flow-run`
 - [ ] `.claude/skills/` versionado no git (ajustar `.gitignore` se o time quiser)

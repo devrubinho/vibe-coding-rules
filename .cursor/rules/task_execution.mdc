@@ -14,6 +14,7 @@ alwaysApply: false
 | `task-flow: sync` | `@task-flow-sync` |
 | `task-flow: from contexts` | `@task-flow-from-contexts` |
 | `task-flow: run next X`, `run N` | `@task-flow-run` |
+| `task-flow: split:N` | `@task-flow-split` |
 | `task-flow: status` | `@task-flow-status` |
 | `task-flow: audit` | `@task-flow-audit` |
 | `task-flow: validate` | `@task-flow-validate` |

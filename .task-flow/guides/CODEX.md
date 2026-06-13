@@ -29,6 +29,19 @@ Rule: `.cursor/rules/task_from_contexts.mdc`
 
 ---
 
+## task-flow: split:N
+
+1. **N obrigatório** — `split:3`, `split:2`. `split` sem `:N` → inválido.
+2. Escopo opcional: `split:3 50-72` ou `split:2 50,51,69`; senão todas pending.
+3. Particionar em **N** filas sem conflito; cadeias na mesma fila.
+4. Ordenar IA-1 (mais forte) → IA-N por dificuldade.
+5. Output N linhas `task-flow: run id,id,id` + coordenação.
+6. **Não** implementar nem editar status.
+
+Rule: `.cursor/rules/task_split.mdc`
+
+---
+
 ## task-flow: run next X | run X | run all
 
 See AGENTS.md **Run** section. Prefer `.claude/skills/task-flow-run/workflow.md`; fallback: `.cursor/rules/task_work.mdc`.

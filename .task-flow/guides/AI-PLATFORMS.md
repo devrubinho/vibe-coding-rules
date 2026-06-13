@@ -33,8 +33,9 @@ Os comandos `task-flow: …` são **os mesmos** em Claude Code, Cursor e Codex. 
 1. Definir tasks: editar `tasks.input.txt` **ou** colocar specs em `contexts/` e rodar `task-flow: from contexts`
 2. `task-flow: sync`
 3. `task-flow: status`
-4. `task-flow: run next X` ou `task-flow: run N`
-5. **Você** faz `git commit` (a IA só sugere)
+4. `task-flow: split:3` (opcional — N IAs em paralelo) → colar cada `run X,Y,Z` numa sessão
+5. `task-flow: run next X` ou `task-flow: run N`
+6. **Você** faz `git commit` (a IA só sugere)
 
 Detalhes dos comandos: [README.md](../README.md).
 
@@ -55,7 +56,7 @@ Detalhes dos comandos: [README.md](../README.md).
 | `.codex/config.toml` | — | — | ✅ (opcional, preservado no update) |
 | `task-flow-cursor.mdc` | — | ✅ always-on | — |
 | `rbin-git-policy.mdc` | — | ✅ always-on | — |
-| `.claude/skills/` | ✅ (10 skills) | — | — |
+| `.claude/skills/` | ✅ (11 skills) | — | — |
 | `.cursor/skills/` | — | ✅ (espelho) | — |
 
 Por padrão, `.claude/`, `.cursor/`, `.task-flow/`, `CLAUDE.md` e `AGENTS.md` entram no **`.gitignore`** do projeto cliente. Para versionar skills/regras com o time, ajuste o ignore — veja a seção “Versionamento” em cada guia.

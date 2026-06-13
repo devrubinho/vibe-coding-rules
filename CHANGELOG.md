@@ -2,6 +2,45 @@
 
 ## [Unreleased]
 
+## [1.27.1] - 2026-06-13
+
+**Patch — `split:N` obrigatório.**
+
+### Changed
+
+- **`task-flow: split:N`** — `N` é obrigatório (`split:3`, `split:2`). Plain `task-flow: split` **não existe** mais.
+- Escopo opcional após N: `split:3 50-72`, `split:2 50,51,69`.
+
+### Migration
+
+```bash
+npm install -g rbin-task-flow@1.27.1
+cd your-project && rbin-task-flow update
+```
+
+Use `task-flow: split:3` em vez de `task-flow: split`.
+
+## [1.27.0] - 2026-06-13
+
+**Minor release — `task-flow: split` (3 IAs em paralelo).**
+
+### Added
+
+- **`task-flow: split`** — planeja 3 filas de tasks pendentes sem conflito de arquivos, ordenadas por dificuldade (🟣 IA forte / 🟢 / 🔵); output `task-flow: run X,Y,Z` copiável por sessão. **Não implementa** — só plano.
+- Variantes: `split` (todas pending), `split 50-72`, `split 50,51,69`.
+- Skill `@task-flow-split` · regra `task_split.mdc`.
+
+### Changed
+
+- **11 skills** no `init` (antes 10).
+
+### Migration
+
+```bash
+npm install -g rbin-task-flow@1.27.0
+cd your-project && rbin-task-flow update
+```
+
 ## [1.26.1] - 2026-06-05
 
 **Patch — `disable-model-invocation` nos skills `task-flow-*`.**

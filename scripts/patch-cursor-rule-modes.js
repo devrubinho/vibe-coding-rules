@@ -18,6 +18,10 @@ alwaysApply: false
 description: Drafts tasks in tasks.input.txt from .task-flow/contexts/ files. Use for task-flow from contexts or import contexts.
 alwaysApply: false
 ---`,
+  'task_split.mdc': `---
+description: Plans parallel task-flow run across N AIs — split:N required. Use for task-flow split:3, split:2.
+alwaysApply: false
+---`,
   'task_generation.mdc': `---
 description: Subtask generation templates for new tasks. For sync use task-flow-sync.mdc or @task-flow-sync.
 globs: .task-flow/**

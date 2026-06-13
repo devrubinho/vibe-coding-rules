@@ -81,6 +81,7 @@ Guia completo: [guides/GRAPHIFY.md](guides/GRAPHIFY.md).
 | `task-flow: validate` | `all` (default) · `X` · `X,Y` | Deep audit vs codebase; revert false done; append gaps to `tasks.input.txt`; sync |
 | `task-flow: status` | — | Shows current task status |
 | `task-flow: run` | `next X` · `X` · `X,Y` · `all` | Execute pending subtasks: next N in order, one/many tasks, or everything |
+| `task-flow: split` | `:3` · `:2` · `:3 50-72` | Plan **N** parallel `run` lines — `:N` required |
 | `task-flow: estimate` | `X` · `X,Y` · `all` | Time estimate for average developer pace (hours + management buffer) |
 | `task-flow: report` | `X` · `X,Y` · `all` | Implementation report → `.task-flow/guides/reports/task-X-implementation.md` |
 | `task-flow: audit` | — | Audits codebase against **coding standards checklist**; full doc on demand |
@@ -125,6 +126,15 @@ Audits the **entire codebase** against the **checklist** in [coding_standards.md
 ---
 
 ## Commands with Task ID
+
+### `task-flow: split:N`
+Plans **parallel work across N IAs** (`split:3`, `split:2`, …). **`:N` is required** — plain `split` is invalid.
+
+**Examples:**
+- `task-flow: split:3` — all pending, 3 streams
+- `task-flow: split:2 50-72` — range, 2 streams
+
+Output: N copy-paste lines `task-flow: run id,id,id` + coordination notes. Invoke: `@task-flow-split`.
 
 ### `task-flow: run next X`
 Works on next X pending subtasks in sequential order. Implements and marks as "done".

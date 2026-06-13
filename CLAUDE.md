@@ -16,6 +16,7 @@
 | Sync input → system | `/task-flow-sync` |
 | Draft tasks from `contexts/` | `/task-flow-from-contexts` |
 | Run subtasks | `/task-flow-run` |
+| Split pending for N IAs (`split:3`, `split:2`, …) | `/task-flow-split` |
 | Status | `/task-flow-status` |
 | Audit repo | `/task-flow-audit` |
 | Validate + fill gaps | `/task-flow-validate` |

@@ -93,13 +93,13 @@ Após inicializar, use estes comandos na IA (Cursor/Claude/Codex) para gerenciar
 
 **Graphify (opcional):** grafo em `.task-flow/guides/graphify-out/`. Novo projeto: `rbin-task-flow init --graphify`. **Já tem Task Flow:** `npm install -g rbin-task-flow@latest` e `rbin-task-flow update --graphify` no projeto (migra `graphify-out/` da raiz + regera grafo). Detalhes: [.task-flow/README.md](.task-flow/README.md#graphify-opcional) · [GRAPHIFY.md](.task-flow/guides/GRAPHIFY.md).
 
-**Claude Code / Cursor skills (v1.20+):** `init` copia 10 skills para `.claude/skills/` e `.cursor/skills/` — use `/task-flow-from-contexts`, `/task-flow-sync`, `/task-flow-run`, etc.
+**Claude Code / Cursor skills (v1.20+):** `init` copia 11 skills para `.claude/skills/` e `.cursor/skills/` — use `/task-flow-split`, `/task-flow-sync`, `/task-flow-run`, etc.
 
 **Codex (v1.21+):** `AGENTS.md` com sync/run embutidos, `.task-flow/guides/CODEX.md` sob demanda, `.codex/config.toml` (64 KiB).
 
 **Cursor (v1.23+):** `task-flow-cursor.mdc` + `rbin-git-policy.mdc` (2 always-on) + skills — ver `.task-flow/guides/CURSOR.md`.
 
-**Perfil minimal:** `init --profile minimal` instala só as 2 regras always-on e as 10 skills; workflows via `@task-flow-*` (sem `task_work`, `coding_standards` glob, etc.). `standard` (padrão) copia todas as regras `.cursor/rules/`.
+**Perfil minimal:** `init --profile minimal` instala só as 2 regras always-on e as 11 skills; workflows via `@task-flow-*` (sem `task_work`, `coding_standards` glob, etc.). `standard` (padrão) copia todas as regras `.cursor/rules/`.
 
 **Compartilhar com o time:** `init --share-ai-config` não ignora `.cursor/skills/` nem `.cursor/rules/` no `.gitignore` (só `.cursor/settings.json` e overrides locais). Padrão: `.cursor/` inteiro ignorado — menos ruído no repo, config local por dev.
 
@@ -109,6 +109,7 @@ Após inicializar, use estes comandos na IA (Cursor/Claude/Codex) para gerenciar
 | `task-flow: sync` | **Sincroniza** tarefas do arquivo texto com o sistema | Mantém tudo sincronizado automaticamente - adiciona novas, remove deletadas, preserva seu progresso |
 | `task-flow: audit` | **Avalia** o quanto o código bate com os padrões de codificação | Analisa a codebase, dá um score por categoria e pergunta quais melhorias você quer adotar — sem impor nada |
 | `task-flow: status` | **Visualiza** o progresso rapidamente | Vê resumo com tasks completas, em andamento e quantas subtarefas faltam |
+| `task-flow: split` | `:3` · `:2` · `:3 50-72` | **Divide** trabalho entre N IAs — gera N comandos `run X,Y,Z` (só plano) |
 | `task-flow: run next X` | **Automatiza** o trabalho nas próximas subtarefas | A IA trabalha nas próximas X subtarefas sequencialmente, você só acompanha |
 | `task-flow: run X` | **Completa** uma tarefa inteira de uma vez | Executa todas as subtarefas de uma tarefa específica (permite trabalho paralelo) |
 | `task-flow: run X,Y` | **Completa** múltiplas tarefas | Executa tarefas separadas por vírgula (ex: `task-flow: run 10,11`) |
@@ -475,11 +476,11 @@ After initializing, use these commands in your AI (Cursor/Claude/Codex) to autom
 
 **Graphify (optional):** graph at `.task-flow/guides/graphify-out/`. New project: `rbin-task-flow init --graphify`. **Existing project:** `npm install -g rbin-task-flow@latest` then `rbin-task-flow update --graphify` (migrates legacy root `graphify-out/` + re-extracts). See [.task-flow/README.md](.task-flow/README.md#graphify-opcional) · [GRAPHIFY.md](.task-flow/guides/GRAPHIFY.md).
 
-**Claude / Cursor skills (v1.20+):** installs 10 skills — use `/task-flow-from-contexts`, `/task-flow-sync`, `/task-flow-run`, etc.
+**Claude / Cursor skills (v1.20+):** installs 11 skills — use `/task-flow-split`, `/task-flow-sync`, `/task-flow-run`, etc.
 
 **Codex (v1.21+):** optimized `AGENTS.md`, `.task-flow/guides/CODEX.md`, `.codex/config.toml`.
 
-**Cursor (v1.23+):** 2 always-on rules + 10 skills — `@task-flow-from-contexts`, `@task-flow-sync`, `@task-flow-run`.
+**Cursor (v1.23+):** 2 always-on rules + 11 skills — `@task-flow-split`, `@task-flow-sync`, `@task-flow-run`.
 
 **Minimal profile:** `init --profile minimal` copies only `task-flow-cursor.mdc` and `rbin-git-policy.mdc` plus skills; use `@task-flow-*` for workflows. `standard` (default) copies all rules under `.cursor/rules/`.
 
@@ -491,6 +492,7 @@ After initializing, use these commands in your AI (Cursor/Claude/Codex) to autom
 | `task-flow: sync` | **Sync** tasks from text file with system | Keeps everything synchronized automatically - adds new, removes deleted, preserves your progress |
 | `task-flow: audit` | **Evaluate** how well your code matches coding standards | Scans the codebase, scores it by category and asks which improvements you want to adopt — never imposes changes |
 | `task-flow: status` | **Visualize** progress quickly | See summary with completed tasks, in progress, and remaining subtasks |
+| `task-flow: split` | `:3` · `:2` · `:3 50-72` | **Split** work across N AIs — N `run` commands (plan only) |
 | `task-flow: run next X` | **Automate** work on next subtasks | AI works on next X subtasks sequentially, you just follow along |
 | `task-flow: run X` | **Complete** an entire task at once | Executes all subtasks of a specific task (allows parallel work) |
 | `task-flow: run X,Y` | **Complete** multiple tasks | Executes comma-separated tasks (e.g., `task-flow: run 10,11`) |

@@ -8,7 +8,7 @@ Guia para extrair o máximo do **RBIN Task Flow** no [Cursor](https://cursor.com
 
 ## 1. Por que o Task Flow “nasce” bem no Cursor
 
-O instalador copia regras para `.cursor/rules/` e **10 skills** para `.cursor/skills/`. Desde **v1.23** (otimização P0 — ver [OPTIMIZATION-PLAN.md](../OPTIMIZATION-PLAN.md)):
+O instalador copia regras para `.cursor/rules/` e **11 skills** para `.cursor/skills/`. Desde **v1.23** (otimização P0 — ver [OPTIMIZATION-PLAN.md](../OPTIMIZATION-PLAN.md)):
 
 | Camada | O que carrega | Tokens (~) |
 |--------|----------------|------------|
@@ -71,6 +71,7 @@ Confirme no projeto: `rg 'alwaysApply: true' .cursor/rules` → deve listar **ap
 | `task_work.mdc` | fallback curto de `run` | Intelligent — use `@task-flow-run` |
 | `task_execution.mdc` | índice stub → skills | Intelligent / `@` manual |
 | `task_from_contexts.mdc` | draft tasks de `contexts/` | Intelligent |
+| `task_split.mdc` | plano paralelo `split:N` | Intelligent |
 | `task-flow-sync.mdc` | `sync` completo | **Glob** `.task-flow/**` · prefer `@task-flow-sync` |
 | `task_generation.mdc` | templates de subtarefas | **Glob** `.task-flow/**` |
 | `task_status.mdc` | `status` | **Glob** `.task-flow/**` |
@@ -108,7 +109,7 @@ Cursor suporta o mesmo formato que Claude Code: `.cursor/skills/<nome>/SKILL.md`
 | Mesmo workflow em Claude + Cursor | Skills em **ambas** pastas | ✅ |
 | Referência enorme (coding standards) | checklist glob (~1k tokens) | `@rbin-coding-standards` + full doc por seção |
 
-O `rbin-task-flow init` copia **10 skills** para `.cursor/skills/` (mesmo conteúdo que `.claude/skills/`). No Agent, use `@task-flow-run`, `@task-flow-sync`, etc.
+O `rbin-task-flow init` copia **11 skills** para `.cursor/skills/` (mesmo conteúdo que `.claude/skills/`). No Agent, use `@task-flow-split`, `@task-flow-run`, `@task-flow-sync`, etc.
 
 Após `rbin-task-flow init` ou `update`, use `@task-flow-*` no Agent. Para sync: `@task-flow-sync` (não `task_generation` isolado).
 
@@ -281,7 +282,7 @@ Para open source: documente no README — contribuidores podem usar `--share-ai-
 ## 13. Checklist de maturidade Cursor + Task Flow
 
 - [x] `task-flow-cursor.mdc` + `rbin-git-policy.mdc` (2 always-on, v1.23)
-- [x] 10 skills em `.cursor/skills/` após `init`
+- [x] 11 skills em `.cursor/skills/` após `init`
 - [x] Otimização P0 de tokens (ver §3)
 - [ ] `task-flow: sync` após cada edição em `tasks.input.txt`
 - [ ] `@task-flow-run` (não `@task_work`) para implementar
