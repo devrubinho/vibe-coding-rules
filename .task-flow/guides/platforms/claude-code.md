@@ -87,7 +87,8 @@ task-flow-run/
 |-------|-------------------|
 | `description` | **Obrigatório para descoberta.** Terceira pessoa, WHAT + WHEN, termos `task-flow`, `run next`, `sync`, `RBIN`. Limite ~1536 caracteres na listagem. |
 | `name` | Opcional; comando `/` vem do **nome da pasta** (`task-flow-run` → `/task-flow-run`). |
-| `disable-model-invocation: true` | Workflows com efeito colateral: `run`, `sync`, deploy. Você dispara; Claude não “decide” sozinho. |
+| `disable-model-invocation: true` | Só em skills pesadas de referência (`rbin-coding-standards`) — evita auto-carregar standards inteiros. |
+| `disable-model-invocation: false` | **`task-flow-*`** (`sync`, `run`, `validate`, …) — `/task-flow-sync` e `task-flow: sync` devem executar quando você pede. |
 | `user-invocable: false` | Conhecimento de fundo (ex.: legado) — raro no Task Flow. |
 | `allowed-tools` | Restringir ferramentas em skills sensíveis (ex.: só `Read`, `Grep` para audit read-only). |
 | `paths` | Ex.: `[".task-flow/**"]` — auto-carregar skill ao editar arquivos de task. |
@@ -98,7 +99,7 @@ task-flow-run/
 | Tipo | Exemplo Task Flow |
 |------|------------------|
 | **Referência** | `/rbin-coding-standards` sob demanda (`disable-model-invocation: true`) — checklist primeiro |
-| **Tarefa** | `task-flow-run`, `task-flow-sync` — passos sequenciais; use `disable-model-invocation: true` |
+| **Tarefa** | `task-flow-run`, `task-flow-sync` — `disable-model-invocation: false` (usuário dispara; `/` e `task-flow:` devem funcionar) |
 
 Mantenha o corpo do `SKILL.md` **curto** (< 500 linhas). Detalhe em `workflow.md`.
 
@@ -160,7 +161,7 @@ Para Task Flow em equipe: prefira **skills de projeto** versionadas (ajuste o `.
 ---
 name: task-flow-run
 description: Executes RBIN Task Flow subtasks from tasks.json and status.json. Use when the user says task-flow run, run next X subtasks, work on task N, execute pending subtasks, or implement task flow.
-disable-model-invocation: true
+disable-model-invocation: false
 allowed-tools: Read Write Edit Glob Grep Shell
 paths: [".task-flow/**"]
 ---
@@ -218,7 +219,8 @@ Copie o corpo longo de `.cursor/rules/task_work.mdc` para `workflow.md`.
 ### 7.4 Múltiplos agentes no mesmo repo
 
 - Use **checagem de dependência** (`run 3` só se 1–2 done) — já em `task_work.mdc`.
-- Skills com `disable-model-invocation: true` evitam dois Claudes disparando `sync` ao mesmo tempo sem intenção.
+- Skills `task-flow-*` com `disable-model-invocation: false` — `/` e linguagem natural executam o workflow.
+- `rbin-coding-standards` mantém `true` para não inflar contexto sem pedido.
 
 ---
 
@@ -305,7 +307,8 @@ Ou use `AGENTS.override.md` / settings locais fora do git e commite `.claude/ski
 | Evite | Por quê |
 |-------|---------|
 | Colar `task_work.mdc` inteiro no `CLAUDE.md` | Estoura contexto fixo da sessão |
-| `disable-model-invocation: false` em `sync`/`run` | Claude pode executar workflow pesado sem você pedir |
+| Confiar só em `/` sem ler SKILL quando Skill tool falha | Use `task-flow: sync` + leia `workflow.md` — nunca diga que sync é "só manual" |
+| `disable-model-invocation: true` em `sync`/`run` | Bloqueia `/task-flow-sync` no Claude Code; use `false` nos `task-flow-*` |
 | Editar `status.json` à mão | Dessincroniza `tasks.status.md` |
 | Confiar só em “continua as tasks” | Sem número ou skill, ordem fica ambígua |
 | Ignorar reinício após criar `.claude/skills/` | Skills não aparecem no `/` |

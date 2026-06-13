@@ -1,7 +1,7 @@
 ---
 name: task-flow-report
 description: Generates implementation markdown report for completed RBIN Task Flow tasks. Use when the user says task-flow report X or document completed task.
-disable-model-invocation: true
+disable-model-invocation: false
 paths: [".task-flow/**"]
 ---
 

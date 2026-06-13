@@ -2,6 +2,25 @@
 
 ## [Unreleased]
 
+## [1.26.1] - 2026-06-05
+
+**Patch — `disable-model-invocation` nos skills `task-flow-*`.**
+
+### Fixed
+
+- **`task-flow-*` skills** (`sync`, `run`, `validate`, …): `disable-model-invocation: false` — `/task-flow-sync` e `task-flow: sync` voltam a executar no Claude Code (antes `true` bloqueava o Skill tool).
+- **`rbin-coding-standards`** mantém `true` (referência pesada; só ao implementar código).
+- `CLAUDE.md` + guia Claude: nunca dizer que sync/run é "só manual" se o Skill tool falhar — ler `workflow.md` / `.mdc`.
+
+### Migration
+
+```bash
+npm install -g rbin-task-flow@1.26.1
+cd your-project && rbin-task-flow update
+```
+
+Reinicie o Claude Code se `.claude/skills/` já existia na sessão.
+
 ## [1.26.0] - 2026-06-05
 
 **Minor release — `from contexts` + comandos enxutos (10 skills).**

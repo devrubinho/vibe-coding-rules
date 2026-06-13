@@ -1,7 +1,7 @@
 ---
 name: task-flow-validate
 description: Deep-validates RBIN Task Flow tasks against the codebase, reverts false done status, and appends missing gaps to tasks.input.txt then syncs. Use when the user says task-flow validate, validate all, validar tasks, or verificar lacunas.
-disable-model-invocation: true
+disable-model-invocation: false
 ---
 
 # Task Flow — Validate

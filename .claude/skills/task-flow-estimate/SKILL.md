@@ -1,7 +1,7 @@
 ---
 name: task-flow-estimate
 description: Estimates hours for RBIN Task Flow tasks (single ID, comma-separated IDs, or all). Use when the user says task-flow estimate 1, estimate 1,2, estimate all, or time estimate for tasks.
-disable-model-invocation: true
+disable-model-invocation: false
 paths: [".task-flow/**"]
 ---
 

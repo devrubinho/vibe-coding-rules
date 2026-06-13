@@ -26,6 +26,15 @@
 
 Natural language `task-flow: …` works the same. Details: [.task-flow/README.md](.task-flow/README.md).
 
+## Skills vs `disable-model-invocation`
+
+| Skill | Flag | Why |
+|-------|------|-----|
+| `task-flow-*` (`sync`, `run`, …) | `false` | You asked — `/task-flow-sync` and `task-flow: sync` must run the workflow |
+| `rbin-coding-standards` | `true` | Heavy reference; invoke only when implementing code |
+
+If the Skill tool ever refuses a slash command, still execute the workflow: read `.claude/skills/task-flow-*/SKILL.md` or `.cursor/rules/task-flow-*.mdc` — **never** tell the user sync/run is "only manual".
+
 ## Anti-patterns (save context)
 
 - Prefer **`/task-flow-run`** (or `@task-flow-run`) for executing subtasks — avoid `@task_work` plus duplicate `.cursor/rules/task_work.mdc` in the same turn.

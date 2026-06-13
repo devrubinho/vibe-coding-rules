@@ -1,7 +1,7 @@
 ---
 name: task-flow-audit
 description: Audits the full codebase against RBIN coding standards with a score table and asks which improvements to adopt. Use when the user says task-flow audit or audit coding standards for the whole project.
-disable-model-invocation: true
+disable-model-invocation: false
 ---
 
 # Task Flow — Audit

@@ -1,7 +1,7 @@
 ---
 name: task-flow-run
 description: Executes RBIN Task Flow subtasks from tasks.json and status.json. Use when the user says task-flow run, run next X subtasks, work on task N, execute pending subtasks, implement task flow, or trabalhar nas próximas subtarefas.
-disable-model-invocation: true
+disable-model-invocation: false
 paths: [".task-flow/**"]
 ---
 

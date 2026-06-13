@@ -1,7 +1,7 @@
 ---
 name: task-flow-from-contexts
 description: Creates tasks in tasks.input.txt from files in .task-flow/contexts/ (images, PDF, text, etc.). Use when the user says task-flow from contexts, import contexts, gerar tasks dos contexts, or criar tasks a partir dos contexts.
-disable-model-invocation: true
+disable-model-invocation: false
 paths: [".task-flow/**"]
 ---
 

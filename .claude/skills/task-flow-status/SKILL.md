@@ -1,7 +1,7 @@
 ---
 name: task-flow-status
 description: Shows RBIN Task Flow progress from tasks.status.md. Use when the user says task-flow status, show task status, status das tasks, or ver progresso das tarefas.
-disable-model-invocation: true
+disable-model-invocation: false
 ---
 
 # Task Flow — Status

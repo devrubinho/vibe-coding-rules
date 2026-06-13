@@ -6,7 +6,7 @@ alwaysApply: false
 
 # task-flow: sync
 
-**Prefer:** `@task-flow-sync` · Skill workflow: `.claude/skills/task-flow-sync/workflow.md`
+**Prefer:** `@task-flow-sync` · Skill: `.claude/skills/task-flow-sync/workflow.md` · Works with `/task-flow-sync` and `task-flow: sync`.
 
 ## 1. Read
 

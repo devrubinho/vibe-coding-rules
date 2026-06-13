@@ -1,7 +1,7 @@
 ---
 name: task-flow-sync
 description: Synchronizes RBIN Task Flow tasks.input.txt with tasks.json, status.json, and tasks.status.md. Use when the user says task-flow sync, sync tasks, sincronizar tasks, or after editing tasks.input.txt.
-disable-model-invocation: true
+disable-model-invocation: false
 paths: [".task-flow/**"]
 ---
 
