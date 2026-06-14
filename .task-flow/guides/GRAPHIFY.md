@@ -31,7 +31,7 @@ Graphify ([graphifyy](https://pypi.org/project/graphifyyy/)) cria um **grafo de 
 1. Copia **`.cursor/rules/graphify-task-flow.mdc`** — `alwaysApply: false` (não compete com `task_work`, etc.).
 2. Grafo em **`.task-flow/guides/graphify-out/`** (já coberto pelo `.task-flow/` no `.gitignore`; remove entrada legada `graphify-out/` na raiz).
 3. Se existir **`.cursor/rules/graphify.mdc`** do `graphify cursor install` (upstream com `alwaysApply: true`), o instalador **desativa** `alwaysApply` para economizar contexto.
-4. Com **`--graphify`** em `init`, `update` ou **`reset`**, roda `graphify extract . --backend claude-cli --out .task-flow/guides` se o CLI estiver no PATH (usa assinatura Claude Code — sem API key separada).
+4. Com **`--graphify`** em `init` ou **`reset`**, roda `graphify extract . --backend claude-cli --out .task-flow/guides` se o CLI estiver no PATH (usa assinatura Claude Code — sem API key separada).
 
 **Não** rodamos `graphify claude install` / `graphify cursor install` automaticamente — o install upstream força `graphify.mdc` always-on e incham `CLAUDE.md` / `AGENTS.md`.
 
@@ -41,7 +41,7 @@ Graphify ([graphifyy](https://pypi.org/project/graphifyyy/)) cria um **grafo de 
 
 ```bash
 cd seu-projeto
-rbin-task-flow reset --graphify   # ou init/update --graphify; recria .task-flow + grafo
+rbin-task-flow reset --keep-tasks --graphify   # ou init --graphify; recria template + grafo
 task-flow: sync
 task-flow: run next 3             # IA usa grafo só ao implementar
 # você: git commit
@@ -89,7 +89,7 @@ task-flow: run next 2 — se .task-flow/guides/graphify-out/ existir, graphify q
 | Primeiro setup | `rbin-task-flow init --graphify` ou `graphify extract . --backend claude-cli --out .task-flow/guides` |
 | Reset completo (tasks + template + grafo) | `rbin-task-flow reset --graphify` |
 | Refactor grande após vários `run` | `graphify update .` ou `graphify extract . --backend claude-cli --out .task-flow/guides` |
-| `task-flow: update` | Reaplica `graphify-task-flow.mdc` e pode rebaixar `graphify.mdc` |
+| `rbin-task-flow reset --keep-tasks` | Reaplica `graphify-task-flow.mdc` e pode rebaixar `graphify.mdc` |
 
 ---
 

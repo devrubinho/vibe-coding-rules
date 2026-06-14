@@ -32,12 +32,13 @@ For each task/subtask in scope:
 | Status | Check |
 |--------|--------|
 | `done` | Implementation exists and matches requirements (files, tests, docs per instructions) |
+| `manual` | Dev-log + conversation log; not `done` until IA verifies via chat history |
 | `pending` / `in_progress` | Whether code already partially or fully implements the subtask (status drift) |
 
 Record:
 
 - **Verified done** — correctly marked
-- **False done** — marked `done` but missing or incomplete
+- **False done** — marked `done` but missing, incomplete, or should be `manual`
 - **Drift** — implemented in code but still `pending`
 - **Confirmed pending** — not implemented yet (expected)
 
@@ -51,7 +52,7 @@ Find work not covered by current tasks:
 
 ### 4. Apply fixes (no ask — user invoked validate)
 
-1. **Status:** set false `done` → `pending` in `status.json`; optional drift `pending` → keep or note in report (do not auto-mark `done` without user run)
+1. **Status:** set false `done` → `pending` or `manual` (with dev-log if user action required) in `status.json`
 2. **Input:** append new lacunas as `- Description` lines to `tasks.input.txt` (append only; never remove or edit existing lines)
 3. **Sync:** follow [task-flow-sync.mdc](mdc:.cursor/rules/task-flow-sync.mdc) — diff input, regen subtasks for new tasks, rebuild `tasks.status.md` Summary
 4. **Never** edit `.internal/` by hand except through sync-aligned updates to `status.json` for false-done fixes before sync

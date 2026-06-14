@@ -9,11 +9,11 @@ alwaysApply: false
   - When user says "task-flow: status" or "task-flow status":
     - **READ**: `.task-flow/tasks.status.md`
     - **DISPLAY**: Show the current status of all tasks and subtasks
-    - **FORMAT**: Display in a clear, readable format showing done/pending tasks
+    - **FORMAT**: Display done `[x]`, pending `[ ]`, manual `[~]` (see `.task-flow/dev-logs/`)
 
 - **Status Display:**
   - Read `.task-flow/tasks.status.md` file
-  - Show tasks marked as `- [x]` (done) and `- [ ]` (pending)
+  - Show tasks marked as `- [x]` (done), `- [ ]` (pending), `- [~]` (manual — user action required)
   - Display subtasks with their status
   - Show progress summary if available
 

@@ -14,6 +14,7 @@ alwaysApply: true
 | `.task-flow/.internal/tasks.json` | Definitions |
 | `.task-flow/.internal/status.json` | Status source of truth |
 | `.task-flow/contexts/` | Specs / mockups |
+| `.task-flow/dev-logs/` | Manual steps + conversation log (`task-X.Y-manual.md`) |
 | `.task-flow/guides/` | Platform guides, Graphify, standards, reports |
 
 ## Prefer skills (`.cursor/skills/`)
@@ -33,6 +34,8 @@ alwaysApply: true
 | Suggest commit | `@rbin-git` |
 
 Natural language (`work on next 3 subtasks`) = same as `task-flow: run next 3`.
+
+**Manual subtasks:** user reports progress in chat; AI updates `.task-flow/dev-logs/` Conversation log and marks `done` when verified — no separate command.
 
 ## Git (always)
 

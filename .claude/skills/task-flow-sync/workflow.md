@@ -43,12 +43,12 @@ All subtasks `pending`; task `pending`.
 ## tasks.status.md
 
 - Auto-generated banner warning (do not edit manually).
-- Summary section with counts.
-- `- [ ]` / `- [x]` for tasks and indented subtasks.
+- Summary section with counts (include 🖐️ manual when any).
+- `- [ ]` / `- [x]` / `- [~]` for tasks and indented subtasks (`[~]` → link dev-log).
 
 ## Sync-only rules
 
-- Preserve status on modified tasks when subtasks still match.
+- Preserve status on modified tasks when subtasks still match (`done`, `manual`, `pending`).
 - New subtasks after regen → `pending`; removed subtasks → drop from status.
 - Never explore codebase during pure sync unless user explicitly asks for codebase analysis in the same message.
 

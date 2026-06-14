@@ -53,7 +53,7 @@ Detalhes dos comandos: [README.md](../README.md).
 | `.task-flow/guides/CURSOR.md` | — | ✅ | — |
 | `.task-flow/guides/coding-standards-full.md` | on demand | on demand (sections only) | on demand |
 | [OPTIMIZATION-PLAN.md](OPTIMIZATION-PLAN.md) | — | token roadmap | — |
-| `.codex/config.toml` | — | — | ✅ (opcional, preservado no update) |
+| `.codex/config.toml` | — | — | ✅ (opcional, preservado no reset --keep-tasks) |
 | `task-flow-cursor.mdc` | — | ✅ always-on | — |
 | `rbin-git-policy.mdc` | — | ✅ always-on | — |
 | `.claude/skills/` | ✅ (11 skills) | — | — |

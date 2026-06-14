@@ -13,15 +13,21 @@ paths: [".task-flow/**"]
 
 ## Steps
 
-1. Read `status.json` first; list **pending** task/subtask IDs only.
-2. **tasks.json (token discipline):** Count subtasks across all tasks. If **>50**, do **not** load the full file — read only the JSON slice for each active task id (pending subtasks you will run). If ≤50, full read is OK.
-3. Parse intent: `run next X` (default X=1) | `run X` | `run X,Y` | `run all`.
-4. **`run X` / `run X,Y`:** If any task before X has pending subtasks, **stop** and list blocking tasks.
-5. For each subtask: follow `instructions`; read `.task-flow/contexts/` files when referenced.
-6. If `.task-flow/guides/graphify-out/graph.json` exists, prefer `graphify query "<module from subtask>" --graph .task-flow/guides/graphify-out/graph.json` before broad grep (summarized output only — see GRAPHIFY.md).
-7. After each subtask: update `status.json` and `tasks.status.md` (regenerate 📊 Summary).
-8. When parent task complete: mark task `done` in both files.
-9. Invoke `/rbin-git` logic to **suggest** commit only — never `git add`/`commit`/`push`.
+1. Read `status.json`; resolve **`manual`** subtasks first via dev-logs + current conversation (see workflow).
+2. List **pending** task/subtask IDs (`done`, `manual` until resolved).
+3. **tasks.json:** partial read by task id if **>50** subtasks total.
+4. Parse intent: `run next X` (default X=1) | `run X` | `run X,Y` | `run all`.
+5. **`run X` / `run X,Y`:** Stop if earlier tasks/subtasks are not `done`.
+6. Per subtask: `instructions` + `contexts/`; optional `graphify query`.
+7. **Automatable** → `done` + `tasks.status.md` Summary.
+8. **Manual intervention** → `manual` + `.task-flow/dev-logs/task-X.Y-manual.md`; user reports progress **in chat**; AI appends **Conversation log** and marks `done` only when verified complete.
+9. Parent task all `done` → mark task `done`.
+10. Suggest commit via `/rbin-git` — never git write.
+
+## Never during run
+
+- Mark `done` when manual steps remain unverified
+- Write `guides/reports/task-*-implementation.md`
 
 ## Full workflow
 

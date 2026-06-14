@@ -13,6 +13,7 @@
 | `.task-flow/.internal/tasks.json` | Task definitions |
 | `.task-flow/.internal/status.json` | Status source of truth |
 | `.task-flow/contexts/` | Specs/mockups for subtasks |
+| `.task-flow/dev-logs/` | Manual steps + conversation log (AI updates from chat) |
 
 ## Git
 
@@ -52,12 +53,13 @@ No explanatory comments. Complex topics → `dev-logs/*.md`. Allowed: `// ──
 ## Run (embedded)
 
 1. Read `tasks.json` + `status.json`.
-2. `run next X` (default X=1): next X **pending** subtasks in order 1.1, 1.2, …, 2.1…
-3. `run X` / `X,Y` / `all`: all pending for task(s); for `run X`, block if tasks `1..X-1` have any pending subtask.
-4. Per subtask: follow `instructions`; read `contexts/` if cited; implement + verify.
-5. If `.task-flow/guides/graphify-out/graph.json` exists, prefer `graphify query … --graph .task-flow/guides/graphify-out/graph.json` before repo-wide grep.
-6. Mark subtask `done` in `status.json`; update `tasks.status.md` Summary.
-7. Parent task `done` when all subtasks done. Suggest commit; never git write.
+2. **Resolve `manual` first:** read dev-logs + conversation; append Conversation log; mark `done` only when verified.
+3. `run next X` (default X=1): next X **pending** subtasks (skip unresolved `manual`).
+4. `run X` / `X,Y` / `all`: all pending for task(s); block if tasks `1..X-1` have non-`done` subtasks.
+5. Per subtask: `instructions`; `contexts/`; implement + verify; optional `graphify query`.
+6. **Automatable** → `done`; **manual intervention** → `manual` + dev-log; user reports in chat; AI updates log and completes when verified.
+7. Parent task `done` when all subtasks `done`. Suggest commit; never git write.
+8. **Never** write `guides/reports/` during run.
 
 ## Prompt templates (copy)
 

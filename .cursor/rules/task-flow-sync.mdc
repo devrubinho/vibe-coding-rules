@@ -20,7 +20,7 @@ alwaysApply: false
 |--------|--------|
 | **New** | Generate task + 3–8 subtasks; all `pending` |
 | **Removed** | Drop from `tasks.json`, `status.json`, `tasks.status.md` |
-| **Modified** | Update title/description; regen subtasks; **preserve** done/pending status where possible |
+| **Modified** | Update title/description; regen subtasks; **preserve** done/pending/**manual** status where possible |
 | **Unchanged** | Leave task data and status as-is |
 
 Task IDs stay sequential (1, 2, 3…) matching `tasks.input.txt` order.
@@ -38,8 +38,8 @@ Task IDs stay sequential (1, 2, 3…) matching `tasks.input.txt` order.
 ## 4. Align status
 
 - `status.json` = source of truth
-- Rebuild `tasks.status.md` checkboxes to match; **regenerate 📊 Summary** (completed / in progress / remaining counts)
-- After regen: new subtasks → `pending`; keep `done` on matched subtasks when possible
+- Rebuild `tasks.status.md` checkboxes to match (`[ ]` pending · `[x]` done · `[~]` manual); **regenerate 📊 Summary** (completed / in progress / 🖐️ manual / remaining counts)
+- After regen: new subtasks → `pending`; keep `done` and `manual` on matched subtasks when possible
 
 ## 5. Principles
 

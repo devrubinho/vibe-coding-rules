@@ -2,6 +2,89 @@
 
 ## [Unreleased]
 
+## [1.30.1] - 2026-06-05
+
+**Patch — manual completion via conversation, sem `confirm`.**
+
+### Removed
+
+- **`task-flow: confirm`** — skill `task-flow-confirm` e regra `task_confirm.mdc`.
+
+### Changed
+
+- Subtarefas `manual`: IA atualiza **Conversation log** em `dev-logs/` a partir do chat e marca `done` quando verificar que está completo — sem comando separado.
+
+### Migration
+
+```bash
+npm install -g rbin-task-flow@1.30.1
+cd your-project && rbin-task-flow reset --keep-tasks
+```
+
+## [1.30.0] - 2026-06-05
+
+**Minor — intervenção manual no `run`.**
+
+### Added
+
+- Status **`manual`** para subtarefas que exigem ação do usuário (deploy, console, credenciais…).
+- Pasta **`.task-flow/dev-logs/`** com `task-X.Y-manual.md` (passos + conversation log).
+- IA marca `done` quando o log + conversa confirmam conclusão — sem comando `confirm` (removido em 1.30.1).
+
+### Changed
+
+- **`task-flow: run`** — não marca `done` nem gera `guides/reports/` quando há passos manuais; para na subtarefa e aponta o dev-log.
+- **`task-flow: report`** — explícito: só após task 100% `done` (sem `manual`).
+
+### Migration
+
+```bash
+npm install -g rbin-task-flow@1.30.0
+cd your-project && rbin-task-flow reset --keep-tasks
+```
+
+## [1.29.0] - 2026-06-05
+
+**Breaking — remove `rbin-task-flow update`.**
+
+### Removed
+
+- **`rbin-task-flow update`** — use `reset` ou `reset --keep-tasks` em vez disso.
+
+### Migration
+
+```bash
+npm install -g rbin-task-flow@1.29.0
+cd your-project
+
+# Subir versão mantendo tasks (substitui update --keep-tasks)
+rbin-task-flow reset --keep-tasks
+
+# Com graphify
+rbin-task-flow reset --keep-tasks --graphify
+
+# Reinstalar do zero (substitui update sem keep-tasks em projetos novos: use init)
+rbin-task-flow reset
+```
+
+## [1.28.0] - 2026-06-05
+
+**Minor release — `--keep-tasks` no CLI.**
+
+### Added
+
+- **`--keep-tasks`** em `reset` — preserva `tasks.input.txt`, `tasks.status.md` e `.internal/` ao subir a versão do pacote ou recriar o template.
+- Combinável com `--graphify`: `rbin-task-flow reset --keep-tasks --graphify`.
+
+### Migration
+
+```bash
+npm install -g rbin-task-flow@1.28.0
+cd your-project && rbin-task-flow reset --keep-tasks
+# ou, com grafo:
+rbin-task-flow reset --keep-tasks --graphify
+```
+
 ## [1.27.1] - 2026-06-13
 
 **Patch — `split:N` obrigatório.**

@@ -5,32 +5,14 @@ alwaysApply: false
 
 # Task Flow — Run (fallback)
 
-**Prefer:** `@task-flow-run` (Claude: `/task-flow-run`) — full steps in `.claude/skills/task-flow-run/workflow.md` (same under `.cursor/skills/` after install).
+**Prefer:** `@task-flow-run` — `.claude/skills/task-flow-run/workflow.md`
 
-**Task flow** = RBIN Task Flow. Do not edit `.task-flow/.internal/` by hand.
+## Critical flow
 
-## Commands
+1. **Resolve `manual` first:** read dev-logs + conversation; append Conversation log; mark `done` only when verified.
+2. **`run next X`:** pending subtasks only; `manual` blocks until dev-log shows complete.
+3. **Automatable** → `done`; **user must act** → `manual` + dev-log; never `done` until log confirms.
+4. User reports manual progress **in normal chat** — no separate confirm command.
+5. Suggest commit via `@rbin-git` — never write git.
 
-| User says | Action |
-|-----------|--------|
-| `task-flow: run next X` / `run next` | Next X pending subtasks in order (default X=1) |
-| `task-flow: run X` | All pending subtasks of task X |
-| `task-flow: run X,Y` / `run all` | As labeled |
-
-Natural language (`work on next 3 subtasks`, `execute all subtasks of task 2`) = same as above.
-
-## Critical flow (each subtask)
-
-1. Read `status.json` first; load `tasks.json` by pending task ids only if **>50 subtasks** total (see `@task-flow-run` workflow).
-2. **`run X`:** If tasks `1..X-1` have any pending subtask, **stop** and list blockers; do not run X.
-3. Implement per `instructions`; read `.task-flow/contexts/` when referenced; optional `graphify query` if `.task-flow/guides/graphify-out/` exists ([graphify-task-flow.mdc](mdc:.cursor/rules/graphify-task-flow.mdc)).
-4. After each subtask: `status.json` → `done`; `tasks.status.md` → `- [x]` + regenerate 📊 Summary.
-5. Parent task all done → mark task `done` in both files.
-6. Suggest commit via [rbin-git-policy.mdc](mdc:.cursor/rules/rbin-git-policy.mdc) / `@rbin-git` — never write git.
-
-If blocked: subtask `in_progress` + explain.
-
-## More detail
-
-- Skill workflow: `.claude/skills/task-flow-run/workflow.md`
-- Command index: [task-flow-cursor.mdc](mdc:.cursor/rules/task-flow-cursor.mdc) · [task_execution.mdc](mdc:.cursor/rules/task_execution.mdc) (stub)
+**Never during run:** `guides/reports/task-*-implementation.md`.

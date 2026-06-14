@@ -33,7 +33,7 @@
 <a id="português"></a>
 # 🇧🇷 Português
 
-> **v1.25.1** — Padrão `.env` Vercel nos coding standards. De **1.25.0**: `npm install -g rbin-task-flow@1.25.1` e `rbin-task-flow update`. [CHANGELOG](CHANGELOG.md) · [Publicação](RELEASE-1.25.1.md).
+> **v1.30.1** — `reset --keep-tasks`, sem comando `update`, subtarefas `manual` em `dev-logs/`. `npm install -g rbin-task-flow@1.30.1` e `rbin-task-flow reset --keep-tasks`. [CHANGELOG](CHANGELOG.md) · [Publicação](RELEASE-1.30.1.md).
 
 ## O Que É Este Projeto?
 
@@ -74,11 +74,12 @@ rbin-task-flow init
 rbin-task-flow init          # Inicializa no projeto atual
 rbin-task-flow init --profile minimal  # Só 2 regras always-on + skills (menos tokens no Cursor)
 rbin-task-flow init --share-ai-config  # Versiona .cursor/skills/ e .cursor/rules/ no git (time)
-rbin-task-flow update        # Atualiza configurações (mantém profile em install-meta.json)
-rbin-task-flow update --profile standard  # Passa a copiar todas as regras .mdc
+rbin-task-flow init --graphify  # Init + grafo em .task-flow/guides/graphify-out/
 rbin-task-flow reset         # Reinstala o Task Flow do zero
-rbin-task-flow update --graphify # Update + grafo em .task-flow/guides/graphify-out/
+rbin-task-flow reset --keep-tasks  # Sobe versão sem sobrescrever suas tasks
+rbin-task-flow reset --profile standard  # Passa a copiar todas as regras .mdc
 rbin-task-flow reset --graphify  # Reset + graphify extract (CLI Graphify no PATH)
+rbin-task-flow reset --keep-tasks --graphify  # Upgrade + mantém tasks + graphify extract
 rbin-task-flow version-check # Verifica atualizações de modelos
 rbin-task-flow info          # Mostra informações
 rbin-task-flow estimate <ids> # Estima tempo (ex: "1" ou "1,2" ou "all")
@@ -91,7 +92,7 @@ Após inicializar, use estes comandos na IA (Cursor/Claude/Codex) para gerenciar
 
 **Otimizar por plataforma:** [.task-flow/guides/AI-PLATFORMS.md](.task-flow/guides/AI-PLATFORMS.md) · [Claude](.task-flow/guides/platforms/claude-code.md) · [Cursor](.task-flow/guides/platforms/cursor.md) · [Codex](.task-flow/guides/platforms/codex.md) · [Graphify](.task-flow/guides/GRAPHIFY.md)
 
-**Graphify (opcional):** grafo em `.task-flow/guides/graphify-out/`. Novo projeto: `rbin-task-flow init --graphify`. **Já tem Task Flow:** `npm install -g rbin-task-flow@latest` e `rbin-task-flow update --graphify` no projeto (migra `graphify-out/` da raiz + regera grafo). Detalhes: [.task-flow/README.md](.task-flow/README.md#graphify-opcional) · [GRAPHIFY.md](.task-flow/guides/GRAPHIFY.md).
+**Graphify (opcional):** grafo em `.task-flow/guides/graphify-out/`. Novo projeto: `rbin-task-flow init --graphify`. **Já tem Task Flow:** `npm install -g rbin-task-flow@latest` e `rbin-task-flow reset --keep-tasks --graphify` no projeto (migra `graphify-out/` da raiz + regera grafo). **Manter suas tasks ao subir versão:** `rbin-task-flow reset --keep-tasks`. Detalhes: [.task-flow/README.md](.task-flow/README.md#graphify-opcional) · [GRAPHIFY.md](.task-flow/guides/GRAPHIFY.md).
 
 **Claude Code / Cursor skills (v1.20+):** `init` copia 11 skills para `.claude/skills/` e `.cursor/skills/` — use `/task-flow-split`, `/task-flow-sync`, `/task-flow-run`, etc.
 
@@ -110,7 +111,7 @@ Após inicializar, use estes comandos na IA (Cursor/Claude/Codex) para gerenciar
 | `task-flow: audit` | **Avalia** o quanto o código bate com os padrões de codificação | Analisa a codebase, dá um score por categoria e pergunta quais melhorias você quer adotar — sem impor nada |
 | `task-flow: status` | **Visualiza** o progresso rapidamente | Vê resumo com tasks completas, em andamento e quantas subtarefas faltam |
 | `task-flow: split` | `:3` · `:2` · `:3 50-72` | **Divide** trabalho entre N IAs — gera N comandos `run X,Y,Z` (só plano) |
-| `task-flow: run next X` | **Automatiza** o trabalho nas próximas subtarefas | A IA trabalha nas próximas X subtarefas sequencialmente, você só acompanha |
+| `task-flow: run next X` | **Automatiza** o trabalho nas próximas subtarefas | IA implementa o que pode; passos manuais → `dev-logs/`; você reporta no chat |
 | `task-flow: run X` | **Completa** uma tarefa inteira de uma vez | Executa todas as subtarefas de uma tarefa específica (permite trabalho paralelo) |
 | `task-flow: run X,Y` | **Completa** múltiplas tarefas | Executa tarefas separadas por vírgula (ex: `task-flow: run 10,11`) |
 | `task-flow: run all` | **Completa** todas as tarefas | Executa todas as tarefas pendentes |
@@ -271,11 +272,17 @@ Para atualizar configurações em um projeto existente:
 ```bash
 # Usando NPM (recomendado)
 cd /caminho/para/seu/projeto
-rbin-task-flow update
 
-# Para reiniciar o Task Flow do zero, incluindo .task-flow/.internal
+# Primeira instalação
+rbin-task-flow init
+
+# Subir versão do pacote mantendo suas tasks
+npm install -g rbin-task-flow@latest
+rbin-task-flow reset --keep-tasks
+rbin-task-flow reset --keep-tasks --graphify
+
+# Reiniciar o Task Flow do zero (perde tasks)
 rbin-task-flow reset
-# Com grafo de código (requer graphify no PATH):
 rbin-task-flow reset --graphify
 
 # Ou usando método legacy
@@ -416,7 +423,7 @@ Para problemas ou perguntas:
 <a id="english"></a>
 # 🇬🇧 English
 
-> **v1.25.1** — Vercel `.env` pattern in coding standards. From **1.25.0**: `npm install -g rbin-task-flow@1.25.1` then `rbin-task-flow update`. [CHANGELOG](CHANGELOG.md) · [Release guide](RELEASE-1.25.1.md).
+> **v1.30.1** — `reset --keep-tasks`, no `update` CLI, `manual` subtasks in `dev-logs/`. `npm install -g rbin-task-flow@1.30.1` then `rbin-task-flow reset --keep-tasks`. [CHANGELOG](CHANGELOG.md) · [Release guide](RELEASE-1.30.1.md).
 
 ## What Is This Project?
 
@@ -457,11 +464,12 @@ rbin-task-flow init
 rbin-task-flow init          # Initialize in current project
 rbin-task-flow init --profile minimal  # 2 always-on rules + skills only (lower Cursor token cost)
 rbin-task-flow init --share-ai-config  # Commit .cursor/skills and rules with the team
-rbin-task-flow update        # Update configs (keeps profile from .task-flow/install-meta.json)
-rbin-task-flow update --profile standard  # Install all .cursor/rules/*.mdc
+rbin-task-flow init --graphify  # Init + graph at .task-flow/guides/graphify-out/
 rbin-task-flow reset         # Reinstall Task Flow from scratch
-rbin-task-flow update --graphify # Update + graph at .task-flow/guides/graphify-out/
+rbin-task-flow reset --keep-tasks  # Upgrade package without overwriting your tasks
+rbin-task-flow reset --profile standard  # Install all .cursor/rules/*.mdc
 rbin-task-flow reset --graphify  # Reset + graphify extract (Graphify CLI on PATH)
+rbin-task-flow reset --keep-tasks --graphify  # Upgrade + keep tasks + graphify extract
 rbin-task-flow version-check # Check for model updates
 rbin-task-flow info          # Show information
 rbin-task-flow estimate <ids> # Estimate time (e.g., "1" or "1,2" or "all")
@@ -474,7 +482,7 @@ After initializing, use these commands in your AI (Cursor/Claude/Codex) to autom
 
 **Per-platform optimization:** [index](.task-flow/guides/AI-PLATFORMS.md) · [Claude](.task-flow/guides/platforms/claude-code.md) · [Cursor](.task-flow/guides/platforms/cursor.md) · [Codex](.task-flow/guides/platforms/codex.md) · [Graphify](.task-flow/guides/GRAPHIFY.md)
 
-**Graphify (optional):** graph at `.task-flow/guides/graphify-out/`. New project: `rbin-task-flow init --graphify`. **Existing project:** `npm install -g rbin-task-flow@latest` then `rbin-task-flow update --graphify` (migrates legacy root `graphify-out/` + re-extracts). See [.task-flow/README.md](.task-flow/README.md#graphify-opcional) · [GRAPHIFY.md](.task-flow/guides/GRAPHIFY.md).
+**Graphify (optional):** graph at `.task-flow/guides/graphify-out/`. New project: `rbin-task-flow init --graphify`. **Existing project:** `npm install -g rbin-task-flow@latest` then `rbin-task-flow reset --keep-tasks --graphify` (migrates legacy root `graphify-out/` + re-extracts). **Keep your tasks when upgrading:** `rbin-task-flow reset --keep-tasks`. See [.task-flow/README.md](.task-flow/README.md#graphify-opcional) · [GRAPHIFY.md](.task-flow/guides/GRAPHIFY.md).
 
 **Claude / Cursor skills (v1.20+):** installs 11 skills — use `/task-flow-split`, `/task-flow-sync`, `/task-flow-run`, etc.
 
@@ -493,7 +501,7 @@ After initializing, use these commands in your AI (Cursor/Claude/Codex) to autom
 | `task-flow: audit` | **Evaluate** how well your code matches coding standards | Scans the codebase, scores it by category and asks which improvements you want to adopt — never imposes changes |
 | `task-flow: status` | **Visualize** progress quickly | See summary with completed tasks, in progress, and remaining subtasks |
 | `task-flow: split` | `:3` · `:2` · `:3 50-72` | **Split** work across N AIs — N `run` commands (plan only) |
-| `task-flow: run next X` | **Automate** work on next subtasks | AI works on next X subtasks sequentially, you just follow along |
+| `task-flow: run next X` | **Automate** work on next subtasks | AI implements what it can; manual steps → `dev-logs/`; you report in chat |
 | `task-flow: run X` | **Complete** an entire task at once | Executes all subtasks of a specific task (allows parallel work) |
 | `task-flow: run X,Y` | **Complete** multiple tasks | Executes comma-separated tasks (e.g., `task-flow: run 10,11`) |
 | `task-flow: run all` | **Complete** all tasks | Executes all pending tasks |
@@ -654,11 +662,17 @@ To update configs in an existing project:
 ```bash
 # Using NPM (recommended)
 cd /path/to/your/project
-rbin-task-flow update
 
-# To reset Task Flow from scratch, including .task-flow/.internal
+# First install
+rbin-task-flow init
+
+# Upgrade package while keeping your tasks
+npm install -g rbin-task-flow@latest
+rbin-task-flow reset --keep-tasks
+rbin-task-flow reset --keep-tasks --graphify
+
+# Reset Task Flow from scratch (loses tasks)
 rbin-task-flow reset
-# With code knowledge graph (requires graphify on PATH):
 rbin-task-flow reset --graphify
 
 # Or using legacy method

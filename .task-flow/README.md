@@ -8,6 +8,7 @@
 ├── tasks.input.txt        ← defina tasks (`- descrição`)
 ├── tasks.status.md        ← progresso (auto; não editar)
 ├── contexts/              ← specs, mockups
+├── dev-logs/              ← passos manuais + log da conversa (IA atualiza)
 ├── .internal/             ← tasks.json, status.json (sistema)
 └── guides/                ← documentação e configs
     ├── AI-PLATFORMS.md
@@ -46,15 +47,23 @@ cd seu-projeto
 rbin-task-flow init --graphify
 ```
 
-### Projeto que já usa Task Flow (atualizar pacote + migrar grafo)
+### Projeto que já usa Task Flow (subir versão + migrar grafo)
 
 ```bash
 npm install -g rbin-task-flow@latest
 cd seu-projeto
-rbin-task-flow update --graphify
+rbin-task-flow reset --keep-tasks --graphify
 ```
 
-O `update --graphify` reaplica rules/skills, move `graphify-out/` legado da raiz para `guides/graphify-out/` (se existir) e roda o extract.
+**Manter suas tasks** ao subir versão (não sobrescreve `tasks.input.txt`, `tasks.status.md` nem `.internal/`):
+
+```bash
+npm install -g rbin-task-flow@latest
+cd seu-projeto
+rbin-task-flow reset --keep-tasks
+```
+
+O `reset --keep-tasks --graphify` reaplica rules/skills, move `graphify-out/` legado da raiz para `guides/graphify-out/` (se existir) e roda o extract.
 
 ### Só regerar o grafo (sem reinstall do template)
 
@@ -80,7 +89,7 @@ Guia completo: [guides/GRAPHIFY.md](guides/GRAPHIFY.md).
 | `task-flow: sync` | — | Complete synchronization: adds new, removes deleted, updates modified, preserves status |
 | `task-flow: validate` | `all` (default) · `X` · `X,Y` | Deep audit vs codebase; revert false done; append gaps to `tasks.input.txt`; sync |
 | `task-flow: status` | — | Shows current task status |
-| `task-flow: run` | `next X` · `X` · `X,Y` · `all` | Execute pending subtasks: next N in order, one/many tasks, or everything |
+| `task-flow: run` | `next X` · `X` · `X,Y` · `all` | Execute pending subtasks; manual → `dev-logs/`, status `manual` |
 | `task-flow: split` | `:3` · `:2` · `:3 50-72` | Plan **N** parallel `run` lines — `:N` required |
 | `task-flow: estimate` | `X` · `X,Y` · `all` | Time estimate for average developer pace (hours + management buffer) |
 | `task-flow: report` | `X` · `X,Y` · `all` | Implementation report → `.task-flow/guides/reports/task-X-implementation.md` |
@@ -111,7 +120,7 @@ Complete synchronization between `tasks.input.txt` and the system:
 - ✅ Adds new tasks from `tasks.input.txt`
 - ✅ Removes tasks that were deleted from `tasks.input.txt`
 - ✅ Updates tasks that were modified in `tasks.input.txt`
-- ✅ Preserves status (done/pending) of existing tasks
+- ✅ Preserves status (`done`, `pending`, `manual`) of existing tasks
 - ✅ Synchronizes status between `status.json` and `tasks.status.md` (ensures they are always aligned)
 
 ### `task-flow: validate`
@@ -137,14 +146,18 @@ Plans **parallel work across N IAs** (`split:3`, `split:2`, …). **`:N` is requ
 Output: N copy-paste lines `task-flow: run id,id,id` + coordination notes. Invoke: `@task-flow-split`.
 
 ### `task-flow: run next X`
-Works on next X pending subtasks in sequential order. Implements and marks as "done".
+Works on next X **pending** subtasks. Resolves `manual` first by reading dev-logs and the current conversation.
+
+- **Fully automatable** → `done`
+- **Needs your action** → `manual` + `.task-flow/dev-logs/task-X.Y-manual.md`
+- You report progress **in chat** (no extra command); the AI appends the **Conversation log** and marks `done` when verified
 
 **Examples:**
-- `task-flow: run next 4` → Next 4 subtasks
-- `task-flow: run next` → Next 1 subtask
+- `task-flow: run next 4` → Next 4 pending subtasks
+- `task-flow: run next` → Next 1 pending subtask
 
 ### `task-flow: run X` (simplified syntax)
-Executes all pending subtasks of a specific task. Implements and marks as "done".
+Executes all **pending** subtasks of a specific task. Stops if a subtask requires manual intervention.
 
 **⚠️ Dependency Check:**
 - Only executes if all previous tasks (1, 2, ..., X-1) are completely finished

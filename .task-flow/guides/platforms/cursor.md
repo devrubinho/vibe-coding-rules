@@ -33,8 +33,8 @@ Documentação: [Cursor Rules](https://cursor.com/docs/context/rules) · Referê
 | **minimal** | `rbin-task-flow init --profile minimal` | Só `task-flow-cursor.mdc` + `rbin-git-policy.mdc` + skills |
 
 - **minimal:** ≤2 always-on; workflows só via `@task-flow-*` (sem glob `coding_standards`, `task_work`, etc.).
-- **update** sem `--profile` reaplica o profile salvo em `.task-flow/install-meta.json`.
-- Migrar para regras completas: `rbin-task-flow update --profile standard`.
+- **reset** sem `--profile` reaplica o profile salvo em `.task-flow/install-meta.json`.
+- Migrar para regras completas: `rbin-task-flow reset --profile standard --keep-tasks`.
 
 ---
 
@@ -111,7 +111,7 @@ Cursor suporta o mesmo formato que Claude Code: `.cursor/skills/<nome>/SKILL.md`
 
 O `rbin-task-flow init` copia **11 skills** para `.cursor/skills/` (mesmo conteúdo que `.claude/skills/`). No Agent, use `@task-flow-split`, `@task-flow-run`, `@task-flow-sync`, etc.
 
-Após `rbin-task-flow init` ou `update`, use `@task-flow-*` no Agent. Para sync: `@task-flow-sync` (não `task_generation` isolado).
+Após `rbin-task-flow init` ou `reset --keep-tasks`, use `@task-flow-*` no Agent. Para sync: `@task-flow-sync` (não `task_generation` isolado).
 
 ---
 
@@ -201,7 +201,7 @@ Coloque PNG/PDF/MD em `.task-flow/contexts/`. Nas subtarefas geradas, instruçõ
 | Stubs `task_work` / `task_execution` | ✅ |
 | Unificar git em `rbin-git-policy` | ✅ |
 
-**No seu projeto:** `rbin-task-flow update` reaplica o template. Evite reativar `alwaysApply: true` em `graphify.mdc` upstream.
+**No seu projeto:** `rbin-task-flow reset --keep-tasks` reaplica o template. Evite reativar `alwaysApply: true` em `graphify.mdc` upstream.
 
 **Roadmap:** [OPTIMIZATION-PLAN.md](../OPTIMIZATION-PLAN.md) · tarefas: [OPTIMIZATION-IMPLEMENTATION-TASKS.md](../OPTIMIZATION-IMPLEMENTATION-TASKS.md).
 
@@ -238,10 +238,11 @@ Cursor também pode ler `AGENTS.md` em alguns fluxos; no RBIN ele é focado em *
 
 | Comando CLI | Uso com Cursor |
 |-------------|----------------|
-| `rbin-task-flow init` | Copia rules + task-flow |
-| `rbin-task-flow update` | Atualiza rules; preserva `.internal/` |
+| `rbin-task-flow init` | Primeira instalação (rules + task-flow) |
 | `rbin-task-flow reset` | Recria `.task-flow` do zero |
+| `rbin-task-flow reset --keep-tasks` | Sobe versão sem sobrescrever `tasks.input.txt`, `tasks.status.md`, `.internal/` |
 | `rbin-task-flow reset --graphify` | Reset + `graphify extract . --backend claude-cli` |
+| `rbin-task-flow reset --keep-tasks --graphify` | Upgrade + mantém tasks + grafo |
 
 O Agent executa o workflow (`task-flow: audit`, `task-flow: run`, etc.); o CLI prepara arquivos.
 
@@ -258,7 +259,7 @@ O Agent executa o workflow (`task-flow: audit`, `task-flow: run`, etc.); o CLI p
 | Local (padrão) | `init` | Repo limpo; cada dev com setup próprio | Sem sync de rules/skills |
 | Time | `init --share-ai-config` | Mesmo Task Flow para todos | Mais arquivos de IA no git; tokens por dev ao usar rules |
 
-`update` sem flag reaplica a opção salva em `.task-flow/install-meta.json` (`shareAiConfig`).
+`reset` sem flag reaplica a opção salva em `.task-flow/install-meta.json` (`shareAiConfig`).
 
 Para open source: documente no README — contribuidores podem usar `--share-ai-config` ou `init` local.
 
@@ -268,7 +269,7 @@ Para open source: documente no README — contribuidores podem usar `--share-ai-
 
 | Problema | Causa provável | Ação |
 |----------|----------------|------|
-| Agent ignora `task-flow:` | Rules não instaladas / projeto errado | `rbin-task-flow update` |
+| Agent ignora `task-flow:` | Rules não instaladas / projeto errado | `rbin-task-flow reset --keep-tasks` |
 | Não atualiza `tasks.status.md` | Só mexeu em `status.json` | `@task-flow-run` — regenerar Summary |
 | `run 3` não roda | Tasks 1–2 incompletas | `task-flow: status` |
 | Coding standards ignorados | Checklist não no contexto | `@rbin-coding-standards` ou abrir arquivo em `src/` |

@@ -46,11 +46,13 @@ Rule: `.cursor/rules/task_split.mdc`
 
 See AGENTS.md **Run** section. Prefer `.claude/skills/task-flow-run/workflow.md`; fallback: `.cursor/rules/task_work.mdc`.
 
-**Dependency:** `run N` only if tasks `1..N-1` fully done.
+**Dependency:** `run N` only if tasks `1..N-1` fully `done` (no `manual` blocking).
 
-**Per subtask:** implement → `done` in `status.json` → refresh `tasks.status.md` → suggest commit.
+**Per subtask (automatable):** implement → `done` → refresh `tasks.status.md` → suggest commit.
 
-**Blocked:** set `in_progress`, explain.
+**Manual intervention:** implement what you can → `manual` → dev-log → user reports in chat → AI updates Conversation log → `done` when verified.
+
+**Never during run:** `guides/reports/task-*-implementation.md`.
 
 ---
 

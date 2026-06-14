@@ -78,12 +78,12 @@ Only during `run` / `validate` when `.task-flow/guides/graphify-out/` exists. Do
 
 | Issue | Fix |
 |-------|-----|
-| Ignores task-flow | `rbin-task-flow update` |
+| Ignores task-flow | `rbin-task-flow reset --keep-tasks` |
 | Run workflow wrong | **`@task-flow-run`** — avoid `@task_work` |
 | Rule not applied | `@task-flow-<command>` for that workflow |
 | Standards missing | File under `src/` or `@rbin-coding-standards` |
 | Context too large | Fewer `src/` files in chat; skills not full docs |
-| Wrong always-on count | `update`; don't set `graphify.mdc` always-on |
+| Wrong always-on count | `reset --keep-tasks`; don't set `graphify.mdc` always-on |
 
 ---
 

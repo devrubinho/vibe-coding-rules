@@ -36,7 +36,7 @@ projeto/
 └── .task-flow/
 ```
 
-Após `rbin-task-flow init` ou `update`, use **`/task-flow-sync`**, **`/task-flow-run`**, etc. Reinicie o Claude Code se `.claude/skills/` foi criado pela primeira vez na sessão.
+Após `rbin-task-flow init` ou `reset --keep-tasks`, use **`/task-flow-sync`**, **`/task-flow-run`**, etc. Reinicie o Claude Code se `.claude/skills/` foi criado pela primeira vez na sessão.
 
 ---
 
