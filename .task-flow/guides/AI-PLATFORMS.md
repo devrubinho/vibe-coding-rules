@@ -59,7 +59,7 @@ Detalhes dos comandos: [README.md](../README.md).
 | `.claude/skills/` | ✅ (11 skills) | — | — |
 | `.cursor/skills/` | — | ✅ (espelho) | — |
 
-Por padrão, `.claude/`, `.cursor/`, `.task-flow/`, `CLAUDE.md` e `AGENTS.md` entram no **`.gitignore`** do projeto cliente. Para versionar skills/regras com o time, ajuste o ignore — veja a seção “Versionamento” em cada guia.
+Por padrão, **`.task-flow`** é acrescentado ao final do **`.gitignore`** do projeto cliente.
 
 ---
 

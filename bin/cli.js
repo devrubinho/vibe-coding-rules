@@ -26,7 +26,7 @@ function addInstallCommand(name, description, extra = {}) {
     )
     .option(
       '--share-ai-config',
-      'Do not gitignore .cursor/skills/ or .cursor/rules/ (team can commit shared AI config; see .gitignore comment)'
+      'Save team AI config preference in install-meta.json (appends .task-flow to .gitignore)'
     )
     .option(
       '--keep-tasks',

@@ -248,20 +248,9 @@ O Agent executa o workflow (`task-flow: audit`, `task-flow: run`, etc.); o CLI p
 
 ---
 
-## 11. `.gitignore` discreto vs time
+## 11. `.gitignore` no projeto
 
-**Padrão:** `rbin-task-flow init` ignora `.cursor/` inteiro (skills e rules ficam locais).
-
-**Time:** `rbin-task-flow init --share-ai-config` — **não** ignora `.cursor/skills/` nem `.cursor/rules/`; ignora só `.cursor/settings.json` e `*.local.mdc`. O bloco no `.gitignore` explica o trade-off **tokens vs consistência do time**.
-
-| Estratégia | Comando | Prós | Contras |
-|------------|---------|------|---------|
-| Local (padrão) | `init` | Repo limpo; cada dev com setup próprio | Sem sync de rules/skills |
-| Time | `init --share-ai-config` | Mesmo Task Flow para todos | Mais arquivos de IA no git; tokens por dev ao usar rules |
-
-`reset` sem flag reaplica a opção salva em `.task-flow/install-meta.json` (`shareAiConfig`).
-
-Para open source: documente no README — contribuidores podem usar `--share-ai-config` ou `init` local.
+**Padrão:** `init` / `reset` acrescentam `.task-flow` ao final do `.gitignore`.
 
 ---
 

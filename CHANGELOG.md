@@ -2,6 +2,37 @@
 
 ## [Unreleased]
 
+## [1.30.3] - 2026-06-05
+
+**Patch — `.gitignore` sem comentários.**
+
+### Changed
+
+- **`init` / `reset`** — acrescenta só `.task-flow` ao final do `.gitignore` do projeto (sem bloco nem comentários RBIN).
+
+### Migration
+
+```bash
+npm install -g rbin-task-flow@1.30.3
+cd your-project && rbin-task-flow reset --keep-tasks
+```
+
+## [1.30.2] - 2026-06-05
+
+**Patch — `.gitignore` só `.task-flow/`.**
+
+### Changed
+
+- **`init` / `reset`** — no projeto destino, o `.gitignore` ignora **apenas** `.task-flow/` (remove `.claude/`, `.cursor/`, `CLAUDE.md`, `AGENTS.md` do bloco RBIN).
+- Reinstalação limpa entradas legadas do bloco anterior.
+
+### Migration
+
+```bash
+npm install -g rbin-task-flow@1.30.2
+cd your-project && rbin-task-flow reset --keep-tasks
+```
+
 ## [1.30.1] - 2026-06-05
 
 **Patch — manual completion via conversation, sem `confirm`.**

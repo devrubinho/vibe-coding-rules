@@ -13,7 +13,7 @@ Verify: `rg 'alwaysApply: true' .cursor/rules` → only the two files above.
 
 **Install profiles:** `rbin-task-flow init --profile minimal` → 2 always-on rules + skills only; `standard` (default) → all `.mdc` rules. Saved in `.task-flow/install-meta.json`.
 
-**Team git:** `init --share-ai-config` → `.cursor/skills/` and `.cursor/rules/` not gitignored (default ignores all `.cursor/`).
+**Team git:** `.task-flow` appended to `.gitignore`; other AI config files can be committed.
 
 ---
 

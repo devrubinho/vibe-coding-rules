@@ -203,6 +203,7 @@ install_to_project() {
   # Remove old entries if they exist
   sed -i '' '/^\.claude\/$/d' "$target/.gitignore" 2>/dev/null
   sed -i '' '/^\.cursor\/$/d' "$target/.gitignore" 2>/dev/null
+  sed -i '' '/^\.task-flow$/d' "$target/.gitignore" 2>/dev/null
   sed -i '' '/^\.task-flow\/$/d' "$target/.gitignore" 2>/dev/null
   sed -i '' '/^CLAUDE\.md$/d' "$target/.gitignore" 2>/dev/null
   sed -i '' '/^AGENTS\.md$/d' "$target/.gitignore" 2>/dev/null
@@ -211,6 +212,9 @@ install_to_project() {
   sed -i '' '/^\.task-flow\/scripts\/tasks\.json$/d' "$target/.gitignore" 2>/dev/null
   sed -i '' '/^\.task-flow\/scripts\/status\.json$/d' "$target/.gitignore" 2>/dev/null
   sed -i '' '/^\.cursor\/rules\/\*\.local\.mdc$/d' "$target/.gitignore" 2>/dev/null
+  sed -i '' '/^# Only \.task-flow/d' "$target/.gitignore" 2>/dev/null
+  sed -i '' '/^# \.cursor\//d' "$target/.gitignore" 2>/dev/null
+  sed -i '' '/^# END RBIN Task Flow/d' "$target/.gitignore" 2>/dev/null
   sed -i '' '/^graphify-out\/$/d' "$target/.gitignore" 2>/dev/null
 
   if [ -f "$target/.cursor/rules/graphify.mdc" ]; then
@@ -219,15 +223,8 @@ install_to_project() {
     echo -e "${CYAN}   ℹ️  graphify.mdc set to alwaysApply: false (Task Flow priority)${NC}"
   fi
 
-  # Add entries without comments
-  {
-    echo ""
-    echo ".claude/"
-    echo ".cursor/"
-    echo ".task-flow/"
-    echo "CLAUDE.md"
-    echo "AGENTS.md"
-  } >> "$target/.gitignore"
+  echo "" >> "$target/.gitignore"
+  echo ".task-flow" >> "$target/.gitignore"
 
   echo -e "${GREEN}✅ .gitignore updated${NC}"
 

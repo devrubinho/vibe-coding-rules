@@ -33,7 +33,7 @@
 <a id="português"></a>
 # 🇧🇷 Português
 
-> **v1.30.1** — `reset --keep-tasks`, sem comando `update`, subtarefas `manual` em `dev-logs/`. `npm install -g rbin-task-flow@1.30.1` e `rbin-task-flow reset --keep-tasks`. [CHANGELOG](CHANGELOG.md) · [Publicação](RELEASE-1.30.1.md).
+> **v1.30.3** — `.gitignore`: só `.task-flow` no final, sem comentários. `npm install -g rbin-task-flow@1.30.3` e `rbin-task-flow reset --keep-tasks`. [CHANGELOG](CHANGELOG.md) · [Publicação](RELEASE-1.30.3.md).
 
 ## O Que É Este Projeto?
 
@@ -102,7 +102,7 @@ Após inicializar, use estes comandos na IA (Cursor/Claude/Codex) para gerenciar
 
 **Perfil minimal:** `init --profile minimal` instala só as 2 regras always-on e as 11 skills; workflows via `@task-flow-*` (sem `task_work`, `coding_standards` glob, etc.). `standard` (padrão) copia todas as regras `.cursor/rules/`.
 
-**Compartilhar com o time:** `init --share-ai-config` não ignora `.cursor/skills/` nem `.cursor/rules/` no `.gitignore` (só `.cursor/settings.json` e overrides locais). Padrão: `.cursor/` inteiro ignorado — menos ruído no repo, config local por dev.
+**Compartilhar com o time:** `.cursor/`, `CLAUDE.md` e `AGENTS.md` já podem ir no git; só `.task-flow/` fica ignorado (tasks e progresso locais). Flag `--share-ai-config` grava preferência em `install-meta.json`.
 
 | Comando | Por Que Usar | Feature Principal |
 |---------|--------------|-------------------|
@@ -146,7 +146,7 @@ Repositório centralizado de configurações e regras de desenvolvimento que pod
 - **Instalação Global NPM** - Instale uma vez, use em qualquer lugar com `npm install -g rbin-task-flow`
 - **Gerenciamento Simples de Tarefas** - Defina tarefas em texto simples, a IA gera subtarefas detalhadas
 - **Múltiplos Modelos de IA** - Claude Code Sonnet configurado e pronto para uso
-- **.gitignore Discreto** - Configurações de IA ocultas com comentários genéricos
+- **.gitignore mínimo** - Só `.task-flow/` ignorado; `.cursor/` e instruções versionáveis no git
 - **Zero Configuração** - Pronto para usar imediatamente
 - **RBIN Task Flow** - Gerenciamento de tarefas alimentado por IA com interface de texto simples
 
@@ -248,22 +248,13 @@ Gerenciamento de tarefas simples e poderoso:
 - **Rastreamento Simples**: Gerenciamento de status baseado em JSON com comandos CLI fáceis
 - **Monitoramento de Progresso**: Feedback visual claro sobre a conclusão das tarefas
 
-## .gitignore Discreto
+## .gitignore
 
-O instalador adiciona estas entradas ao `.gitignore`:
+O instalador adiciona `.task-flow` ao final do `.gitignore`:
 
 ```gitignore
-.claude/
-.cursor/
-.task-flow/
-CLAUDE.md
+.task-flow
 ```
-
-**Por que discreto?**
-- Sem comentários explicando o que são
-- Sem menção a "IA", "Claude" ou "Anthropic"
-- Tudo relacionado ao RBIN Task Flow permanece local
-- Histórico git limpo sem arquivos de ferramentas de IA
 
 ## Atualizando Projetos
 
@@ -343,9 +334,7 @@ Lista cada `.cursor/rules/*.mdc` (bytes, linhas, `alwaysApply`), soma always-on 
 - ⚠️ Este é um **repositório template** - não use RBIN Task Flow aqui
 - ✅ Use RBIN Task Flow em **projetos que recebem** as configurações via instalação
 - 🔄 O instalador **sempre sobrescreve** configurações existentes
-- 🤫 As entradas do .gitignore são **discretas** (sem menções a IA)
-- 🎯 Funciona com **Claude Code CLI** ou **Cursor Pro**
-- 📦 O diretório Task Flow (`.task-flow/`) é **automaticamente gitignored**
+- 📦 Apenas `.task-flow/` é **gitignored** (tasks e progresso locais)
 - 📝 Defina tarefas em `.task-flow/tasks.input.txt` usando formato simples: `- Descrição da tarefa`
 - 🚀 **Instalação Global NPM**: `npm install -g rbin-task-flow`, depois use `rbin-task-flow init` em qualquer projeto
 - 🔒 **Chaves de API podem ser necessárias** - depende do seu provedor de IA (Claude Code ou Cursor Pro)
@@ -423,7 +412,7 @@ Para problemas ou perguntas:
 <a id="english"></a>
 # 🇬🇧 English
 
-> **v1.30.1** — `reset --keep-tasks`, no `update` CLI, `manual` subtasks in `dev-logs/`. `npm install -g rbin-task-flow@1.30.1` then `rbin-task-flow reset --keep-tasks`. [CHANGELOG](CHANGELOG.md) · [Release guide](RELEASE-1.30.1.md).
+> **v1.30.3** — `.gitignore`: append `.task-flow` only, no comments. `npm install -g rbin-task-flow@1.30.3` then `rbin-task-flow reset --keep-tasks`. [CHANGELOG](CHANGELOG.md) · [Release guide](RELEASE-1.30.3.md).
 
 ## What Is This Project?
 
@@ -492,7 +481,7 @@ After initializing, use these commands in your AI (Cursor/Claude/Codex) to autom
 
 **Minimal profile:** `init --profile minimal` copies only `task-flow-cursor.mdc` and `rbin-git-policy.mdc` plus skills; use `@task-flow-*` for workflows. `standard` (default) copies all rules under `.cursor/rules/`.
 
-**Share with team:** `init --share-ai-config` leaves `.cursor/skills/` and `.cursor/rules/` out of `.gitignore` (see comment block in `.gitignore` for token vs team trade-off). Default ignores all of `.cursor/`.
+**Share with team:** `.cursor/`, `CLAUDE.md`, and `AGENTS.md` can be committed; only `.task-flow/` is gitignored (local tasks and progress). `--share-ai-config` saves preference in `install-meta.json`.
 
 | Command | Why Use It | Key Feature |
 |---------|------------|-------------|
@@ -536,7 +525,7 @@ A centralized repository of development configurations and rules that can be ins
 - **NPM Global Installation** - Install once, use everywhere with `npm install -g rbin-task-flow`
 - **Simple Task Management** - Define tasks in plain text, AI generates detailed subtasks
 - **Multiple AI Models** - Claude Code Sonnet configured and ready to use
-- **Discrete .gitignore** - AI configs hidden with generic comments
+- **Minimal .gitignore** - Only `.task-flow/` ignored; `.cursor/` and instruction files committable
 - **Zero Configuration** - Ready to use immediately
 - **RBIN Task Flow** - AI-powered task management with simple text interface
 
@@ -638,22 +627,13 @@ Simple yet powerful task management:
 - **Simple Tracking**: JSON-based status management with easy CLI commands
 - **Progress Monitoring**: Clear visual feedback on task completion
 
-## Discrete .gitignore
+## .gitignore
 
-The installer adds these entries to `.gitignore`:
+The installer appends `.task-flow` at the end of `.gitignore`:
 
 ```gitignore
-.claude/
-.cursor/
-.task-flow/
-CLAUDE.md
+.task-flow
 ```
-
-**Why discrete?**
-- No comments explaining what they are
-- No mention of "AI", "Claude", or "Anthropic"
-- Everything related to RBIN Task Flow stays local
-- Clean git history without AI tooling files
 
 ## Updating Projects
 
@@ -733,9 +713,7 @@ Prints each `.cursor/rules/*.mdc` (bytes, lines, `alwaysApply`), totals always-o
 - ⚠️ This is a **template repository** - don't use RBIN Task Flow here
 - ✅ Use RBIN Task Flow in **projects that receive** the configs via installation
 - 🔄 Installer **always overwrites** existing configs
-- 🤫 .gitignore entries are **discrete** (no AI mentions)
-- 🎯 Works with **Claude Code CLI** or **Cursor Pro**
-- 📦 Task Flow directory (`.task-flow/`) is **automatically gitignored**
+- 📦 Only `.task-flow/` is **gitignored** (local tasks and progress)
 - 📝 Define tasks in `.task-flow/tasks.input.txt` using simple format: `- Task description`
 - 🚀 **NPM Global Install**: `npm install -g rbin-task-flow`, then use `rbin-task-flow init` in any project
 - 🔒 **API keys may be required** - depends on your AI provider (Claude Code or Cursor Pro)
