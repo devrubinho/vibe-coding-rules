@@ -33,7 +33,7 @@ Os comandos `task-flow: …` são **os mesmos** em Claude Code, Cursor e Codex. 
 1. Definir tasks: editar `tasks.input.txt` **ou** colocar specs em `contexts/` e rodar `task-flow: from contexts`
 2. `task-flow: sync`
 3. `task-flow: status`
-4. `task-flow: split:3` (opcional — N IAs em paralelo) → colar cada `run X,Y,Z` numa sessão
+4. `task-flow: run-split:3` (opcional — N IAs em paralelo) → colar cada `run X,Y,Z` numa sessão
 5. `task-flow: run next X` ou `task-flow: run N`
 6. **Você** faz `git commit` (a IA só sugere)
 

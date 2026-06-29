@@ -14,13 +14,13 @@ alwaysApply: false
 | `task-flow: sync` | `@task-flow-sync` |
 | `task-flow: from contexts` | `@task-flow-from-contexts` |
 | `task-flow: run next X`, `run N` | `@task-flow-run` |
-| `task-flow: split:N` | `@task-flow-split` |
+| `task-flow: run-split:N` | `@task-flow-run-split` |
 | `task-flow: status` | `@task-flow-status` |
 | `task-flow: audit` | `@task-flow-audit` |
 | `task-flow: validate` | `@task-flow-validate` |
 | `task-flow: estimate X` / `X,Y` / `all` | `@task-flow-estimate` |
 | `task-flow: report X` | `@task-flow-report` |
-| Implement code | `@rbin-coding-standards` |
-| Suggest commit | `@rbin-git` |
+| Implement code | the `coding_standards.mdc` checklist |
+| Suggest commit | a Conventional Commit (policy: `rbin-git-policy.mdc`) |
 
 Git: [rbin-git-policy.mdc](mdc:.cursor/rules/rbin-git-policy.mdc). Run fallback: [task_work.mdc](mdc:.cursor/rules/task_work.mdc).

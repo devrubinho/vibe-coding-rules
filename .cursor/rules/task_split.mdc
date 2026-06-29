@@ -1,22 +1,22 @@
 ---
-description: Plans parallel task-flow run across N AIs — split:N required. Splits pending tasks into non-conflicting streams ordered by difficulty. Use for task-flow split:3, split:2, etc.
+description: Plans parallel task-flow run across N AIs — run-split:N required. Splits pending tasks into non-conflicting streams ordered by difficulty. Use for task-flow run-split:3, run-split:2, etc.
 alwaysApply: false
 ---
 
-# task-flow: split:N
+# task-flow: run-split:N
 
-**Prefer:** `@task-flow-split` · **Does not implement** — only outputs copy-paste `task-flow: run X,Y,Z` per IA tier.
+**Prefer:** `@task-flow-run-split` · **Does not implement** — only outputs copy-paste `task-flow: run X,Y,Z` per IA tier.
 
-**`N` is required.** Plain `task-flow: split` (without `:N`) is invalid — ask for `split:2`, `split:3`, etc.
+**`N` is required.** Plain `task-flow: run-split` (without `:N`) is invalid — ask for `run-split:2`, `run-split:3`, etc.
 
 ## When to run
 
-- `task-flow: split:3` — all pending, 3 IAs
-- `task-flow: split:2` — all pending, 2 IAs
-- `task-flow: split:3 50-72` — scope range, 3 IAs
-- `task-flow: split:2 50,51,69` — scope list, 2 IAs
+- `task-flow: run-split:3` — all pending, 3 IAs
+- `task-flow: run-split:2` — all pending, 2 IAs
+- `task-flow: run-split:3 50-72` — scope range, 3 IAs
+- `task-flow: run-split:2 50,51,69` — scope list, 2 IAs
 
-Natural language: `dividir pending em 3 ias` → `split:3`.
+Natural language: `dividir pending em 3 ias` → `run-split:3`.
 
 Default scope (no trailing ids): **all tasks with any pending subtask** in `status.json`.
 
@@ -29,8 +29,8 @@ Default scope (no trailing ids): **all tasks with any pending subtask** in `stat
 
 ### 1. Parse N and scope
 
-- **N:** integer ≥1 from `split:N` (typical 2–4)
-- **Scope:** optional `50-72` or `50,51,69` after `split:N`
+- **N:** integer ≥1 from `run-split:N` (typical 2–4)
+- **Scope:** optional `50-72` or `50,51,69` after `run-split:N`
 - If `N` missing or invalid, stop and show examples
 
 ### 2. Load pending scope
@@ -95,7 +95,7 @@ task-flow: run 52,54,55,56,57,69,70,71,72
 Paste one block per IA session. `task-flow: status`
 ```
 
-For `split:2`, use two tiers (🟣 IA-1, 🟢 IA-2). For `split:4`, add 🟡 IA-4, etc.
+For `run-split:2`, use two tiers (🟣 IA-1, 🟢 IA-2). For `run-split:4`, add 🟡 IA-4, etc.
 
 One **`task-flow: run id,id,id`** line per stream.
 
@@ -109,4 +109,4 @@ Call out shared files between streams, read-after-write deps, and ordering insid
 - Status: `@task-flow-status`
 - Git: [rbin-git-policy.mdc](mdc:.cursor/rules/rbin-git-policy.mdc)
 
-**Principle:** `split:N` = plan N parallel `run` commands; user owns N sessions; no execution.
+**Principle:** `run-split:N` = plan N parallel `run` commands; user owns N sessions; no execution.

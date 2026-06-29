@@ -41,7 +41,7 @@ Subtasks in `manual` block later subtasks in the same task until the dev-log sho
 2. Read `.task-flow/contexts/` when cited.
 3. Implement; verify (tests/build).
 4. `done` in `status.json`; run `rbin-task-flow render-status`.
-5. Suggest commit via `@rbin-git` when appropriate.
+5. Suggest a Conventional Commit message (policy: `.cursor/rules/rbin-git-policy.mdc`) when appropriate — never git write.
 
 ## Per subtask — manual intervention required
 

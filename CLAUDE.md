@@ -16,14 +16,15 @@
 | Sync input → system | `/task-flow-sync` |
 | Draft tasks from `contexts/` | `/task-flow-from-contexts` |
 | Run subtasks | `/task-flow-run` |
-| Split pending for N IAs (`split:3`, `split:2`, …) | `/task-flow-split` |
+| Recommend how many streams to split into | `/task-flow-plan-split` |
+| Run pending in N parallel streams (`run-split:3`, `run-split:2`, …) | `/task-flow-run-split` |
 | Status | `/task-flow-status` |
 | Audit repo | `/task-flow-audit` |
 | Validate + fill gaps | `/task-flow-validate` |
 | Estimate hours (`X`, `X,Y`, `all`) | `/task-flow-estimate` |
 | Implementation report | `/task-flow-report` |
-| Implement code | `/rbin-coding-standards` (invoke explicitly; checklist first, full doc sections only if needed) |
-| Commit suggestion | `/rbin-git` |
+| Implement code | `.cursor/rules/coding_standards.mdc` checklist (full doc `.task-flow/guides/coding-standards-full.md` only if needed) |
+| Commit suggestion | suggest Conventional Commit; policy `.cursor/rules/rbin-git-policy.mdc` |
 
 Natural language `task-flow: …` works the same. Details: [.task-flow/README.md](.task-flow/README.md).
 
@@ -32,19 +33,18 @@ Natural language `task-flow: …` works the same. Details: [.task-flow/README.md
 | Skill | Flag | Why |
 |-------|------|-----|
 | `task-flow-*` (`sync`, `run`, …) | `false` | You asked — `/task-flow-sync` and `task-flow: sync` must run the workflow |
-| `rbin-coding-standards` | `true` | Heavy reference; invoke only when implementing code |
 
 If the Skill tool ever refuses a slash command, still execute the workflow: read `.claude/skills/task-flow-*/SKILL.md` or `.cursor/rules/task-flow-*.mdc` — **never** tell the user sync/run is "only manual".
 
 ## Anti-patterns (save context)
 
 - Prefer **`/task-flow-run`** (or `@task-flow-run`) for executing subtasks — avoid `@task_work` plus duplicate `.cursor/rules/task_work.mdc` in the same turn.
-- Do **not** load `.task-flow/guides/coding-standards-full.md` unless the user asks for depth; use `/rbin-coding-standards` checklist or `coding_standards.mdc` for normal implementation.
+- Do **not** load `.task-flow/guides/coding-standards-full.md` unless the user asks for depth; use the `.cursor/rules/coding_standards.mdc` checklist for normal implementation.
 - Cursor users: see [.task-flow/guides/CURSOR.md](.task-flow/guides/CURSOR.md) for always-on vs skills (`@task-flow-*`).
 
 ## Git
 
-**Never** run `git add`, `commit`, `push`, `pull`, `merge`, `checkout`, `reset`, or `rebase`. Read-only git is OK. After work, use `/rbin-git` to suggest a Conventional Commit message.
+**Never** run `git add`, `commit`, `push`, `pull`, `merge`, `checkout`, `reset`, or `rebase`. Read-only git is OK. After work, suggest a Conventional Commit message (policy: `.cursor/rules/rbin-git-policy.mdc`); you run git.
 
 ## Graphify (optional)
 

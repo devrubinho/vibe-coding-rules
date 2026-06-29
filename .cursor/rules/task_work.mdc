@@ -13,6 +13,6 @@ alwaysApply: false
 2. **`run next X`:** pending subtasks only; `manual` blocks until dev-log shows complete.
 3. **Automatable** → `done`; **user must act** → `manual` + dev-log; never `done` until log confirms.
 4. User reports manual progress **in normal chat** — no separate confirm command.
-5. Suggest commit via `@rbin-git` — never write git.
+5. Suggest commit via a Conventional Commit (policy: `rbin-git-policy.mdc`) — never write git.
 
 **Never during run:** `guides/reports/task-*-implementation.md`.

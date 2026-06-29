@@ -42,6 +42,6 @@ git commit -m "feat(scope): Short description
 
 ## On demand
 
-Extended examples and presentation: `@rbin-git` skill · legacy [commit_practices.mdc](mdc:.cursor/rules/commit_practices.mdc), [git_control.mdc](mdc:.cursor/rules/git_control.mdc).
+Extended examples: legacy [commit_practices.mdc](mdc:.cursor/rules/commit_practices.mdc), [git_control.mdc](mdc:.cursor/rules/git_control.mdc).
 
 **Principle:** AI may act freely except git writes and risky remote ops — user owns git history.

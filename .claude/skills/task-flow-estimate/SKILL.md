@@ -13,6 +13,4 @@ paths: [".task-flow/**"]
 4. Output one range in hours per task, e.g. `10-14 hours`.
 5. State assumption: average developer, average pace, no AI acceleration.
 
-**CLI (optional):** `rbin-task-flow estimate 1` · `rbin-task-flow estimate 1,2` · `rbin-task-flow estimate all`
-
 Reference: `.cursor/rules/task_estimate.mdc`

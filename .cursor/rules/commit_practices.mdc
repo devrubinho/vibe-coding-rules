@@ -1,8 +1,8 @@
 ---
-description: Legacy commit examples — prefer rbin-git-policy.mdc (always-on). Invoke @rbin-git for full suggestion flow.
+description: Legacy commit examples — prefer rbin-git-policy.mdc (always-on) for the full suggestion flow.
 alwaysApply: false
 ---
 
 - **Superseded by** [rbin-git-policy.mdc](mdc:.cursor/rules/rbin-git-policy.mdc) (always-on).
-- **Skill:** `@rbin-git` for extended commit templates and Task Flow integration.
+- **Skill:** a Conventional Commit (policy: `rbin-git-policy.mdc`) for extended commit templates and Task Flow integration.
 - **Principle:** Suggest commits after `done`; user runs `git add` / `git commit`.

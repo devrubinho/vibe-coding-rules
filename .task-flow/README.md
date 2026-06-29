@@ -90,7 +90,8 @@ Guia completo: [guides/GRAPHIFY.md](guides/GRAPHIFY.md).
 | `task-flow: validate` | `all` (default) · `X` · `X,Y` | Deep audit vs codebase; revert false done; append gaps to `tasks.input.txt`; sync |
 | `task-flow: status` | — | Shows current task status |
 | `task-flow: run` | `next X` · `X` · `X,Y` · `all` | Execute pending subtasks; manual → `dev-logs/`, status `manual` |
-| `task-flow: split` | `:3` · `:2` · `:3 50-72` | Plan **N** parallel `run` lines — `:N` required |
+| `task-flow: plan-split` | — | Recommend how many streams to split into (file-disjoint groups); does not execute |
+| `task-flow: run-split:N` | `:3` · `:2` · `:3 50-72` | Run pending in **N** parallel streams (Claude: subagents; else `run` lines) — `:N` required |
 | `task-flow: estimate` | `X` · `X,Y` · `all` | Time estimate for average developer pace (hours + management buffer) |
 | `task-flow: report` | `X` · `X,Y` · `all` | Implementation report → `.task-flow/guides/reports/task-X-implementation.md` |
 | `task-flow: audit` | — | Audits codebase against **coding standards checklist**; full doc on demand |
@@ -136,14 +137,17 @@ Audits the **entire codebase** against the **checklist** in [coding_standards.md
 
 ## Commands with Task ID
 
-### `task-flow: split:N`
-Plans **parallel work across N IAs** (`split:3`, `split:2`, …). **`:N` is required** — plain `split` is invalid.
+### `task-flow: plan-split`
+Recommends **how many** parallel streams to use: analyzes pending tasks, groups them by file-disjointness, and proposes N (with the groups and what must run sequentially). **Does not execute** — pair with `run-split:N`. Invoke: `@task-flow-plan-split`.
+
+### `task-flow: run-split:N`
+Runs pending work in **N parallel streams** (`run-split:3`, `run-split:2`, …). **`:N` is required** — plain `run-split` is invalid. To pick N first, use `plan-split`.
 
 **Examples:**
-- `task-flow: split:3` — all pending, 3 streams
-- `task-flow: split:2 50-72` — range, 2 streams
+- `task-flow: run-split:3` — all pending, 3 streams
+- `task-flow: run-split:2 50-72` — range, 2 streams
 
-Output: N copy-paste lines `task-flow: run id,id,id` + coordination notes. Invoke: `@task-flow-split`.
+On **Claude**: dispatches one `task-runner` subagent per file-disjoint stream in parallel, then applies state centrally. On **Cursor/Codex**: outputs N copy-paste lines `task-flow: run id,id,id` + coordination notes. Invoke: `@task-flow-run-split`.
 
 ### `task-flow: run next X`
 Works on next X **pending** subtasks. Resolves `manual` first by reading dev-logs and the current conversation.
@@ -184,8 +188,6 @@ Estimates time required to complete task(s) based on the real complexity of the 
 - `task-flow: estimate 1` → time estimate for task 1
 - `task-flow: estimate 10,11` → time estimates for tasks 10 and 11
 - `task-flow: estimate all` → time estimates for all tasks
-
-**CLI:** `rbin-task-flow estimate 1` · `rbin-task-flow estimate 1,2` · `rbin-task-flow estimate all`
 
 ### `task-flow: report X` (simplified syntax)
 Generates a detailed implementation report for completed task(s) in Markdown format.

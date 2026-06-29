@@ -29,10 +29,10 @@ Rule: `.cursor/rules/task_from_contexts.mdc`
 
 ---
 
-## task-flow: split:N
+## task-flow: run-split:N
 
-1. **N obrigatório** — `split:3`, `split:2`. `split` sem `:N` → inválido.
-2. Escopo opcional: `split:3 50-72` ou `split:2 50,51,69`; senão todas pending.
+1. **N obrigatório** — `run-split:3`, `run-split:2`. `run-split` sem `:N` → inválido.
+2. Escopo opcional: `run-split:3 50-72` ou `run-split:2 50,51,69`; senão todas pending.
 3. Particionar em **N** filas sem conflito; cadeias na mesma fila.
 4. Ordenar IA-1 (mais forte) → IA-N por dificuldade.
 5. Output N linhas `task-flow: run id,id,id` + coordenação.

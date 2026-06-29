@@ -22,7 +22,7 @@ paths: [".task-flow/**"]
 7. **Automatable** → `done` in `status.json`; run `rbin-task-flow render-status` to refresh `tasks.status.md`.
 8. **Manual intervention** → `manual` + `.task-flow/dev-logs/task-X.Y-manual.md`; user reports progress **in chat**; AI appends **Conversation log** and marks `done` only when verified complete.
 9. Parent task all `done` → mark task `done`.
-10. Suggest commit via `/rbin-git` — never git write.
+10. Suggest a Conventional Commit message (policy: `.cursor/rules/rbin-git-policy.mdc`) — never git write.
 
 ## Never during run
 

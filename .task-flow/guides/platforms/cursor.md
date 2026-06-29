@@ -71,7 +71,7 @@ Confirme no projeto: `rg 'alwaysApply: true' .cursor/rules` → deve listar **ap
 | `task_work.mdc` | fallback curto de `run` | Intelligent — use `@task-flow-run` |
 | `task_execution.mdc` | índice stub → skills | Intelligent / `@` manual |
 | `task_from_contexts.mdc` | draft tasks de `contexts/` | Intelligent |
-| `task_split.mdc` | plano paralelo `split:N` | Intelligent |
+| `task_split.mdc` | plano paralelo `run-split:N` | Intelligent |
 | `task-flow-sync.mdc` | `sync` completo | **Glob** `.task-flow/**` · prefer `@task-flow-sync` |
 | `task_generation.mdc` | templates de subtarefas | **Glob** `.task-flow/**` |
 | `task_status.mdc` | `status` | **Glob** `.task-flow/**` |
@@ -107,9 +107,9 @@ Cursor suporta o mesmo formato que Claude Code: `.cursor/skills/<nome>/SKILL.md`
 | Comportamento **sempre** (nunca commitar git) | ✅ Always | ❌ |
 | Workflow **pesado** (`run`, `sync`, audit completo) | ⚠️ Caro se Always | ✅ Sob demanda |
 | Mesmo workflow em Claude + Cursor | Skills em **ambas** pastas | ✅ |
-| Referência enorme (coding standards) | checklist glob (~1k tokens) | `@rbin-coding-standards` + full doc por seção |
+| Referência enorme (coding standards) | checklist glob (~1k tokens) | the `coding_standards.mdc` checklist + full doc por seção |
 
-O `rbin-task-flow init` copia **11 skills** para `.cursor/skills/` (mesmo conteúdo que `.claude/skills/`). No Agent, use `@task-flow-split`, `@task-flow-run`, `@task-flow-sync`, etc.
+O `rbin-task-flow init` copia **11 skills** para `.cursor/skills/` (mesmo conteúdo que `.claude/skills/`). No Agent, use `@task-flow-run-split`, `@task-flow-run`, `@task-flow-sync`, etc.
 
 Após `rbin-task-flow init` ou `reset --keep-tasks`, use `@task-flow-*` no Agent. Para sync: `@task-flow-sync` (não `task_generation` isolado).
 
@@ -180,7 +180,7 @@ Coloque PNG/PDF/MD em `.task-flow/contexts/`. Nas subtarefas geradas, instruçõ
 | Execução clara | `task-flow: run next 3` |
 | Task específica | `task-flow: run 2` |
 | Sincronizar após editar input | `task-flow: sync` |
-| Padrões ao codificar | `@rbin-coding-standards` ou arquivo em `src/` (checklist glob) |
+| Padrões ao codificar | the `coding_standards.mdc` checklist ou arquivo em `src/` (checklist glob) |
 | Regra sob demanda | `@task-flow-audit` ou `@task_audit` + `task-flow: audit` |
 | Run explícito | `@task-flow-run` + `task-flow: run next 2` |
 | Natural | `trabalhe nas próximas 2 subtarefas do task flow` (bootstrap always-on) |
@@ -208,7 +208,7 @@ Coloque PNG/PDF/MD em `.task-flow/contexts/`. Nas subtarefas geradas, instruçõ
 ### 8.2 Hábitos no dia a dia
 
 1. `task-flow: run` → **`@task-flow-run`** (não `@task_work`).
-2. Implementar código → **`@rbin-coding-standards`** (não carregar full doc inteiro).
+2. Implementar código → **the `coding_standards.mdc` checklist** (não carregar full doc inteiro).
 3. Audit → checklist; full doc só se pedir profundidade.
 4. Não abrir dezenas de arquivos `src/` no chat antes de pedir só `sync`/`status`.
 
@@ -261,7 +261,7 @@ O Agent executa o workflow (`task-flow: audit`, `task-flow: run`, etc.); o CLI p
 | Agent ignora `task-flow:` | Rules não instaladas / projeto errado | `rbin-task-flow reset --keep-tasks` |
 | Não atualiza `tasks.status.md` | Só mexeu em `status.json` | `@task-flow-run` — regenerar Summary |
 | `run 3` não roda | Tasks 1–2 incompletas | `task-flow: status` |
-| Coding standards ignorados | Checklist não no contexto | `@rbin-coding-standards` ou abrir arquivo em `src/` |
+| Coding standards ignorados | Checklist não no contexto | the `coding_standards.mdc` checklist ou abrir arquivo em `src/` |
 | Run não segue deps/status | Usou stub sem skill | `@task-flow-run` |
 | Carregou standards inteiro | Audit/run com full doc | Usar checklist; seções do full doc só se necessário |
 | Regra “nunca aplica” | Intelligent + description vaga | `@task-flow-*` explícito |

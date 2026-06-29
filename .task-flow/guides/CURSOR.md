@@ -23,11 +23,11 @@ Verify: `rg 'alwaysApply: true' .cursor/rules` → only the two files above.
 |---------------------|-------------|
 | `task-flow: from contexts` | `@task-flow-from-contexts` |
 | `task-flow: sync` | `@task-flow-sync` |
-| `task-flow: split:N` | `@task-flow-split` |
+| `task-flow: run-split:N` | `@task-flow-run-split` |
 | `task-flow: run next 4` | `@task-flow-run` |
 | `task-flow: status` | `@task-flow-status` |
 | `task-flow: validate` | `@task-flow-validate` |
-| Implement feature code | `@rbin-coding-standards` (explicit; checklist glob on `src/**`) |
+| Implement feature code | the `coding_standards.mdc` checklist (explicit; checklist glob on `src/**`) |
 
 **Avoid:** `@task_work` (short fallback only — prefer `@task-flow-run`).
 
@@ -81,7 +81,7 @@ Only during `run` / `validate` when `.task-flow/guides/graphify-out/` exists. Do
 | Ignores task-flow | `rbin-task-flow reset --keep-tasks` |
 | Run workflow wrong | **`@task-flow-run`** — avoid `@task_work` |
 | Rule not applied | `@task-flow-<command>` for that workflow |
-| Standards missing | File under `src/` or `@rbin-coding-standards` |
+| Standards missing | File under `src/` or the `coding_standards.mdc` checklist |
 | Context too large | Fewer `src/` files in chat; skills not full docs |
 | Wrong always-on count | `reset --keep-tasks`; don't set `graphify.mdc` always-on |
 

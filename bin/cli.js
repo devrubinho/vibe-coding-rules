@@ -4,9 +4,6 @@ const { program } = require('commander');
 const path = require('path');
 const { installInProject } = require('../lib/install');
 const { parseProfileOption } = require('../lib/profiles');
-const { checkVersionUpdates } = require('../lib/version');
-const { estimateTask } = require('../lib/estimate');
-const { generateReport } = require('../lib/report');
 const chalk = require('chalk');
 
 program
@@ -56,33 +53,6 @@ addInstallCommand('init', 'Initialize RBIN Task Flow in current directory');
 addInstallCommand('reset', 'Reset RBIN Task Flow in current directory', { reset: true });
 
 program
-  .command('version-check')
-  .description('Check for model version updates')
-  .action(async () => {
-    await checkVersionUpdates();
-  });
-
-program
-  .command('estimate')
-  .description('Estimate time for task(s) based on real task complexity and average development pace')
-  .argument('<taskIds>', 'Task ID(s) to estimate (comma-separated or "all")')
-  .option('-p, --path <path>', 'Target directory (default: current directory)')
-  .action(async (taskIds, options) => {
-    const targetPath = options.path || process.cwd();
-    await estimateTask(taskIds, targetPath);
-  });
-
-program
-  .command('report')
-  .description('Generate implementation report for completed task(s)')
-  .argument('<taskIds>', 'Task ID(s) to generate report for (comma-separated or "all")')
-  .option('-p, --path <path>', 'Target directory (default: current directory)')
-  .action(async (taskIds, options) => {
-    const targetPath = options.path || process.cwd();
-    await generateReport(taskIds, targetPath);
-  });
-
-program
   .command('validate')
   .description('Validate .task-flow state (tasks.json/status.json) against schemas + referential integrity')
   .option('-p, --path <path>', 'Target directory (default: current directory)')
@@ -104,34 +74,6 @@ program
     const { renderStatusFile } = require('../lib/render-status');
     const code = await renderStatusFile(targetPath, { stdout: options.stdout === true });
     process.exit(code);
-  });
-
-program
-  .command('info')
-  .description('Show information about RBIN Task Flow')
-  .action(() => {
-    console.log('\n' + chalk.cyan('╔════════════════════════════════════════════════════════════════╗'));
-    console.log(chalk.cyan('║') + '        ' + chalk.magenta('✨ RBIN Task Flow ✨') + '                           ' + chalk.cyan('║'));
-    console.log(chalk.cyan('╚════════════════════════════════════════════════════════════════╝') + '\n');
-    console.log(chalk.blue('AI-powered task management for Claude and Cursor'));
-    console.log(chalk.yellow('\nVersion:'), require('../package.json').version);
-    console.log(chalk.yellow('Repository:'), 'https://github.com/rbinoliveira/rbin-task-flow');
-    console.log(chalk.yellow('\nCommands:'));
-    console.log(chalk.cyan('  rbin-task-flow init') + '         - Initialize in current directory');
-    console.log(chalk.cyan('  rbin-task-flow init --profile minimal') + ' - Low-token install (2 always-on rules + skills)');
-    console.log(chalk.cyan('  rbin-task-flow init --share-ai-config') + ' - Version .cursor/skills and rules in git');
-    console.log(chalk.cyan('  rbin-task-flow init --graphify') + ' - Init + graphify extract --backend claude-cli (if CLI installed)');
-    console.log(chalk.cyan('  rbin-task-flow reset') + '        - Reset task flow files from scratch');
-    console.log(chalk.cyan('  rbin-task-flow reset --keep-tasks') + ' - Upgrade package without overwriting tasks');
-    console.log(chalk.cyan('  rbin-task-flow reset --graphify') + ' - Reset + graphify extract --backend claude-cli (if CLI installed)');
-    console.log(chalk.cyan('  rbin-task-flow reset --keep-tasks --graphify') + ' - Upgrade + keep tasks + graphify extract');
-    console.log(chalk.cyan('  rbin-task-flow version-check') + ' - Check for model updates');
-    console.log(chalk.cyan('  rbin-task-flow estimate <ids>') + ' - Estimate time (e.g., "1" or "1,2" or "all")');
-    console.log(chalk.cyan('  rbin-task-flow report <ids>') + '  - Generate report (e.g., "1" or "1,2" or "all")');
-    console.log(chalk.cyan('  rbin-task-flow validate --schema') + ' - Validate state files (schema + referential integrity)');
-    console.log(chalk.cyan('  rbin-task-flow render-status') + '  - Render tasks.status.md from state (deterministic)');
-    console.log(chalk.cyan('  rbin-task-flow info') + '         - Show this information');
-    console.log(chalk.gray('  task-flow: audit — use in AI (@task-flow-audit)\n'));
   });
 
 program.parse();

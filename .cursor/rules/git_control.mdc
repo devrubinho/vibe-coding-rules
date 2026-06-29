@@ -1,8 +1,8 @@
 ---
-description: Legacy git detail — prefer rbin-git-policy.mdc (always-on). Invoke @rbin-git for commit suggestions.
+description: Legacy git detail — prefer rbin-git-policy.mdc (always-on) for commit suggestions.
 alwaysApply: false
 ---
 
 - **Superseded by** [rbin-git-policy.mdc](mdc:.cursor/rules/rbin-git-policy.mdc) (always-on).
-- **Skill:** `@rbin-git` for Conventional Commit suggestions after subtasks.
+- **Skill:** a Conventional Commit (policy: `rbin-git-policy.mdc`) for Conventional Commit suggestions after subtasks.
 - **Principle:** Never execute git write commands; read-only git is OK.

@@ -98,7 +98,7 @@ task-flow-run/
 
 | Tipo | Exemplo Task Flow |
 |------|------------------|
-| **Referência** | `/rbin-coding-standards` sob demanda (`disable-model-invocation: true`) — checklist primeiro |
+| **Referência** | the `coding_standards.mdc` checklist sob demanda (`disable-model-invocation: true`) — checklist primeiro |
 | **Tarefa** | `task-flow-run`, `task-flow-sync` — `disable-model-invocation: false` (usuário dispara; `/` e `task-flow:` devem funcionar) |
 
 Mantenha o corpo do `SKILL.md` **curto** (< 500 linhas). Detalhe em `workflow.md`.
@@ -144,13 +144,13 @@ Para Task Flow em equipe: prefira **skills de projeto** versionadas (ajuste o `.
 | `task-flow: from contexts` | `task-flow-from-contexts` | `/task-flow-from-contexts` | `task_from_contexts.mdc` |
 | `task-flow: sync` | `task-flow-sync` | `/task-flow-sync` | `task-flow-sync.mdc` · `task_generation.mdc` (subtasks) |
 | `task-flow: run next X` / `run X` | `task-flow-run` | `/task-flow-run` | `workflow.md` · stub `task_work.mdc` |
-| `task-flow: split:N` | `task-flow-split` | `/task-flow-split` | `task_split.mdc` |
+| `task-flow: run-split:N` | `task-flow-run-split` | `/task-flow-run-split` | `task_split.mdc` |
 | `task-flow: status` | `task-flow-status` | `/task-flow-status` | `task_status.mdc` |
 | `task-flow: audit` | `task-flow-audit` | `/task-flow-audit` | `task_audit.mdc` |
 | `task-flow: estimate X` / `X,Y` / `all` | `task-flow-estimate` | `/task-flow-estimate` | `task_estimate.mdc` |
 | `task-flow: report X` | `task-flow-report` | `/task-flow-report` | `task_report.mdc` |
-| Implementar código | `rbin-coding-standards` | `/rbin-coding-standards` | checklist `coding_standards.mdc` + `docs/coding-standards-full.md` on demand |
-| Após concluir subtarefa | `rbin-git` | `/rbin-git` | `rbin-git-policy.mdc` (always) |
+| Implementar código | `rbin-coding-standards` | the `coding_standards.mdc` checklist | checklist `coding_standards.mdc` + `docs/coding-standards-full.md` on demand |
+| Após concluir subtarefa | `rbin-git` | a Conventional Commit (policy: `rbin-git-policy.mdc`) | `rbin-git-policy.mdc` (always) |
 
 ---
 
@@ -262,7 +262,7 @@ Stack: …
 | Sync | `/task-flow-sync` |
 | Executar | `/task-flow-run` |
 | Status | `/task-flow-status` |
-| Padrões de código | `/rbin-coding-standards` |
+| Padrões de código | the `coding_standards.mdc` checklist |
 
 Comandos naturais `task-flow: …` também valem.
 
@@ -299,7 +299,7 @@ Ou use `AGENTS.override.md` / settings locais fora do git e commite `.claude/ski
 | Com skills | `Use a skill task-flow-sync` |
 | Sem skills ainda | `Leia .cursor/rules/task_work.mdc e execute task-flow: run next 2` |
 | Contexto visual | `Implemente subtarefa 1.3; mockup em .task-flow/contexts/login.png` |
-| Forçar padrões | `/rbin-coding-standards depois task-flow: run next 1` |
+| Forçar padrões | checklist `coding_standards.mdc`, depois `task-flow: run next 1` |
 
 ---
 

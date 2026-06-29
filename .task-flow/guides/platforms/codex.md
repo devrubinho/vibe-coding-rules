@@ -154,7 +154,7 @@ Codex prefere `AGENTS.override.md` sobre `AGENTS.md` **no mesmo nível**.
 | Comando | Prompt mínimo eficaz |
 |---------|---------------------|
 | `task-flow: from contexts` | `task_from_contexts.mdc — leia contexts/, append tasks em tasks.input.txt` |
-| `task-flow: split:N` | `task_split.mdc — split:3 ou split:2 50-72, output task-flow: run id,id,id` |
+| `task-flow: run-split:N` | `task_split.mdc — run-split:3 ou run-split:2 50-72, output task-flow: run id,id,id` |
 | `task-flow: sync` | `Leia AGENTS.md e task-flow-sync.mdc. Execute task-flow: sync em tasks.input.txt.` |
 | `task-flow: run next 3` | `Siga task-flow-run workflow.md. task-flow: run next 3. Atualize status.json e tasks.status.md.` |
 | `task-flow: run 2` | Idem + respeitar dependências tasks 1..X-1 |

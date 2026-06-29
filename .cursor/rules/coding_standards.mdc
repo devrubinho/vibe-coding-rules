@@ -6,7 +6,7 @@ alwaysApply: false
 
 # Coding Standards — Checklist
 
-Apply when implementing Task Flow subtasks or feature code (this file is the **checklist**). For workflows and section index: invoke `@rbin-coding-standards` (`disable-model-invocation: true` — not auto). **Full guide:** [.task-flow/guides/coding-standards-full.md](mdc:.task-flow/guides/coding-standards-full.md) — **sections only**; never paste entire file into chat.
+Apply when implementing Task Flow subtasks or feature code (this file is the **checklist**). For workflows and section index: invoke the `coding_standards.mdc` checklist (`disable-model-invocation: true` — not auto). **Full guide:** [.task-flow/guides/coding-standards-full.md](mdc:.task-flow/guides/coding-standards-full.md) — **sections only**; never paste entire file into chat.
 
 ---
 
@@ -107,7 +107,7 @@ Follow **Vercel — environment variables** in [coding-standards-full.md](mdc:.t
 
 | Need | Use |
 |------|-----|
-| Implementing code | `@rbin-coding-standards` |
+| Implementing code | the `coding_standards.mdc` checklist |
 | Full examples / Nest / gateways | Sections of `coding-standards-full.md` |
 | Vercel `.env` setup | `coding-standards-full.md` § Vercel |
 | Audit all categories | `@task-flow-audit` |

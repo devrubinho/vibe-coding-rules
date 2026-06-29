@@ -36,7 +36,7 @@ Follow the **checklist** in `.cursor/rules/coding_standards.mdc` (paths, naming 
 
 ## Never
 
-- Run git writes (`add`, `commit`, `push`, `pull`, `merge`, `checkout`, `reset`, `rebase`) — suggest a commit via `/rbin-git`; the user runs git. (A hook also blocks this.)
+- Run git writes (`add`, `commit`, `push`, `pull`, `merge`, `checkout`, `reset`, `rebase`) — suggest a Conventional Commit message (policy: `.cursor/rules/rbin-git-policy.mdc`); the user runs git. (A hook also blocks this.)
 - Touch subtask ids outside your assignment.
 - Write `.task-flow/guides/reports/task-*-implementation.md` (that is `task-flow: report` only).
 - Edit `tasks.status.md` by hand (use `render-status`).

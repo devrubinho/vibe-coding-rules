@@ -1,6 +1,6 @@
-# task-flow-split — dispatch workflow (Claude)
+# task-flow-run-split — dispatch workflow (Claude)
 
-Turns `split:N` from "N copy-paste lines for N machines" into "N parallel `task-runner`
+Turns `run-split:N` from "N copy-paste lines for N machines" into "N parallel `task-runner`
 subagents in one session" — safely. The hard part (computing non-conflicting streams)
 is the same as Plan mode; this file is about running them without corrupting shared state.
 
@@ -75,7 +75,7 @@ After all runners in a wave return:
 📝 Next: task-flow: run next  (after manual resolves)
 ```
 
-Then suggest a commit via `/rbin-git` — never git write.
+Then suggest a Conventional Commit message (policy: `.cursor/rules/rbin-git-policy.mdc`) — never git write.
 
 ## Optional review pass
 
@@ -88,4 +88,4 @@ just-completed ids; apply any "false done" it reports by reverting that subtask 
 - Never dispatch streams that share files in the same wave.
 - Runners never write `status.json` / `tasks.status.md`; the orchestrator does, sequentially.
 - Always `validate --schema` before the final `render-status`.
-- Plan mode (copy-paste lines) stays available; Cursor/Codex keep using `task_split.mdc`.
+- Lines mode (copy-paste run lines) stays available; Cursor/Codex keep using `task_split.mdc`.
