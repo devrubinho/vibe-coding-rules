@@ -33,7 +33,7 @@
 <a id="português"></a>
 # 🇧🇷 Português
 
-> **v1.30.3** — `.gitignore`: só `.task-flow` no final, sem comentários. `npm install -g rbin-task-flow@1.30.3` e `rbin-task-flow reset --keep-tasks`. [CHANGELOG](CHANGELOG.md) · [Publicação](RELEASE-1.30.3.md).
+> **v1.31.0** — Determinismo + paralelismo: hooks de git-write/sync, `validate --schema` e `render-status`, subagents com `run-split`/`plan-split`, testes + CI; CLI enxuto (`init`/`reset`). `npm install -g rbin-task-flow@1.31.0` e `rbin-task-flow reset --keep-tasks`. [CHANGELOG](CHANGELOG.md) · [Publicação](RELEASE-1.31.0.md).
 
 ## O Que É Este Projeto?
 
@@ -409,7 +409,7 @@ Para problemas ou perguntas:
 <a id="english"></a>
 # 🇬🇧 English
 
-> **v1.30.3** — `.gitignore`: append `.task-flow` only, no comments. `npm install -g rbin-task-flow@1.30.3` then `rbin-task-flow reset --keep-tasks`. [CHANGELOG](CHANGELOG.md) · [Release guide](RELEASE-1.30.3.md).
+> **v1.31.0** — Determinism + parallelism: git-write/sync hooks, `validate --schema` and `render-status`, subagents with `run-split`/`plan-split`, tests + CI; lean CLI (`init`/`reset`). `npm install -g rbin-task-flow@1.31.0` then `rbin-task-flow reset --keep-tasks`. [CHANGELOG](CHANGELOG.md) · [Release guide](RELEASE-1.31.0.md).
 
 ## What Is This Project?
 

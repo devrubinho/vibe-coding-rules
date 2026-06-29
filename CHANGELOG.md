@@ -2,6 +2,45 @@
 
 ## [Unreleased]
 
+## [1.31.0] - 2026-06-29
+
+**Minor — determinismo, paralelismo e CLI enxuto.**
+
+### Added
+
+- **Guardrails (Claude):** hook `PreToolUse` que bloqueia git-write (`add/commit/push/...`) e hook `PostToolUse` que lembra de `sync` ao editar `tasks.input.txt`; allowlist de permissões read-only em `.claude/settings.json`.
+- **`rbin-task-flow validate --schema`** — valida `tasks.json`/`status.json` contra JSON schemas + integridade referencial (status↔tasks). Schemas em `lib/schemas/`.
+- **`rbin-task-flow render-status`** — renderiza `tasks.status.md` de forma determinística a partir do estado (zero dependência nova).
+- **Subagents (Claude):** `task-runner` e `task-reviewer` em `.claude/agents/`.
+- **`task-flow: run-split:N`** — executa pendências em N streams paralelos via subagents (orquestrador aplica estado centralmente). Cursor/Codex continuam no modo copy-paste.
+- **`task-flow: plan-split`** — recomenda o N (grupos file-disjoint) sem executar.
+- **Testes + CI:** suíte `node:test` (22 testes) e workflow GitHub Actions (Node 18/20/22).
+
+### Changed
+
+- **Skills/regras** agora chamam `render-status` em vez de o modelo reescrever `tasks.status.md` (menos tokens, sem drift).
+- **`task-flow: validate`** roda `validate --schema` como passo 0 antes da auditoria contra o código.
+- Renomeado **`split:N` → `run-split:N`** (skill `task-flow-split` → `task-flow-run-split`).
+
+### Removed
+
+| Área | Removido |
+|------|----------|
+| CLI | `version-check`, `estimate`, `report`, `info` (+ `lib/version.js`, `lib/estimate.js`, `lib/report.js`) |
+| Skills | `rbin-coding-standards`, `rbin-git` (política de git permanece em `rbin-git-policy.mdc` + hook) |
+
+CLI final: `init`, `reset`, `validate`, `render-status`. Skills: 10 (inclui `run-split` + `plan-split`). As skills de IA `estimate`/`report` permanecem (as versões CLI redundantes foram removidas).
+
+### Migration
+
+```bash
+npm install -g rbin-task-flow@1.31.0
+cd your-project && rbin-task-flow reset --keep-tasks
+```
+
+- Quem usava `task-flow: split:N` deve usar **`run-split:N`** (e `plan-split` para decidir o N).
+- Quem usava o CLI `rbin-task-flow estimate/report` deve usar as skills `task-flow: estimate` / `task-flow: report`.
+
 ## [1.30.3] - 2026-06-05
 
 **Patch — `.gitignore` sem comentários.**
