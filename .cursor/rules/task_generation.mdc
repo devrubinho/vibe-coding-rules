@@ -28,10 +28,10 @@ Use this rule for **subtask shape** when `task-flow-sync` creates or regenerates
 
 **status.json:** `tasks.{id}.status`, `tasks.{id}.subtasks.{subtaskId}` → `pending` | `done` | `in_progress` | `manual`.
 
-**tasks.status.md:** banner “do not edit”; 📊 Summary (include 🖐️ manual count); `- [ ]` pending · `- [x]` done · `- [~]` manual (link to `.task-flow/dev-logs/task-X.Y-manual.md`).
+**tasks.status.md:** rendered by `rbin-task-flow render-status` (do not hand-write) — banner “do not edit”; 📊 Summary (include 🖐️ manual count); `- [ ]` pending · `- [x]` done · `- [~]` manual (link to `.task-flow/dev-logs/task-X.Y-manual.md`).
 
 ## Rules
 
 - Be direct: generate → save; no codebase exploration beyond `contexts/`
 - No questions during generation
-- Regenerate summary in `tasks.status.md` when that file is rebuilt
+- `tasks.status.md` is produced by `rbin-task-flow render-status` — never hand-write it

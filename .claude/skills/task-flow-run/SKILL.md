@@ -19,7 +19,7 @@ paths: [".task-flow/**"]
 4. Parse intent: `run next X` (default X=1) | `run X` | `run X,Y` | `run all`.
 5. **`run X` / `run X,Y`:** Stop if earlier tasks/subtasks are not `done`.
 6. Per subtask: `instructions` + `contexts/`; optional `graphify query`.
-7. **Automatable** → `done` + `tasks.status.md` Summary.
+7. **Automatable** → `done` in `status.json`; run `rbin-task-flow render-status` to refresh `tasks.status.md`.
 8. **Manual intervention** → `manual` + `.task-flow/dev-logs/task-X.Y-manual.md`; user reports progress **in chat**; AI appends **Conversation log** and marks `done` only when verified complete.
 9. Parent task all `done` → mark task `done`.
 10. Suggest commit via `/rbin-git` — never git write.

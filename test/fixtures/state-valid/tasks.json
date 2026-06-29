@@ -1,0 +1,36 @@
+{
+  "tasks": [
+    {
+      "id": 1,
+      "title": "Auth feature",
+      "description": "",
+      "originalRequest": "- Auth feature",
+      "createdAt": "2026-01-01T00:00:00.000Z",
+      "subtasks": [
+        { "id": 1, "title": "Login form", "instructions": "x" },
+        { "id": 2, "title": "Session handling", "instructions": "x" }
+      ]
+    },
+    {
+      "id": 2,
+      "title": "Billing",
+      "description": "",
+      "originalRequest": "- Billing",
+      "createdAt": "2026-01-01T00:00:00.000Z",
+      "subtasks": [
+        { "id": 1, "title": "Stripe integration", "instructions": "x" },
+        { "id": 2, "title": "Webhooks", "instructions": "x" }
+      ]
+    },
+    {
+      "id": 3,
+      "title": "Deploy",
+      "description": "",
+      "originalRequest": "- Deploy",
+      "createdAt": "2026-01-01T00:00:00.000Z",
+      "subtasks": [
+        { "id": 1, "title": "Vercel setup", "instructions": "x" }
+      ]
+    }
+  ]
+}

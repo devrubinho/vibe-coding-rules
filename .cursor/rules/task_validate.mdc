@@ -19,6 +19,10 @@ Use **thorough** reasoning: read each subtask `instructions`, `.task-flow/contex
 
 ## Process
 
+### 0. Schema check (deterministic, run first)
+
+Run `rbin-task-flow validate --schema`. It validates `.task-flow/.internal/tasks.json` and `status.json` against the JSON schemas (`lib/schemas/`) and cross-checks referential integrity (every status id maps to a task/subtask and vice-versa). Exit 0 = clean; non-zero lists the offending id/path. If it fails, fix the state file (or re-run sync) before the deep codebase audit — don't validate against the codebase on top of corrupt state.
+
 ### 1. Load
 
 - `.task-flow/tasks.input.txt` (lines `- ` only)
@@ -54,7 +58,7 @@ Find work not covered by current tasks:
 
 1. **Status:** set false `done` → `pending` or `manual` (with dev-log if user action required) in `status.json`
 2. **Input:** append new lacunas as `- Description` lines to `tasks.input.txt` (append only; never remove or edit existing lines)
-3. **Sync:** follow [task-flow-sync.mdc](mdc:.cursor/rules/task-flow-sync.mdc) — diff input, regen subtasks for new tasks, rebuild `tasks.status.md` Summary
+3. **Sync:** follow [task-flow-sync.mdc](mdc:.cursor/rules/task-flow-sync.mdc) — diff input, regen subtasks for new tasks, then `rbin-task-flow render-status` to rebuild `tasks.status.md`
 4. **Never** edit `.internal/` by hand except through sync-aligned updates to `status.json` for false-done fixes before sync
 
 ### 5. Report

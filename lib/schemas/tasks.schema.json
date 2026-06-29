@@ -1,0 +1,47 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "rbin-task-flow/tasks.schema.json",
+  "title": "RBIN Task Flow tasks.json",
+  "description": "Shape of .task-flow/.internal/tasks.json. Authoritative source: .cursor/rules/task_generation.mdc and the consumers lib/estimate.js, lib/report.js.",
+  "type": "object",
+  "required": ["tasks"],
+  "additionalProperties": true,
+  "properties": {
+    "tasks": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/task" }
+    }
+  },
+  "$defs": {
+    "task": {
+      "type": "object",
+      "required": ["id", "title", "originalRequest", "subtasks"],
+      "additionalProperties": true,
+      "properties": {
+        "id": { "type": "integer", "minimum": 1 },
+        "title": { "type": "string", "minLength": 1 },
+        "description": { "type": "string" },
+        "originalRequest": { "type": "string" },
+        "createdAt": { "type": "string" },
+        "subtasks": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/subtask" }
+        }
+      }
+    },
+    "subtask": {
+      "type": "object",
+      "required": ["id", "title", "instructions"],
+      "additionalProperties": true,
+      "properties": {
+        "id": { "type": "integer", "minimum": 1 },
+        "title": { "type": "string", "minLength": 1 },
+        "description": { "type": "string" },
+        "instructions": {
+          "type": ["string", "array"],
+          "items": { "type": "string" }
+        }
+      }
+    }
+  }
+}

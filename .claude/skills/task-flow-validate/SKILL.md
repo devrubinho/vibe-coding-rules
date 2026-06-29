@@ -8,6 +8,7 @@ disable-model-invocation: false
 
 Thorough implementation audit + automatic gap fill in `tasks.input.txt`.
 
+0. **Schema check first (deterministic):** run `rbin-task-flow validate --schema`. It checks `tasks.json`/`status.json` against the schemas + referential integrity (status↔tasks ids). If it exits non-zero, fix the reported state issue (or re-run sync) before the deep audit below.
 1. Read `tasks.input.txt`, `tasks.json`, `status.json`, `contexts/` — scope `X`, `X,Y`, or `all` (default `all`).
 2. **Verify** each subtask in scope: `done` must match code; `pending` checked for drift.
 3. **Lacunas:** missing work not in `tasks.input.txt` (TODOs, tests, incomplete features).

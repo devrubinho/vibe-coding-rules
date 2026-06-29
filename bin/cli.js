@@ -83,6 +83,30 @@ program
   });
 
 program
+  .command('validate')
+  .description('Validate .task-flow state (tasks.json/status.json) against schemas + referential integrity')
+  .option('-p, --path <path>', 'Target directory (default: current directory)')
+  .option('-s, --schema', 'Validate against JSON schemas and cross-check task/subtask ids')
+  .action(async (options) => {
+    const targetPath = options.path || process.cwd();
+    const { validateTaskFlow } = require('../lib/validate');
+    const code = await validateTaskFlow(targetPath);
+    process.exit(code);
+  });
+
+program
+  .command('render-status')
+  .description('Deterministically render .task-flow/tasks.status.md from tasks.json + status.json')
+  .option('-p, --path <path>', 'Target directory (default: current directory)')
+  .option('--stdout', 'Print to stdout instead of writing tasks.status.md')
+  .action(async (options) => {
+    const targetPath = options.path || process.cwd();
+    const { renderStatusFile } = require('../lib/render-status');
+    const code = await renderStatusFile(targetPath, { stdout: options.stdout === true });
+    process.exit(code);
+  });
+
+program
   .command('info')
   .description('Show information about RBIN Task Flow')
   .action(() => {
@@ -104,6 +128,8 @@ program
     console.log(chalk.cyan('  rbin-task-flow version-check') + ' - Check for model updates');
     console.log(chalk.cyan('  rbin-task-flow estimate <ids>') + ' - Estimate time (e.g., "1" or "1,2" or "all")');
     console.log(chalk.cyan('  rbin-task-flow report <ids>') + '  - Generate report (e.g., "1" or "1,2" or "all")');
+    console.log(chalk.cyan('  rbin-task-flow validate --schema') + ' - Validate state files (schema + referential integrity)');
+    console.log(chalk.cyan('  rbin-task-flow render-status') + '  - Render tasks.status.md from state (deterministic)');
     console.log(chalk.cyan('  rbin-task-flow info') + '         - Show this information');
     console.log(chalk.gray('  task-flow: audit — use in AI (@task-flow-audit)\n'));
   });

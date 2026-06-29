@@ -42,9 +42,7 @@ All subtasks `pending`; task `pending`.
 
 ## tasks.status.md
 
-- Auto-generated banner warning (do not edit manually).
-- Summary section with counts (include 🖐️ manual when any).
-- `- [ ]` / `- [x]` / `- [~]` for tasks and indented subtasks (`[~]` → link dev-log).
+Rendered deterministically by `rbin-task-flow render-status` from `status.json` — do **not** hand-write it. It produces the do-not-edit banner, 📊 Summary (counts incl. 🖐️ manual when any), and `- [ ]` / `- [x]` / `- [~]` for tasks and indented subtasks (`[~]` → dev-log link).
 
 ## Sync-only rules
 

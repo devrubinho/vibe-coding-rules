@@ -1,0 +1,7 @@
+{
+  "tasks": {
+    "1": { "status": "done", "subtasks": { "1": "done", "2": "done" } },
+    "2": { "status": "in_progress", "subtasks": { "1": "done", "2": "pending" } },
+    "3": { "status": "pending", "subtasks": { "1": "manual" } }
+  }
+}

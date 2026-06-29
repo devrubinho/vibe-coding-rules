@@ -35,7 +35,7 @@ No explanatory comments. Complex topics → `dev-logs/*.md`. Allowed: `// ──
 | `task-flow: split:N` | `.cursor/rules/task_split.mdc` · N obrigatório (`split:3`, `split:2 50-72`) |
 | `task-flow: status` | `.task-flow/tasks.status.md` |
 | `task-flow: audit` | `.cursor/rules/task_audit.mdc` · checklist `coding_standards.mdc` (full: `.task-flow/guides/coding-standards-full.md` if needed) |
-| `task-flow: validate` | `.cursor/rules/task_validate.mdc` · then sync |
+| `task-flow: validate` | Run `rbin-task-flow validate --schema` first (schema + referential integrity); then `.cursor/rules/task_validate.mdc` · then sync |
 | `task-flow: estimate X` / `X,Y` / `all` | `.cursor/rules/task_estimate.mdc` · `.task-flow/guides/CODEX.md` |
 | `task-flow: report X` | `.task-flow/guides/CODEX.md` |
 | Implementing code | Checklist `.cursor/rules/coding_standards.mdc` · depth: `.task-flow/guides/coding-standards-full.md` (sections only) |
@@ -44,11 +44,11 @@ No explanatory comments. Complex topics → `dev-logs/*.md`. Allowed: `// ──
 
 1. Read `tasks.input.txt` (lines `- ` only), `tasks.json`, `status.json`.
 2. Diff by `originalRequest`: new / removed / modified / unchanged.
-3. **New:** 3–8 subtasks each, pending status, update `tasks.status.md`.
+3. **New:** 3–8 subtasks each, pending status.
 4. **Removed:** drop from json + status + md.
 5. **Modified:** regen subtasks, **preserve** done/pending where possible.
 6. List `.task-flow/contexts/`; match to tasks; honor `task-flow-screen file.ext`.
-7. `status.json` = truth; sync `tasks.status.md` checkboxes + 📊 Summary.
+7. `status.json` = truth; run `rbin-task-flow render-status` to rebuild `tasks.status.md` (checkboxes + 📊 Summary).
 
 ## Run (embedded)
 

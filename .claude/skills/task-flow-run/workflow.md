@@ -18,7 +18,7 @@ Subtasks in `manual` block later subtasks in the same task until the dev-log sho
 2. Read `.task-flow/dev-logs/task-X.Y-manual.md` for each.
 3. Use the **current conversation** (and codebase checks) to assess completion — no separate confirm command.
 4. If the user reported progress in chat, append to the dev-log **Conversation log** (see format below).
-5. When the log + verification show all manual steps done → set `done`, refresh `tasks.status.md`, continue the run.
+5. When the log + verification show all manual steps done → set `done`, run `rbin-task-flow render-status`, continue the run.
 6. If still incomplete → keep `manual`, tell the user what remains; do not skip marking done prematurely.
 
 ## Dependency check (`run X`)
@@ -40,7 +40,7 @@ Subtasks in `manual` block later subtasks in the same task until the dev-log sho
 1. Load subtask from `tasks.json`.
 2. Read `.task-flow/contexts/` when cited.
 3. Implement; verify (tests/build).
-4. `done` in `status.json` + update `tasks.status.md` Summary.
+4. `done` in `status.json`; run `rbin-task-flow render-status`.
 5. Suggest commit via `@rbin-git` when appropriate.
 
 ## Per subtask — manual intervention required
@@ -74,7 +74,7 @@ When the agent **cannot** finish alone (deploy, console, credentials, production
 **Notes:** [what was checked; what remains]
 ```
 
-4. `tasks.status.md`: `- [~] [title] — manual: .task-flow/dev-logs/task-X.Y-manual.md`
+4. Run `rbin-task-flow render-status` — it renders the `- [~] [title] — manual: .task-flow/dev-logs/task-X.Y-manual.md` line from `status.json`.
 5. Stop further subtasks in that task.
 6. Tell the user the manual steps; they report back **in normal chat** when done.
 
@@ -86,7 +86,7 @@ Applies during `run`, `status`, or whenever the user mentions manual work — **
 2. Match user message to a dev-log (by task id, keywords, or open manual items).
 3. Append **Conversation log** entry with what the user said.
 4. Verify against checklist + codebase when possible.
-5. All steps satisfied → `done` + `tasks.status.md` + continue blocked work on next `run`.
+5. All steps satisfied → `done` + run `rbin-task-flow render-status` + continue blocked work on next `run`.
 6. Partial → keep `manual`, update dev-log with remaining steps.
 
 ## Never during run

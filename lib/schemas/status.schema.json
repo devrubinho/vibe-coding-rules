@@ -1,0 +1,34 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "rbin-task-flow/status.schema.json",
+  "title": "RBIN Task Flow status.json",
+  "description": "Shape of .task-flow/.internal/status.json (source of truth for status). Keys under tasks/subtasks are numeric id strings. Authoritative source: .cursor/rules/task_generation.mdc and the consumer lib/report.js.",
+  "type": "object",
+  "required": ["tasks"],
+  "additionalProperties": true,
+  "properties": {
+    "tasks": {
+      "type": "object",
+      "propertyNames": { "pattern": "^[0-9]+$" },
+      "additionalProperties": { "$ref": "#/$defs/taskStatus" }
+    }
+  },
+  "$defs": {
+    "state": {
+      "enum": ["pending", "done", "in_progress", "manual"]
+    },
+    "taskStatus": {
+      "type": "object",
+      "required": ["status", "subtasks"],
+      "additionalProperties": true,
+      "properties": {
+        "status": { "$ref": "#/$defs/state" },
+        "subtasks": {
+          "type": "object",
+          "propertyNames": { "pattern": "^[0-9]+$" },
+          "additionalProperties": { "$ref": "#/$defs/state" }
+        }
+      }
+    }
+  }
+}
