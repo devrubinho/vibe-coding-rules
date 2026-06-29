@@ -2,6 +2,44 @@
 
 ## [Unreleased]
 
+## [1.31.2] - 2026-06-05
+
+**Patch — Graphify usa pasta padrão na raiz (sem forçar `.task-flow/`).**
+
+### Changed
+
+- Task Flow **configura** Graphify (regra, guia, `.gitignore`, `--graphify` roda extract) mas **não redireciona** output — grafo em `graphify-out/` na raiz, como o CLI já faz.
+- Remove pasta legada `.task-flow/guides/graphify-out/` de versões que tentavam forçar output dentro do Task Flow.
+- `GRAPHIFY.md` e mensagens do instalador deixam essa divisão explícita.
+
+### Migration
+
+```bash
+npm install -g rbin-task-flow@1.31.2
+cd your-project && rbin-task-flow reset --keep-tasks
+# opcional: rbin-task-flow reset --keep-tasks --graphify
+```
+
+## [1.31.1] - 2026-06-05
+
+**Patch — Graphify na raiz do projeto.**
+
+### Changed
+
+- Saída do Graphify em **`graphify-out/`** na raiz (padrão do CLI) — não mais em `.task-flow/guides/graphify-out/`.
+- `graphify extract . --backend claude-cli` sem `--out .task-flow/guides`.
+- `init` / `reset --graphify` migra grafo legado de `.task-flow/guides/graphify-out/` → raiz.
+- `.gitignore` do projeto: `.task-flow` + `graphify-out` no final.
+
+### Migration
+
+```bash
+npm install -g rbin-task-flow@1.31.1
+cd your-project && rbin-task-flow reset --keep-tasks --graphify
+```
+
+Use `graphify-out/graph.json` nos prompts (não `.task-flow/guides/graphify-out/graph.json`).
+
 ## [1.31.0] - 2026-06-29
 
 **Minor — determinismo, paralelismo e CLI enxuto.**

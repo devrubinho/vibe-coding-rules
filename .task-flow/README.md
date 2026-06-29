@@ -16,8 +16,9 @@
     ├── CODEX.md · CURSOR.md
     ├── coding-standards-full.md  ← inclui padrão .env Vercel (§ Vercel)
     ├── platforms/         ← Claude, Cursor, Codex
-    ├── graphify-out/      ← grafo Graphify (init --graphify)
     └── reports/           ← task-X-implementation.md
+
+graphify-out/              ← grafo Graphify na raiz (init --graphify)
 ```
 
 **Optimize by AI platform:**
@@ -36,7 +37,7 @@
 
 ## Graphify (opcional)
 
-Grafo em **`.task-flow/guides/graphify-out/`** (não na raiz do projeto).
+O Task Flow **configura** a coexistência (regra `graphify-task-flow.mdc`, guia abaixo). O **grafo fica em `graphify-out/` na raiz** — padrão do Graphify CLI; não redirecionamos para dentro de `.task-flow/`.
 
 **Pré-requisito:** CLI `graphify` no PATH (`rbin-install-dev`) + `claude` autenticado (Claude Code).
 
@@ -63,20 +64,20 @@ cd seu-projeto
 rbin-task-flow reset --keep-tasks
 ```
 
-O `reset --keep-tasks --graphify` reaplica rules/skills, move `graphify-out/` legado da raiz para `guides/graphify-out/` (se existir) e roda o extract.
+O `reset --keep-tasks --graphify` reaplica rules/skills, limpa pasta legada `.task-flow/guides/graphify-out/` (se existir) e roda `graphify extract` na raiz.
 
 ### Só regerar o grafo (sem reinstall do template)
 
 ```bash
 cd seu-projeto
-graphify extract . --backend claude-cli --out .task-flow/guides
+graphify extract . --backend claude-cli
 ```
 
 ### Na IA (`task-flow: run`)
 
 ```text
-task-flow: run next 2 — se .task-flow/guides/graphify-out/ existir,
-graphify query "<módulo>" --graph .task-flow/guides/graphify-out/graph.json antes de editar.
+task-flow: run next 2 — se graphify-out/ existir,
+graphify query "<módulo>" --graph graphify-out/graph.json antes de editar.
 ```
 
 Guia completo: [guides/GRAPHIFY.md](guides/GRAPHIFY.md).

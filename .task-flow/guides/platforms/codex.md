@@ -350,7 +350,7 @@ Ao implementar código, seguir o checklist em `.cursor/rules/coding_standards.md
 
 ## 15. Graphify (opcional)
 
-Não adicionamos Graphify ao `AGENTS.md` (limite 32 KiB). Em **`task-flow: run`**, peça no prompt: `graphify query "…"` se `.task-flow/guides/graphify-out/` existir. Ver [GRAPHIFY.md](../GRAPHIFY.md).
+Não adicionamos Graphify ao `AGENTS.md` (limite 32 KiB). Em **`task-flow: run`**, peça no prompt: `graphify query "…"` se `graphify-out/` existir. Ver [GRAPHIFY.md](../GRAPHIFY.md).
 
 ---
 

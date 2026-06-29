@@ -33,7 +33,7 @@
 <a id="português"></a>
 # 🇧🇷 Português
 
-> **v1.31.0** — Determinismo + paralelismo: hooks de git-write/sync, `validate --schema` e `render-status`, subagents com `run-split`/`plan-split`, testes + CI; CLI enxuto (`init`/`reset`). `npm install -g rbin-task-flow@1.31.0` e `rbin-task-flow reset --keep-tasks`. [CHANGELOG](CHANGELOG.md) · [Publicação](RELEASE-1.31.0.md).
+> **v1.31.2** — Graphify: configuramos coexistência; output em `graphify-out/` na raiz (padrão do CLI). `npm install -g rbin-task-flow@1.31.2` e `rbin-task-flow reset --keep-tasks`. [CHANGELOG](CHANGELOG.md) · [Publicação](RELEASE-1.31.2.md).
 
 ## O Que É Este Projeto?
 
@@ -74,7 +74,7 @@ rbin-task-flow init
 rbin-task-flow init          # Inicializa no projeto atual
 rbin-task-flow init --profile minimal  # Só 2 regras always-on + skills (menos tokens no Cursor)
 rbin-task-flow init --share-ai-config  # Versiona .cursor/skills/ e .cursor/rules/ no git (time)
-rbin-task-flow init --graphify  # Init + grafo em .task-flow/guides/graphify-out/
+rbin-task-flow init --graphify  # Init + grafo em graphify-out/
 rbin-task-flow reset         # Reinstala o Task Flow do zero
 rbin-task-flow reset --keep-tasks  # Sobe versão sem sobrescrever suas tasks
 rbin-task-flow reset --profile standard  # Passa a copiar todas as regras .mdc
@@ -88,7 +88,7 @@ Após inicializar, use estes comandos na IA (Cursor/Claude/Codex) para gerenciar
 
 **Otimizar por plataforma:** [.task-flow/guides/AI-PLATFORMS.md](.task-flow/guides/AI-PLATFORMS.md) · [Claude](.task-flow/guides/platforms/claude-code.md) · [Cursor](.task-flow/guides/platforms/cursor.md) · [Codex](.task-flow/guides/platforms/codex.md) · [Graphify](.task-flow/guides/GRAPHIFY.md)
 
-**Graphify (opcional):** grafo em `.task-flow/guides/graphify-out/`. Novo projeto: `rbin-task-flow init --graphify`. **Já tem Task Flow:** `npm install -g rbin-task-flow@latest` e `rbin-task-flow reset --keep-tasks --graphify` no projeto (migra `graphify-out/` da raiz + regera grafo). **Manter suas tasks ao subir versão:** `rbin-task-flow reset --keep-tasks`. Detalhes: [.task-flow/README.md](.task-flow/README.md#graphify-opcional) · [GRAPHIFY.md](.task-flow/guides/GRAPHIFY.md).
+**Graphify (opcional):** configuramos coexistência; o grafo fica em **`graphify-out/` na raiz** (padrão do Graphify). `rbin-task-flow init --graphify` ou `reset --keep-tasks --graphify`. Detalhes: [.task-flow/README.md](.task-flow/README.md#graphify-opcional) · [GRAPHIFY.md](.task-flow/guides/GRAPHIFY.md).
 
 **Claude Code / Cursor skills (v1.20+):** `init` copia 10 skills para `.claude/skills/` e `.cursor/skills/` — use `/task-flow-run-split`, `/task-flow-sync`, `/task-flow-run`, etc.
 
@@ -98,7 +98,7 @@ Após inicializar, use estes comandos na IA (Cursor/Claude/Codex) para gerenciar
 
 **Perfil minimal:** `init --profile minimal` instala só as 2 regras always-on e as 10 skills; workflows via `@task-flow-*` (sem `task_work`, `coding_standards` glob, etc.). `standard` (padrão) copia todas as regras `.cursor/rules/`.
 
-**Compartilhar com o time:** `.cursor/`, `CLAUDE.md` e `AGENTS.md` já podem ir no git; só `.task-flow/` fica ignorado (tasks e progresso locais). Flag `--share-ai-config` grava preferência em `install-meta.json`.
+**Compartilhar com o time:** `.cursor/`, `CLAUDE.md` e `AGENTS.md` podem ir no git; `.task-flow/` e `graphify-out/` ficam ignorados.
 
 | Comando | Por Que Usar | Feature Principal |
 |---------|--------------|-------------------|
@@ -247,10 +247,11 @@ Gerenciamento de tarefas simples e poderoso:
 
 ## .gitignore
 
-O instalador adiciona `.task-flow` ao final do `.gitignore`:
+O instalador adiciona ao final do `.gitignore`:
 
 ```gitignore
 .task-flow
+graphify-out
 ```
 
 ## Atualizando Projetos
@@ -409,7 +410,7 @@ Para problemas ou perguntas:
 <a id="english"></a>
 # 🇬🇧 English
 
-> **v1.31.0** — Determinism + parallelism: git-write/sync hooks, `validate --schema` and `render-status`, subagents with `run-split`/`plan-split`, tests + CI; lean CLI (`init`/`reset`). `npm install -g rbin-task-flow@1.31.0` then `rbin-task-flow reset --keep-tasks`. [CHANGELOG](CHANGELOG.md) · [Release guide](RELEASE-1.31.0.md).
+> **v1.31.2** — Graphify: coexistence config only; output at `graphify-out/` project root (CLI default). `npm install -g rbin-task-flow@1.31.2` then `rbin-task-flow reset --keep-tasks`. [CHANGELOG](CHANGELOG.md) · [Release guide](RELEASE-1.31.2.md).
 
 ## What Is This Project?
 
@@ -450,7 +451,7 @@ rbin-task-flow init
 rbin-task-flow init          # Initialize in current project
 rbin-task-flow init --profile minimal  # 2 always-on rules + skills only (lower Cursor token cost)
 rbin-task-flow init --share-ai-config  # Commit .cursor/skills and rules with the team
-rbin-task-flow init --graphify  # Init + graph at .task-flow/guides/graphify-out/
+rbin-task-flow init --graphify  # Init + graph at graphify-out/
 rbin-task-flow reset         # Reinstall Task Flow from scratch
 rbin-task-flow reset --keep-tasks  # Upgrade package without overwriting your tasks
 rbin-task-flow reset --profile standard  # Install all .cursor/rules/*.mdc
@@ -464,7 +465,7 @@ After initializing, use these commands in your AI (Cursor/Claude/Codex) to autom
 
 **Per-platform optimization:** [index](.task-flow/guides/AI-PLATFORMS.md) · [Claude](.task-flow/guides/platforms/claude-code.md) · [Cursor](.task-flow/guides/platforms/cursor.md) · [Codex](.task-flow/guides/platforms/codex.md) · [Graphify](.task-flow/guides/GRAPHIFY.md)
 
-**Graphify (optional):** graph at `.task-flow/guides/graphify-out/`. New project: `rbin-task-flow init --graphify`. **Existing project:** `npm install -g rbin-task-flow@latest` then `rbin-task-flow reset --keep-tasks --graphify` (migrates legacy root `graphify-out/` + re-extracts). **Keep your tasks when upgrading:** `rbin-task-flow reset --keep-tasks`. See [.task-flow/README.md](.task-flow/README.md#graphify-opcional) · [GRAPHIFY.md](.task-flow/guides/GRAPHIFY.md).
+**Graphify (optional):** we configure coexistence; graph stays at **`graphify-out/` project root** (Graphify default). `rbin-task-flow init --graphify` or `reset --keep-tasks --graphify`. See [.task-flow/README.md](.task-flow/README.md#graphify-opcional) · [GRAPHIFY.md](.task-flow/guides/GRAPHIFY.md).
 
 **Claude / Cursor skills (v1.20+):** installs 10 skills — use `/task-flow-run-split`, `/task-flow-sync`, `/task-flow-run`, etc.
 
@@ -623,10 +624,11 @@ Simple yet powerful task management:
 
 ## .gitignore
 
-The installer appends `.task-flow` at the end of `.gitignore`:
+The installer appends at the end of `.gitignore`:
 
 ```gitignore
 .task-flow
+graphify-out
 ```
 
 ## Updating Projects

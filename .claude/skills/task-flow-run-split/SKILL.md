@@ -24,7 +24,7 @@ Pick Dispatch unless the user asks to "just give me the lines" / "split for N ma
 
 1. Parse **`run-split:N`** — N required (e.g. `run-split:3`). Plain `run-split` without `:N` → ask the user (or suggest `plan-split` to pick N). Optional scope: `run-split:3 50-72` or `run-split:2 50,51`.
 2. `rbin-task-flow validate --schema` for a clean baseline; load pending IDs from `status.json`; read `tasks.json` for those tasks.
-3. Partition into **N file-disjoint** streams; keep dependency chains together. If `.task-flow/guides/graphify-out/graph.json` exists, use `graphify query` to confirm module/file boundaries.
+3. Partition into **N file-disjoint** streams; keep dependency chains together. If `graphify-out/graph.json` exists, use `graphify query` to confirm module/file boundaries.
 4. Order streams IA-1 (strongest) → IA-N by difficulty.
 5. **Dispatch mode:** spawn one `task-runner` per file-disjoint stream **in parallel** (one message, multiple Task calls), each given only its ids and told to implement + verify and **report** outcomes — not to write `status.json`/`tasks.status.md`. Serialize any streams that share files.
 6. **Apply centrally:** after all runners return, you (the orchestrator) update `status.json` from their reports sequentially, run `rbin-task-flow validate --schema`, then `rbin-task-flow render-status` once.

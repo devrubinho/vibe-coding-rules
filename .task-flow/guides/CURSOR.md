@@ -70,7 +70,7 @@ After each subtask:
 
 ## Graphify
 
-Only during `run` / `validate` when `.task-flow/guides/graphify-out/` exists. Does not replace Task Flow status. See [GRAPHIFY.md](GRAPHIFY.md).
+Only during `run` / `validate` when `graphify-out/` exists. Does not replace Task Flow status. See [GRAPHIFY.md](GRAPHIFY.md).
 
 ---
 

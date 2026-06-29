@@ -26,8 +26,8 @@ of `render-status`.
 - N streams, dependency chains kept together (a task's subtasks stay in one stream; a task
   that depends on an earlier one runs in the same or a later stream, never concurrently).
 - Confirm **file disjointness**, not just task disjointness. When
-  `.task-flow/guides/graphify-out/graph.json` exists, `graphify query "<module>" --graph
-  .task-flow/guides/graphify-out/graph.json` to see which files each task touches.
+  `graphify-out/graph.json` exists, `graphify query "<module>" --graph
+  graphify-out/graph.json` to see which files each task touches.
 - If two streams would touch the same file → they are **not** disjoint: either merge them
   into one stream or run them in separate sequential waves (never in parallel).
 

@@ -68,9 +68,9 @@ Por padrão, **`.task-flow`** é acrescentado ao final do **`.gitignore`** do pr
 Com o [Graphify](https://pypi.org/project/graphifyyy/) instalado (`rbin-install-dev`), o Task Flow inclui integração cooperativa:
 
 - Regra **`.cursor/rules/graphify-task-flow.mdc`** — só quando `task-flow: run`, `validate`, etc. precisam navegar o código (`alwaysApply: false`).
-- Grafo em **`.task-flow/guides/graphify-out/`** (dentro de `.task-flow/`, já gitignored).
+- Grafo em **`graphify-out/`** na raiz (padrão do Graphify; Task Flow não redireciona output).
 - Rebaixa **`graphify.mdc`** upstream para `alwaysApply: false` se existir.
-- **`rbin-task-flow init --graphify`** — roda `graphify extract . --backend claude-cli --out .task-flow/guides` após o init.
+- **`rbin-task-flow init --graphify`** — roda `graphify extract . --backend claude-cli` após o init.
 
 Guia completo: [GRAPHIFY.md](GRAPHIFY.md).
 

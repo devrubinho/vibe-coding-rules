@@ -18,6 +18,6 @@ Thorough implementation audit + automatic gap fill in `tasks.input.txt`.
    - Run sync workflow (`@task-flow-sync` / `task-flow-sync.mdc`)
 5. Report verified / reverted / added / next `run`.
 
-Optional: `graphify query` per task area if `.task-flow/guides/graphify-out/graph.json` exists.
+Optional: `graphify query` per task area if `graphify-out/graph.json` exists.
 
 Reference: `.cursor/rules/task_validate.mdc`

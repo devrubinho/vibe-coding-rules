@@ -15,7 +15,7 @@ Default scope when no ID: **`all`**.
 
 ## Depth
 
-Use **thorough** reasoning: read each subtask `instructions`, `.task-flow/contexts/` when cited, verify files/tests/docs in the codebase — not a shallow grep. Optional: `graphify query "<module>"` per task area when `.task-flow/guides/graphify-out/graph.json` exists.
+Use **thorough** reasoning: read each subtask `instructions`, `.task-flow/contexts/` when cited, verify files/tests/docs in the codebase — not a shallow grep. Optional: `graphify query "<module>"` per task area when `graphify-out/graph.json` exists.
 
 ## Process
 

@@ -44,7 +44,7 @@ Default scope (no trailing ids): **all tasks with any pending subtask** in `stat
 
 Per task, infer **primary file/module areas** from subtask `instructions` and task text.
 
-Optional: `graphify query` when `.task-flow/guides/graphify-out/graph.json` exists.
+Optional: `graphify query` when `graphify-out/graph.json` exists.
 
 Two tasks **conflict** if they likely edit the **same files or same service/module** in parallel.
 

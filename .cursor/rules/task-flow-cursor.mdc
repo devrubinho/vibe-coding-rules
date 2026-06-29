@@ -43,7 +43,7 @@ Never write git — user runs all commits. Policy: [rbin-git-policy.mdc](mdc:.cu
 
 ## Graphify (optional)
 
-On `run` / `validate`, if `.task-flow/guides/graphify-out/` exists: `graphify query` before repo-wide grep. Rule: `graphify-task-flow`. Guide: `.task-flow/guides/GRAPHIFY.md`.
+On `run` / `validate`, if `graphify-out/` exists: `graphify query` before repo-wide grep. Rule: `graphify-task-flow`. Guide: `.task-flow/guides/GRAPHIFY.md`.
 
 ## More detail
 

@@ -48,7 +48,7 @@ If the Skill tool ever refuses a slash command, still execute the workflow: read
 
 ## Graphify (optional)
 
-During `/task-flow-run`, if `.task-flow/guides/graphify-out/` exists, use `graphify query` with `--graph .task-flow/guides/graphify-out/graph.json` before broad search. See [.task-flow/guides/GRAPHIFY.md](.task-flow/guides/GRAPHIFY.md).
+During `/task-flow-run`, if `graphify-out/` exists, use `graphify query` with `--graph graphify-out/graph.json` before broad search. See [.task-flow/guides/GRAPHIFY.md](.task-flow/guides/GRAPHIFY.md).
 
 ## Cursor rules (reference)
 

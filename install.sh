@@ -205,6 +205,8 @@ install_to_project() {
   sed -i '' '/^\.cursor\/$/d' "$target/.gitignore" 2>/dev/null
   sed -i '' '/^\.task-flow$/d' "$target/.gitignore" 2>/dev/null
   sed -i '' '/^\.task-flow\/$/d' "$target/.gitignore" 2>/dev/null
+  sed -i '' '/^graphify-out$/d' "$target/.gitignore" 2>/dev/null
+  sed -i '' '/^graphify-out\/$/d' "$target/.gitignore" 2>/dev/null
   sed -i '' '/^CLAUDE\.md$/d' "$target/.gitignore" 2>/dev/null
   sed -i '' '/^AGENTS\.md$/d' "$target/.gitignore" 2>/dev/null
   sed -i '' '/^# RBIN Task Flow/d' "$target/.gitignore" 2>/dev/null
@@ -215,7 +217,6 @@ install_to_project() {
   sed -i '' '/^# Only \.task-flow/d' "$target/.gitignore" 2>/dev/null
   sed -i '' '/^# \.cursor\//d' "$target/.gitignore" 2>/dev/null
   sed -i '' '/^# END RBIN Task Flow/d' "$target/.gitignore" 2>/dev/null
-  sed -i '' '/^graphify-out\/$/d' "$target/.gitignore" 2>/dev/null
 
   if [ -f "$target/.cursor/rules/graphify.mdc" ]; then
     sed -i '' 's/alwaysApply: true/alwaysApply: false/g' "$target/.cursor/rules/graphify.mdc" 2>/dev/null || \
@@ -225,6 +226,7 @@ install_to_project() {
 
   echo "" >> "$target/.gitignore"
   echo ".task-flow" >> "$target/.gitignore"
+  echo "graphify-out" >> "$target/.gitignore"
 
   echo -e "${GREEN}✅ .gitignore updated${NC}"
 

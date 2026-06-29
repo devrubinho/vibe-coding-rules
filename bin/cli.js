@@ -16,7 +16,7 @@ function addInstallCommand(name, description, extra = {}) {
     .command(name)
     .description(description)
     .option('-p, --path <path>', 'Target directory (default: current directory)')
-    .option('-g, --graphify', 'Run graphify extract → .task-flow/guides/graphify-out/ (claude-cli backend; requires graphify CLI)')
+    .option('-g, --graphify', 'Run graphify extract → graphify-out/ at project root (claude-cli backend; requires graphify CLI)')
     .option(
       '--profile <profile>',
       'Cursor rules: minimal (2 always-on + skills) or standard (all rules); reset without flag keeps .task-flow/install-meta.json'

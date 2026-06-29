@@ -110,7 +110,7 @@ Follow the checklist in `.cursor/rules/coding_standards.mdc`. For examples/Nest:
 
 ## Graphify (optional)
 
-Only during `run` / `validate` when `.task-flow/guides/graphify-out/` exists. See `.task-flow/guides/GRAPHIFY.md`. Does not replace status updates.
+Only during `run` / `validate` when `graphify-out/` exists. See `.task-flow/guides/GRAPHIFY.md`. Does not replace status updates.
 
 ---
 
