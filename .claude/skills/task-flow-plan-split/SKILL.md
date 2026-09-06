@@ -43,3 +43,4 @@ Next: task-flow: run-split:<N>
 - This is the decision step; **execution** is `task-flow: run-split:N` (see `task-flow-run-split`).
 - N never exceeds the number of independent groups — proposing more just collapses back.
 - When in doubt, recommend a lower N (start at 2). The risk is parallelizing conflicting files, never under-splitting.
+- `tasks.status.md` already shows a fast, `dependsOn`-based signal (`🤖 AI N available`, capped at 3) — a good starting hint before doing the deeper file-overlap analysis here, but don't skip step 2/3: `dependsOn` only tracks stated task dependencies, not incidental file overlap.

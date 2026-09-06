@@ -17,6 +17,7 @@
       "description": "",
       "originalRequest": "- Billing",
       "createdAt": "2026-01-01T00:00:00.000Z",
+      "dependsOn": [3],
       "subtasks": [
         { "id": 1, "title": "Stripe integration", "instructions": "x" },
         { "id": 2, "title": "Webhooks", "instructions": "x" }

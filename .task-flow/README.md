@@ -124,6 +124,7 @@ Complete synchronization between `tasks.input.txt` and the system:
 - ✅ Updates tasks that were modified in `tasks.input.txt`
 - ✅ Preserves status (`done`, `pending`, `manual`) of existing tasks
 - ✅ Synchronizes status between `status.json` and `tasks.status.md` (ensures they are always aligned)
+- ✅ Flags up to 3 unblocked tasks in `tasks.status.md` as `🤖 AI 1/2/3 available` — based on each task's `dependsOn`, so you know at a glance which ones can run right now in separate parallel streams. Recomputed on every sync/run, no manual upkeep.
 
 ### `task-flow: validate`
 Deep validation: checks subtasks against the codebase, reverts false `done`, appends lacunas to `tasks.input.txt`, and syncs. Invoke: `@task-flow-validate` / `/task-flow-validate`.

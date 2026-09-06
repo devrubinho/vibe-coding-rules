@@ -92,3 +92,17 @@ test('referential: task in tasks missing from status', () => {
   const errors = checkReferentialIntegrity(validTasks(), status);
   assert.ok(errors.some((e) => /task 2 has no status entry/.test(e)));
 });
+
+test('referential: dependsOn pointing at a non-existent task', () => {
+  const tasks = validTasks();
+  tasks.tasks[1].dependsOn = [99];
+  const errors = checkReferentialIntegrity(tasks, validStatus());
+  assert.ok(errors.some((e) => /task 2 dependsOn 99, which does not exist/.test(e)));
+});
+
+test('referential: dependsOn listing itself', () => {
+  const tasks = validTasks();
+  tasks.tasks[1].dependsOn = [2];
+  const errors = checkReferentialIntegrity(tasks, validStatus());
+  assert.ok(errors.some((e) => /task 2 lists itself in dependsOn/.test(e)));
+});

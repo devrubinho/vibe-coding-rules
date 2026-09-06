@@ -23,6 +23,11 @@
         "description": { "type": "string" },
         "originalRequest": { "type": "string" },
         "createdAt": { "type": "string" },
+        "dependsOn": {
+          "type": "array",
+          "items": { "type": "integer", "minimum": 1 },
+          "description": "Ids of other tasks that must be done before this one can start. Drives the parallel-ready 'AI N available' badges in render-status."
+        },
         "subtasks": {
           "type": "array",
           "items": { "$ref": "#/$defs/subtask" }

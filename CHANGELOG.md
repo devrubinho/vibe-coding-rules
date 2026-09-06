@@ -2,6 +2,29 @@
 
 ## [Unreleased]
 
+## [1.32.0] - 2026-09-06
+
+**Minor — sinaliza tasks prontas para rodar em paralelo direto em `tasks.status.md`.**
+
+### Added
+
+- **`dependsOn`** (opcional, `tasks.json`): lista de ids de outras tasks que precisam estar `done` antes desta começar. `task-flow: sync` preenche isso só quando há dependência real (arquivo/saída compartilhados) — a ordem no `tasks.input.txt` sozinha não conta.
+- **`rbin-task-flow render-status`** agora marca, na linha de resumo de cada task pronta (não concluída e sem `dependsOn` pendente), `— 🤖 AI N available`. No máximo 3 tasks marcadas por vez (`AI 1`/`AI 2`/`AI 3`), na ordem dos ids — o teto reflete quantos streams podem rodar em paralelo. Recalculado a cada render (sync/run/run-split), sem passo manual.
+- **`rbin-task-flow validate`**: checa integridade referencial de `dependsOn` (id inexistente ou autodependência).
+
+### Changed
+
+- `lib/schemas/tasks.schema.json` ganhou o campo `dependsOn` (opcional, retrocompatível — tasks sem o campo continuam elegíveis para paralelismo).
+
+### Migration
+
+```bash
+npm install -g rbin-task-flow@1.32.0
+cd your-project && rbin-task-flow reset --keep-tasks
+```
+
+Nenhuma mudança de dados é necessária — `tasks.json` existente sem `dependsOn` simplesmente trata todas as tasks pendentes como independentes.
+
 ## [1.31.2] - 2026-06-05
 
 **Patch — Graphify usa pasta padrão na raiz (sem forçar `.task-flow/`).**

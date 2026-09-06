@@ -16,6 +16,7 @@ alwaysApply: false
   - Show tasks marked as `- [x]` (done), `- [ ]` (pending), `- [~]` (manual — user action required)
   - Display subtasks with their status
   - Show progress summary if available
+  - Call out `🤖 AI N available` tags on the task summary lines — those tasks are unblocked (their `dependsOn` are all done) and can be dispatched to separate parallel streams (up to 3 at once); point the user at `task-flow: run-split:N`
 
 - **Natural Language Phrases:**
   - **FAST FORMAT**: `task-flow: status` or `task-flow status`

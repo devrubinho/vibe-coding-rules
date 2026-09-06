@@ -12,7 +12,7 @@
 **Tasks:**
 - ✅ Task 1: Auth feature (0 remaining subtasks out of 2)
 - ⏳ Task 2: Billing (1 remaining subtasks out of 2)
-- ⏳ Task 3: Deploy (1 remaining subtasks out of 1)
+- ⏳ Task 3: Deploy (1 remaining subtasks out of 1) — 🤖 AI 1 available
 
 ---
 

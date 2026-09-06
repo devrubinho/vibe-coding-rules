@@ -17,7 +17,8 @@ paths: [".task-flow/**"]
 6. **Modified:** update title/description, regenerate subtasks, **preserve** done/pending status where possible.
 7. **Unchanged:** leave task data and status as-is.
 8. `status.json` is the source of truth for all status values.
-9. Run `rbin-task-flow render-status` to rebuild `tasks.status.md` (checkboxes + 📊 Summary) from `status.json` — do not hand-write it.
+9. **`dependsOn`:** on every new/modified task, set `dependsOn: [<task ids>]` only for a genuine dependency (needs another task's file/output) — never just because it comes later in `tasks.input.txt`. This drives the `🤖 AI N available` badges below.
+10. Run `rbin-task-flow render-status` to rebuild `tasks.status.md` (checkboxes + 📊 Summary + parallel-ready badges) from `tasks.json` + `status.json` — do not hand-write it.
 
 ## Contexts
 

@@ -9,6 +9,7 @@ For each new line in `tasks.input.txt`:
 - Assign sequential task id (order in file).
 - `originalRequest`: exact input line text.
 - `createdAt`: ISO 8601.
+- `dependsOn`: ids of tasks this one genuinely needs done first (shared file/module, consumes another task's output). Not the same as list order — most tasks should have none. Re-check it on modified/regenerated tasks too.
 - 3–8 subtasks with title, description, instructions (3–5 steps).
 - Reference contexts when relevant.
 
@@ -23,6 +24,7 @@ For each new line in `tasks.input.txt`:
       "description": "Task description",
       "originalRequest": "- Task from input",
       "createdAt": "2026-01-01T00:00:00.000Z",
+      "dependsOn": [],
       "subtasks": [
         {
           "id": 1,
@@ -42,7 +44,9 @@ All subtasks `pending`; task `pending`.
 
 ## tasks.status.md
 
-Rendered deterministically by `rbin-task-flow render-status` from `status.json` — do **not** hand-write it. It produces the do-not-edit banner, 📊 Summary (counts incl. 🖐️ manual when any), and `- [ ]` / `- [x]` / `- [~]` for tasks and indented subtasks (`[~]` → dev-log link).
+Rendered deterministically by `rbin-task-flow render-status` from `tasks.json` + `status.json` — do **not** hand-write it. It produces the do-not-edit banner, 📊 Summary (counts incl. 🖐️ manual when any), and `- [ ]` / `- [x]` / `- [~]` for tasks and indented subtasks (`[~]` → dev-log link).
+
+Each summary line also gets `— 🤖 AI N available` when the task is parallel-ready: not done yet, and every id in its `dependsOn` is already `done`. It scans tasks in id order and flags **at most 3** ready tasks (AI 1, AI 2, AI 3) — matching how many streams can run at once. This is recomputed on every render, so it tracks status changes automatically; it never needs a manual update.
 
 ## Sync-only rules
 

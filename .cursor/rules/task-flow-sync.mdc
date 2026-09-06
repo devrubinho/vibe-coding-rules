@@ -29,6 +29,7 @@ Task IDs stay sequential (1, 2, 3…) matching `tasks.input.txt` order.
 
 - `originalRequest`: exact input line; `createdAt`: ISO 8601 for new tasks
 - 3–8 subtasks: title, description, instructions (3–5 steps)
+- `dependsOn`: set to the ids of other tasks this one genuinely needs done first (shared file/module, consumes something the other creates) — **not** just its position in `tasks.input.txt`. Leave empty when tasks are independent, even if listed sequentially. Re-evaluate it on every regen (a modified task's real dependencies can change).
 - Contexts: keyword match or `task-flow-screen file.ext` → `.task-flow/contexts/file.ext`
 - Subtask instructions: **checklist** in [coding_standards.mdc](mdc:.cursor/rules/coding_standards.mdc) only — not [coding-standards-full.md](mdc:.task-flow/guides/coding-standards-full.md)
 - More templates: [task_generation.mdc](mdc:.cursor/rules/task_generation.mdc)
@@ -38,7 +39,7 @@ Task IDs stay sequential (1, 2, 3…) matching `tasks.input.txt` order.
 ## 4. Align status
 
 - `status.json` = source of truth
-- Run `rbin-task-flow render-status` to rebuild `tasks.status.md` (checkboxes `[ ]`/`[x]`/`[~]` + 📊 Summary: completed / in progress / 🖐️ manual / remaining) deterministically from `status.json` — do not hand-write it
+- Run `rbin-task-flow render-status` to rebuild `tasks.status.md` (checkboxes `[ ]`/`[x]`/`[~]` + 📊 Summary: completed / in progress / 🖐️ manual / remaining + `🤖 AI N available` on parallel-ready tasks, from `dependsOn`) deterministically from `tasks.json` + `status.json` — do not hand-write it
 - After regen: new subtasks → `pending`; keep `done` and `manual` on matched subtasks when possible
 
 ## 5. Principles

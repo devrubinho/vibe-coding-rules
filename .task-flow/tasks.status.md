@@ -9,8 +9,8 @@
 - 📝 **Remaining Subtasks**: 0
 
 **Tasks:**
-- ⏳ Task 1: First task (0 remaining subtasks out of 0)
-- ⏳ Task 2: Second task (0 remaining subtasks out of 0)
+- ⏳ Task 1: First task (0 remaining subtasks out of 0) — 🤖 AI 1 available
+- ⏳ Task 2: Second task (0 remaining subtasks out of 0) — 🤖 AI 2 available
 
 ---
 
